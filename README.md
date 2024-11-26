@@ -1,3 +1,27 @@
+# Annotation project api
+
+## Development setup
+
+This Readme provides information for development with [VsCode](https://code.visualstudio.com/).
+
+### Run Project
+
+Clone the [setup](https://github.com/Databases-and-Informationsystems/setup) project and follow the instructions
+
+## Select Development Environment
+
+- Install the [Dev - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension in VsCode
+- Open the Command Palette (⇧⌘P) and type `Dev-Containers`, then select the `Attach to Running Container...`
+- Select `annotation-frontend`
+- VS Code will restart and reload in a new Window
+- On the Explorer sidebar, click the open a folder button and then enter `/app` (this will be loaded from the remote container)
+
+
+### Code Formatting
+We use [Prettier](https://prettier.io/) to format the code 
+- Install [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) **inside of the dev container**
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
