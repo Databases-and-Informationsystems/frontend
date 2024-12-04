@@ -5,32 +5,54 @@ export function NavigationHeader(props: {project_name: string}) {
   return (
     <div className="top-0">
       <h2 className="text-left text-3xl font-bold">Annotating: <span className="italic">{props.project_name}</span></h2>
-      <div>
+      <div className="flex space-x-4">
         <NavigationMenu>
           <div className="flex space-x-4">
             <NavigationMenuItem>
-              <NavigationMenuLink href="/" className="text-lg font-medium">
-                Home
+              <NavigationMenuLink href="/m_sug" className="text-lg font-medium">
+                Mention suggestion
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/about" className="text-lg font-medium">
-                About
+              <NavigationMenuLink href="/m_edt" className="text-lg font-medium">
+                Mention editing
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/services" className="text-lg font-medium">
-                Services
+              <NavigationMenuLink href="/e_sel" className="text-lg font-medium">
+                Entity selection
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/contact" className="text-lg font-medium">
-                Contact
+              <NavigationMenuLink href="/r_sug" className="text-lg font-medium">
+                Relation suggestion
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink href="/r_edt" className="text-lg font-medium">
+                Relation editing
               </NavigationMenuLink>
             </NavigationMenuItem>
           </div>
         </NavigationMenu>
       </div>
+      <NavigationMenu>
+        <NavigationMenuItem>
+          <NavigationMenuLink onClick={() => {/*TODO*/}} className="text-lg font-medium">
+            u
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink onClick={() => {/*TODO*/}} className="text-lg font-medium">
+            f
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink onClick={() => {/*TODO*/}} className="text-lg font-medium">
+            save
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenu>
     </div>
   )
 }
