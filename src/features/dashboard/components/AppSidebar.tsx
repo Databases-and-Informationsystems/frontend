@@ -36,8 +36,8 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild size='lg'>
-              <span className={`text-4xl font-semibold ${
+            <SidebarMenuButton asChild size='lg' isActive={false}>
+              <span className={`!text-4xl font-semibold ${
                   state === 'collapsed' ? 'hidden' : 'block'
                 }`}>
                 Application
