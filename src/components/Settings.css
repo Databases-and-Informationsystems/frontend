@@ -1,0 +1,45 @@
+.page {
+  flex: 1;
+  padding: "20px";
+  background-color: #ffffff;
+  margin-left: 10px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input {
+  width: 30%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #c1c1c1;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #000000;
+}
+.heading {
+margin: 2px;
+color: #000000;
+}
+.heading2 {
+margin-top: 1px;
+font-size: medium;
+margin-bottom: 20px;
+
+}
