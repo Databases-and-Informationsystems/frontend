@@ -8,7 +8,7 @@ interface TokenProps {
 
 export const Token = ({ token }: TokenProps) => {
   return (
-    <span>
+    <span className='text-lg font-semibold'>
       {token.text}
     </span>
   )

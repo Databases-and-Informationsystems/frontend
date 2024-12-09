@@ -1,3 +1,4 @@
+import { AnnotationLayout } from '@/features/annotation_tool/components/AnnotationLayout'
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
 import React from 'react'
 import { Routes, Route } from 'react-router'
@@ -13,7 +14,7 @@ const AppRoutes = () => {
             <Route path='schemas' element={<div>Schemas</div>} />
             <Route path='settings' element={<div>Settings</div>} />
         </Route>
-        <Route path='annotation' element={<div>Annotation</div>} />
+        <Route path='annotation' element={<AnnotationLayout/>} />
     </Routes>
   )
 }
