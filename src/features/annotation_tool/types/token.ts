@@ -1,5 +1,5 @@
 export type Token = {
-  id: string;
+  id: number;
   text: string;
   index_in_document: number;
   pos_tag: string;      

@@ -1,6 +1,6 @@
 export type Mention = {
-  id: string;
+  id: number;
   tag: string; 
   isShownRecommendation: boolean;
-  token_ids: string[];
+  token_ids: number[];
 }
