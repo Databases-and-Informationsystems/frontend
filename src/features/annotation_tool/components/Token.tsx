@@ -1,5 +1,6 @@
 import React from 'react'
 import { Token as TokenType } from '../types/token'
+import { useSelection } from '../provider/useSelection';
 
 interface TokenProps {
     token: TokenType;
@@ -7,8 +8,14 @@ interface TokenProps {
 
 
 export const Token = ({ token }: TokenProps) => {
+  const { selectedTokens, handleTokenClick } = useSelection();
+
+  const isSelected = selectedTokens.includes(token.id);
+
   return (
-    <span className='text-lg font-semibold'>
+    <span className={`select-none text-lg font-semibold cursor-pointer ${isSelected ? 'bg-blue-200' : ''}`}
+      onClick={() => handleTokenClick(token.id, token.sentence_index)}
+    >
       {token.text}
     </span>
   )
