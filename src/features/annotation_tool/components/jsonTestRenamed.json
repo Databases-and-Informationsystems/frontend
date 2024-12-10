@@ -1,0 +1,50 @@
+{
+  "tokens": [
+    {
+      "id": 1,
+      "text": "The",
+      "index_in_document": 0,
+      "pos_tag": "DT",
+      "bio_tag": "B-Actor",
+      "sentence_index": 0
+    },
+    {
+      "id": 2,
+      "text": "MSPN",
+      "index_in_document": 1,
+      "pos_tag": "NNP",
+      "bio_tag": "I-Actor",
+      "sentence_index": 0
+    }
+  ],
+  "mentions": [
+    {
+      "id": 1,
+      "tag": "Actor",
+      "isShownRecommendation": true,
+      "token_ids": [
+        0,
+        1
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": 1,
+      "mention_ids": [
+        1,
+        2
+      ]
+    }
+  ],
+  "relation": [
+    {
+      "id": 1,
+      "tag": "uses",
+      "isDirected": true,
+      "isShownRecommendation": true,
+      "mention_head_id": 1,
+      "mention_tail_id": 2
+    }
+  ]
+}
