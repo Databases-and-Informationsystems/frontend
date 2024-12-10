@@ -12,6 +12,7 @@ interface AnnotatedTextProps {
 export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
   const { mentions } = useMentionContext();
 
+
   // Find mention by token id
   const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
     mentions.find(mention => mention.token_ids.includes(tokenId)));
@@ -24,6 +25,7 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
     acc[token.sentence_index].push(token);
     return acc;
   }, {} as Record<number, TokenType[]>);
+
 
   // Render each sentence with its tokens and mentions
   const renderAnnotatedSentence = (sentenceTokens: TokenType[]) => {
@@ -44,23 +46,22 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
         mentionTokens.forEach((token) => renderedTokenIds.add(token.id));
 
         return (
-          <>
+          <React.Fragment key={`mention-${token.id}`}>
             <Mention
               key={token.id}
               mention={mention}
               tokens={mentionTokens}
             />
             &nbsp;
-          </>
+          </React.Fragment>
         );
       }
-
       renderedTokenIds.add(token.id);
       return (
-        <>
+        <React.Fragment key={`token=${token.id}`}>
           <Token key={token.id} token={token} />
           &nbsp;
-        </>
+        </React.Fragment>
       );
     })
   }

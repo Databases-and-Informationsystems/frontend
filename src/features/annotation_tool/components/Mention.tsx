@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../hooks/useMentionContext';
 import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 
 interface MentionProps {
   mention: MentionType;
@@ -34,10 +35,13 @@ export const Mention = ({ mention, tokens }: MentionProps) => {
       <Badge>
         {mention.tag}
       </Badge>
-      <Button onClick={(e) => {
-        e.stopPropagation();
-        deleteMention(mention.id)}}>
-        X
+      &nbsp;
+      <Button className="h-auto w-auto p-1"
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteMention(mention.id)
+        }}>
+        <Trash2 />
       </Button>
     </span>
   )

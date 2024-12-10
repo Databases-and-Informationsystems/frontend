@@ -28,6 +28,11 @@ export const SelectionProvider = ({ children, initialTokens }: SelectionProvider
   const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
     setSelectedMentions([]);
 
+    if (selectedTokens.includes(tokenId)) {
+      setSelectedTokens(selectedTokens.filter((id) => id !== tokenId));
+      return;
+    }
+
     const currentToken = initialTokens.find((token) => token.id === tokenId);
     if (!currentToken) return;
 
