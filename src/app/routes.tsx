@@ -1,5 +1,4 @@
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
-import React from 'react'
 import { Routes, Route } from 'react-router'
 import Dashboard from '@/features/dashboard/components/Dashboard'
 

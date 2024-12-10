@@ -1,7 +1,7 @@
 import React from "react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@shadcn/ui";
 import { Button } from "@/components/ui/button";
 import { Document } from "../types/types"; 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface StatusFilterProps {
   projects: {
