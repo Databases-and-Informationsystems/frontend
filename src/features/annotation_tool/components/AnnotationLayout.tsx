@@ -5,7 +5,7 @@ import { AnnotatedText } from './AnnotatedText';
 import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
-import { useMentionContext } from '../hooks/useMentionContext';
+import { AnnotationControlBox } from './AnnotationControlBox';
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
@@ -21,10 +21,11 @@ export const AnnotationLayout = () => {
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Annotation Document
       </h1>
-      <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+      <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
       I will be the navbar
     </h2>
       {/* Add Navigation here*/}
+      <AnnotationControlBox />
       <AnnotatedText tokens={document.tokens}/>
       <ModeToggle />
     </div>

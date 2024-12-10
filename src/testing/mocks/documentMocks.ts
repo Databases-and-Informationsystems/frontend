@@ -1,5 +1,12 @@
 import { Token, Mention } from "@/features/annotation_tool/types";
 
+// This is just for testing
+export type MentionSchema = {
+  id: number;
+  tag: string;
+  color: string;
+}
+
 
 export const MOCK_TOKENS: Token[] = [
   { id: 1, text: "The", index_in_document: 0, pos_tag: "DT", bio_tag: "B-Actor", sentence_index: 0 },
@@ -25,10 +32,16 @@ export const MOCK_TOKENS: Token[] = [
 export const MOCK_MENTIONS: Mention[] = [
   { id: 1, tag: "Actor", isShownRecommendation: true, token_ids: [1, 2] },
   { id: 2, tag: "Activity", isShownRecommendation: true, token_ids: [3] },
-  { id: 3, tag: "Activity_Data", isShownRecommendation: true, token_ids: [4, 5] },
+  { id: 3, tag: "Activity Data", isShownRecommendation: true, token_ids: [4, 5] },
   { id: 4, tag: "Actor", isShownRecommendation: true, token_ids: [7, 8] },
   { id: 5, tag: "Actor", isShownRecommendation: true, token_ids: [10, 11] },
   { id: 6, tag: "Activity", isShownRecommendation: true, token_ids: [12] },
-  { id: 7, tag: "Activity_Data", isShownRecommendation: true, token_ids: [13, 14] },
+  { id: 7, tag: "Activity Data", isShownRecommendation: true, token_ids: [13, 14] },
   { id: 8, tag: "Actor", isShownRecommendation: true, token_ids: [16, 17] }     
+]
+
+export const MOCK_MENTION_SCHEMA: MentionSchema[] = [
+  { id: 1, tag: "Actor", color: "red" },
+  { id: 2, tag: "Activity", color: "blue" },
+  { id: 3, tag: "Activity Data", color: "green" }
 ]
