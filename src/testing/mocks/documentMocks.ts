@@ -1,10 +1,16 @@
-import { Token, Mention } from "@/features/annotation_tool/types";
+import { Token, Mention, Relation } from "@/features/annotation_tool/types";
 
 // This is just for testing
 export type MentionSchema = {
   id: number;
   tag: string;
   color: string;
+}
+
+// This is just for testing
+export type RelationSchema = {
+  id: number;
+  tag: string;
 }
 
 
@@ -38,6 +44,21 @@ export const MOCK_MENTIONS: Mention[] = [
   { id: 6, tag: "Activity", isShownRecommendation: true, token_ids: [12] },
   { id: 7, tag: "Activity Data", isShownRecommendation: true, token_ids: [13, 14] },
   { id: 8, tag: "Actor", isShownRecommendation: true, token_ids: [16, 17] }     
+]
+
+export const MOCK_RELATIONS: Relation[] = [
+  { id: 1, tag: "is performed by", isDirected: false, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 1 },
+  { id: 1, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 3 },
+  { id: 1, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 4 },
+  { id: 1, tag: "is performed by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 5 },
+  { id: 1, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 7 },
+  { id: 1, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 8 },
+]
+
+export const MOCK_RELATION_SCHEMA: RelationSchema[] = [
+  { id: 1, tag: "is performed by" },
+  { id: 2, tag: "uses" },
+  { id: 3, tag: "is received by" }
 ]
 
 export const MOCK_MENTION_SCHEMA: MentionSchema[] = [

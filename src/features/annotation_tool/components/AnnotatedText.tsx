@@ -3,7 +3,7 @@ import { Mention as MentionType, Token as TokenType } from '../types'
 import { Mention } from './Mention';
 import { Token } from './Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useMentionContext } from '../hooks/useMentionContext';
+import { useMentionContext } from '../context/useMentionContext';
 
 interface AnnotatedTextProps {
   tokens: TokenType[];

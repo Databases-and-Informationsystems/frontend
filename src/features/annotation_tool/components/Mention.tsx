@@ -3,7 +3,7 @@ import { Mention as MentionType } from '../types/mention'
 import { Token as TokenType } from '../types/token';
 import { Badge } from '@/components/ui/badge';
 import { useSelection } from '../hooks/useSelection';
-import { useMentionContext } from '../hooks/useMentionContext';
+import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';

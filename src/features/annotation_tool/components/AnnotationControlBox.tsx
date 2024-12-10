@@ -3,7 +3,7 @@ import React from 'react'
 import { useSelection } from '../hooks/useSelection'
 import { Button } from '@/components/ui/button';
 import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';
-import { useMentionContext } from '../hooks/useMentionContext';
+import { useMentionContext } from '../context/useMentionContext';
 
 export const AnnotationControlBox = () => {
   const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
