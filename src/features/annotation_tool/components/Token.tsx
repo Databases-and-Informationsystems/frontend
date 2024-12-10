@@ -1,6 +1,6 @@
 import React from 'react'
 import { Token as TokenType } from '../types/token'
-import { useSelection } from '../provider/useSelection';
+import { useSelection } from '../hooks/useSelection';
 
 interface TokenProps {
     token: TokenType;

@@ -3,13 +3,14 @@ import { Mention as MentionType, Token as TokenType } from '../types'
 import { Mention } from './Mention';
 import { Token } from './Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMentionContext } from '../hooks/useMentionContext';
 
 interface AnnotatedTextProps {
   tokens: TokenType[];
-  mentions: MentionType[];
 }
 
-export const AnnotatedText = ({ tokens, mentions }: AnnotatedTextProps) => {
+export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
+  const { mentions } = useMentionContext();
 
   // Find mention by token id
   const getMentionByTokenId = (tokenId: number): MentionType | undefined => (

@@ -13,13 +13,13 @@ interface SelectionContextType {
 }
 
 interface SelectionProviderProps {
-  tokens: TokenType[];
+  initialTokens: TokenType[];
   children: React.ReactNode;
 }
 
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
-export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) => {
+export const SelectionProvider = ({ children, initialTokens }: SelectionProviderProps) => {
   const [currentStep, setCurrentStep] = useState<number>(2);
   const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<number[]>([]);
@@ -28,7 +28,7 @@ export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) 
   const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
     setSelectedMentions([]);
 
-    const currentToken = tokens.find((token) => token.id === tokenId);
+    const currentToken = initialTokens.find((token) => token.id === tokenId);
     if (!currentToken) return;
 
     if (selectedTokens.length === 0) {
@@ -38,7 +38,7 @@ export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) 
 
     // Check if current token is adjacent to the selected tokens
     const isAdjacent = selectedTokens.some((selectedId) => {
-      const selectedToken = tokens.find((token) => token.id === selectedId);
+      const selectedToken = initialTokens.find((token) => token.id === selectedId);
       return (
         selectedToken &&
         Math.abs(selectedToken.index_in_document - currentToken.index_in_document) === 1 &&

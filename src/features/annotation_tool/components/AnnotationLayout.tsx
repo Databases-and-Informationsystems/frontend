@@ -4,6 +4,8 @@ import { MOCK_MENTIONS, MOCK_TOKENS } from '@/testing/mocks/documentMocks';
 import { AnnotatedText } from './AnnotatedText';
 import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
+import { MentionProvider } from '../provider/MentionProvider';
+import { useMentionContext } from '../hooks/useMentionContext';
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
@@ -13,7 +15,8 @@ export const AnnotationLayout = () => {
   });
 
   return (
-  <SelectionProvider tokens={document.tokens}>
+  <SelectionProvider initialTokens={document.tokens}>
+    <MentionProvider initialMentions={document.mentions}>
     <div className='p-6'>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Annotation Document
@@ -22,9 +25,10 @@ export const AnnotationLayout = () => {
       I will be the navbar
     </h2>
       {/* Add Navigation here*/}
-      <AnnotatedText tokens={document.tokens} mentions={document.mentions} />
+      <AnnotatedText tokens={document.tokens}/>
       <ModeToggle />
     </div>
+    </MentionProvider>
   </SelectionProvider>
   )
 }

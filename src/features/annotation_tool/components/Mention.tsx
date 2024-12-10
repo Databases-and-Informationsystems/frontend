@@ -2,7 +2,9 @@ import React from 'react'
 import { Mention as MentionType } from '../types/mention'
 import { Token as TokenType } from '../types/token';
 import { Badge } from '@/components/ui/badge';
-import { useSelection } from '../provider/useSelection';
+import { useSelection } from '../hooks/useSelection';
+import { useMentionContext } from '../hooks/useMentionContext';
+import { Button } from '@/components/ui/button';
 
 interface MentionProps {
   mention: MentionType;
@@ -11,6 +13,7 @@ interface MentionProps {
 
 export const Mention = ({ mention, tokens }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
+  const { deleteMention } = useMentionContext();
 
   const isSelected = selectedMentions.includes(mention.id);
 
@@ -31,7 +34,11 @@ export const Mention = ({ mention, tokens }: MentionProps) => {
       <Badge>
         {mention.tag}
       </Badge>
-
+      <Button onClick={(e) => {
+        e.stopPropagation();
+        deleteMention(mention.id)}}>
+        X
+      </Button>
     </span>
   )
 }
