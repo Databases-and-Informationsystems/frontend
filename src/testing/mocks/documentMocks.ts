@@ -41,7 +41,7 @@ export const MOCK_MENTIONS: Mention[] = [
 ]
 
 export const MOCK_MENTION_SCHEMA: MentionSchema[] = [
-  { id: 1, tag: "Actor", color: "red" },
-  { id: 2, tag: "Activity", color: "blue" },
-  { id: 3, tag: "Activity Data", color: "green" }
+  { id: 1, tag: "Actor", color: "#dc2626" },
+  { id: 2, tag: "Activity", color: "#3b82f6" },
+  { id: 3, tag: "Activity Data", color: "#16a34a" }
 ]

@@ -6,6 +6,7 @@ import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../hooks/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
+import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';
 
 interface MentionProps {
   mention: MentionType;
@@ -16,12 +17,22 @@ export const Mention = ({ mention, tokens }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
   const { deleteMention } = useMentionContext();
 
+  const [schema] = React.useState({
+    schemaMentions: MOCK_MENTION_SCHEMA
+  })
+
   const isSelected = selectedMentions.includes(mention.id);
+
+  const getMentionColor = (tag: string) => {
+    const mention = schema.schemaMentions.find(mention => mention.tag === tag)
+    return mention ? mention.color : '#000'
+  }
 
 
   return (
-    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-green-500 bg-green-200' : 'border-gray-300'}`}
+    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'}`}
       onClick={() => handleMentionClick(mention.id)}
+      style={{ backgroundColor: getMentionColor(mention.tag) }}
     >
       <span>
         {tokens.map((token) => (
