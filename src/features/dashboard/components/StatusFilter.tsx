@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Document } from "../types/types"; 
+import { Document } from "../types/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface StatusFilterProps {
@@ -12,7 +12,7 @@ interface StatusFilterProps {
       open: Document[];
       completed: Document[];
     };
-    progress:number;
+    progress: number;
   }[];
 }
 
@@ -46,25 +46,28 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
   );
 
   return (
-    <div className="p-4">
+    <div className="p-6 bg-gray-50 rounded-lg shadow-lg">
       <Accordion type="single" collapsible>
+        {/* Ongoing Section */}
         <AccordionItem value="ongoing">
-          <AccordionTrigger className="text-xl font-bold">Ongoing Documents</AccordionTrigger>
+          <AccordionTrigger className="text-xl font-bold text-green-600">
+            Ongoing Documents
+          </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {ongoingDocs.map((doc, index) => (
-                <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-sm">
-                  <p className="font-semibold">Document: {doc.name}</p>
-                  <p>Project: {doc.project}</p>
-                  <p>Schema: {doc.schema}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="w-24 h-2 bg-green-200 rounded-full">
+                <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+                  <p className="font-semibold text-gray-800">Document: {doc.name}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <div className="flex items-center justify-between mt-3">
+                    <div className="w-full h-2 bg-green-100 rounded-full mr-4">
                       <div
-                        className="h-full bg-green-500"
+                        className="h-full bg-green-500 rounded-full"
                         style={{ width: `${doc.progress}%` }}
                       ></div>
                     </div>
-                    <Button>Continue Working</Button>
+                    <Button variant="outline">Continue Working</Button>
                   </div>
                 </div>
               ))}
@@ -72,32 +75,38 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
           </AccordionContent>
         </AccordionItem>
 
+        {/* Open Section */}
         <AccordionItem value="open">
-          <AccordionTrigger className="text-xl font-bold">Open Documents</AccordionTrigger>
+          <AccordionTrigger className="text-xl font-bold text-blue-600">
+            Open Documents
+          </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {openDocs.map((doc, index) => (
-                <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-sm">
-                  <p className="font-semibold">Document: {doc.name}</p>
-                  <p>Project: {doc.project}</p>
-                  <p>Schema: {doc.schema}</p>
-                  <Button>Start Working</Button>
+                <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+                  <p className="font-semibold text-gray-800">Document: {doc.name}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <Button variant="outline">Start Working</Button>
                 </div>
               ))}
             </div>
           </AccordionContent>
         </AccordionItem>
 
+        {/* Completed Section */}
         <AccordionItem value="completed">
-          <AccordionTrigger className="text-xl font-bold">Completed Documents</AccordionTrigger>
+          <AccordionTrigger className="text-xl font-bold text-gray-600">
+            Completed Documents
+          </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {completedDocs.map((doc, index) => (
-                <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-sm">
-                  <p className="font-semibold">Document: {doc.name}</p>
-                  <p>Project: {doc.project}</p>
-                  <p>Schema: {doc.schema}</p>
-                  <Button>Open Document</Button>
+                <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+                  <p className="font-semibold text-gray-800">Document: {doc.name}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <Button variant="outline">Open Document</Button>
                 </div>
               ))}
             </div>

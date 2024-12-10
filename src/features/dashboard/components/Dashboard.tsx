@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ProjectCard from "./ProjectCard";
 import StatusFilter from "./StatusFilter";
 
-
 interface Document {
   name: string;
   project: string;
@@ -60,10 +59,10 @@ const Dashboard: React.FC = () => {
   ]);
 
   return (
-    <div className="dashboard">
+    <div className="dashboard p-6">
       <StatusFilter projects={projects} />
-      <h1>Projects</h1>
-      <div>
+      <h1 className="text-2xl font-bold mt-6 mb-4">Projects</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project, index) => (
           <ProjectCard key={index} {...project} />
         ))}
