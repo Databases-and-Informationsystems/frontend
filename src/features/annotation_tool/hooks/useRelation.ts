@@ -11,7 +11,7 @@ export const useRelation = () => {
   const relationsFetched = useRef<boolean>(false)
 
   useEffect(() => {
-    if (currentStep === 4 && !relationsFetched.current) {
+    if (currentStep === 3 && !relationsFetched.current) {
       fetchRelations();
     }
   }, [currentStep]);

@@ -20,7 +20,7 @@ interface SelectionProviderProps {
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
 export const SelectionProvider = ({ children, initialTokens }: SelectionProviderProps) => {
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(3);
   const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<number[]>([]);
 

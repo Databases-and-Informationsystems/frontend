@@ -13,6 +13,14 @@ export type RelationSchema = {
   tag: string;
 }
 
+export type DependenciesSchema = {
+  id: number;
+  isDirected: boolean;
+  schema_relation_id: number;
+  schema_mention_head_id: number;
+  schema_mention_tail_id: number;
+}
+
 
 export const MOCK_TOKENS: Token[] = [
   { id: 1, text: "The", index_in_document: 0, pos_tag: "DT", bio_tag: "B-Actor", sentence_index: 0 },
@@ -48,11 +56,11 @@ export const MOCK_MENTIONS: Mention[] = [
 
 export const MOCK_RELATIONS: Relation[] = [
   { id: 1, tag: "is performed by", isDirected: false, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 1 },
-  { id: 1, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 3 },
-  { id: 1, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 4 },
-  { id: 1, tag: "is performed by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 5 },
-  { id: 1, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 7 },
-  { id: 1, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 8 },
+  { id: 2, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 3 },
+  { id: 3, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 2, mention_tail_id: 4 },
+  { id: 4, tag: "is performed by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 5 },
+  { id: 5, tag: "uses", isDirected: true, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 7 },
+  { id: 6, tag: "is received by", isDirected: false, isShownRecommendation: true, mention_head_id: 6, mention_tail_id: 8 },
 ]
 
 export const MOCK_RELATION_SCHEMA: RelationSchema[] = [
@@ -65,4 +73,10 @@ export const MOCK_MENTION_SCHEMA: MentionSchema[] = [
   { id: 1, tag: "Actor", color: "#dc2626" },
   { id: 2, tag: "Activity", color: "#3b82f6" },
   { id: 3, tag: "Activity Data", color: "#16a34a" }
+]
+
+export const MOCK_SCHEMA_DEPENDENCIES: DependenciesSchema[] = [
+  { id: 1, isDirected: false, schema_relation_id: 1, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
+  { id: 2, isDirected: true, schema_relation_id: 2, schema_mention_head_id: 2, schema_mention_tail_id: 3 },
+  { id: 3, isDirected: false, schema_relation_id: 3, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
 ]

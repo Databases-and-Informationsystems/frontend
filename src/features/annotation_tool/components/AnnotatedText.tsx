@@ -50,7 +50,6 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
             <Mention
               key={token.id}
               mention={mention}
-              tokens={mentionTokens}
             />
             &nbsp;
           </React.Fragment>

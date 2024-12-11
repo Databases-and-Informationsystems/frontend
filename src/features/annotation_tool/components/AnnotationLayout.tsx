@@ -1,12 +1,14 @@
 import React from 'react'
-import { useStepNavigation } from '../hooks/useStepNavigation';
+//import { useStepNavigation } from '../hooks/useStepNavigation';
 import { MOCK_MENTIONS, MOCK_TOKENS } from '@/testing/mocks/documentMocks';
-import { AnnotatedText } from './AnnotatedText';
 import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
 import { AnnotationControlBox } from './AnnotationControlBox';
 import { RelationProvider } from '../provider/RelationProvider';
+import { useSelection } from '../hooks/useSelection';
+import { MentionStep } from '../pages/MentionStep';
+import { RelationStep } from '../pages/RelationStep';
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
@@ -28,11 +30,22 @@ export const AnnotationLayout = () => {
             </h2>
             {/* Add Navigation here*/}
             <AnnotationControlBox />
-            <AnnotatedText tokens={document.tokens} />
+            <CurrentStepRender />
             <ModeToggle />
           </div>
         </RelationProvider>
       </MentionProvider>
     </SelectionProvider>
   )
+}
+
+const CurrentStepRender = () => {
+  const { currentStep } = useSelection();
+
+  switch (currentStep) {
+    case 2:
+      return <MentionStep/>
+    case 3:
+      return <RelationStep/>
+  }
 }
