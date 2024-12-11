@@ -1,31 +1,33 @@
 import React, { useState } from "react";
 import "./Sidebar.css"; 
-import "@fontsource/inter"; 
-
+/*import "@fontsource/inter"; */
+import dashboardIcon from "./icons/dashboard.png";
+import projectIcon from "./icons/project-management.png";
+import schemaIcon from "./icons/scheme.png";
+import teamsIcon from "./icons/group-chat.png";
 const Sidebar: React.FC = () => {
   const [isExpanded, setExpendState] = useState(true);
 
-  // Menu items with icons
   const menuItems = [
     {
       text: "Dashboard",
-      icon: require("./icons/dashboard.png"), 
-      href: "/dashboard", 
+      icon: dashboardIcon, 
+            href: "/dashboard", 
     },
     {
       text: "Projects",
-      icon: require("./icons/project-management.png"), 
-      href: "/dashboard", 
+      icon: projectIcon, 
+            href: "/dashboard", 
     },
     {
       text: "Schema",
-      icon: require("./icons/scheme.png"), 
-      href: "/schema", 
+      icon: schemaIcon,  
+            href: "/schema", 
     },
     {
       text: "Teams",
-      icon: require("./icons/group-chat.png"), 
-      href: "/dashboard", 
+      icon: teamsIcon,
+            href: "/dashboard", 
     },
   ];
 

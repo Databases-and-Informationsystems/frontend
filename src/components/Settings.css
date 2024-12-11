@@ -36,9 +36,10 @@ button:hover {
 .heading {
 margin: 2px;
 color: #000000;
+font-weight: bold;
+    font-family: sans-serif;
 }
 .heading2 {
-margin-top: 1px;
 font-size: medium;
 margin-bottom: 20px;
 
