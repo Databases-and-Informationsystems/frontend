@@ -9,7 +9,7 @@ function Droppable(props) {
 }
 
 interface MultipleDroppablesProps {
-  names: string[]
+  names: number[]
   items: Record<string, {id: string}[]>
 }
 

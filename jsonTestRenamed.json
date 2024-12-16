@@ -35,6 +35,34 @@
         1,
         2
       ]
+    },
+    {
+      "id": 2,
+      "mention_ids": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 3,
+      "mention_ids": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 4,
+      "mention_ids": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 0,
+      "mention_ids": [
+        1,
+        3
+      ]
     }
   ],
   "relation": [
