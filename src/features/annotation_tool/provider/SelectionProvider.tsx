@@ -76,12 +76,12 @@ export const SelectionProvider = ({ children, initialTokens }: SelectionProvider
     }
 
     // Entity step
-    if (currentStep === 3) {
+    if (currentStep === 5) {
       setSelectedMentions([...selectedMentions, mentionId]);
     }
 
     // Relation step
-    if (currentStep === 5) {
+    if (currentStep === 3) {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mentionId]);
       }

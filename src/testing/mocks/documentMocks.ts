@@ -76,7 +76,7 @@ export const MOCK_MENTION_SCHEMA: MentionSchema[] = [
 ]
 
 export const MOCK_SCHEMA_DEPENDENCIES: DependenciesSchema[] = [
-  { id: 1, isDirected: false, schema_relation_id: 1, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
-  { id: 2, isDirected: true, schema_relation_id: 2, schema_mention_head_id: 2, schema_mention_tail_id: 3 },
-  { id: 3, isDirected: false, schema_relation_id: 3, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
+  { id: 1, isDirected: true, schema_relation_id: 1, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
+  { id: 2, isDirected: false, schema_relation_id: 2, schema_mention_head_id: 2, schema_mention_tail_id: 3 },
+  { id: 3, isDirected: true, schema_relation_id: 3, schema_mention_head_id: 2, schema_mention_tail_id: 1 },
 ]
