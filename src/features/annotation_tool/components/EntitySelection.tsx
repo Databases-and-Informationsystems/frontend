@@ -1,7 +1,7 @@
 import { MultipleDroppables } from '@/features/annotation_tool/components/DroppableHandler.tsx'
 import { DraggableHand } from '@/features/annotation_tool/components/DraggableHandler.tsx'
 import { DndContext, DragOverlay } from '@dnd-kit/core'
-import { useEffect, useState, SyntheticEvent } from 'react'
+import { useEffect, useState, SyntheticEvent, useMemo } from 'react'
 import { Mention } from '@/features/annotation_tool/types'
 import { AnnotationEntity } from '@/features/annotation_tool/types/entity.ts'
 import axios from 'axios'
@@ -9,9 +9,12 @@ import axios from 'axios'
 
 function EntitySelection() {
 
-  const [entityIds, setEntityIds] = useState<any>([])
   const [entityData, setEntityData] = useState<any>()
   const [mentionData, setMentionData] = useState<any>()
+  const entityIds = useMemo(
+    () => entityData?.map((entity) => entity.id) || [],
+    [entityData]
+  );
 
   useEffect(() => {
     const mentions = async () => {
@@ -36,11 +39,8 @@ function EntitySelection() {
   useEffect(() => {
     const entity = async () => {
       try {
-        const response = await axios.get('http://localhost:3033/entities');
-        console.log("Entity stuff: ", response.data);
-        setEntityData(response.data);
-        console.log("Entity state: ", entityData);
-        setEntityIds(response.data.map((entity) => entity.id))
+        const response = await axios.get('http://localhost:3033/entities')
+          .then((response) => setEntityData(response.data));
       } catch (error) {
         console.log("Error: ", error);
       } finally {
@@ -82,6 +82,7 @@ function EntitySelection() {
           <MultipleDroppables
             names={entityIds}
             items={droppableItemLists}
+            all={entityData}
           ></MultipleDroppables>
           <DraggableHand id={'Eins'}></DraggableHand>
           <DraggableHand id={'Zwei'}></DraggableHand>

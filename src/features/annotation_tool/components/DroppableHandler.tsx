@@ -11,9 +11,16 @@ function Droppable(props) {
 interface MultipleDroppablesProps {
   names: number[]
   items: Record<string, {id: string}[]>
+  all: Record<number, any>
 }
 
-export function MultipleDroppables({ names, items }: MultipleDroppablesProps) {
+export function MultipleDroppables({ names, items, all }: MultipleDroppablesProps) {
+  //get all mention ids for the current entity id
+  const getMentionIdsById = (id) => {
+    const entity = all.find((item) => item.id === id);
+    return entity ? entity.mention_ids : [];
+  };
+
   return (
     <section className="bg-red-300 m-1">
       {names.map((id) => (
@@ -24,6 +31,7 @@ export function MultipleDroppables({ names, items }: MultipleDroppablesProps) {
           <Droppable id={id} key={id}>
             Droppable container id: {id}
             {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
+            {getMentionIdsById(id).map((i) => ( <p key={i}>Innen {i}</p> ))}
           </Droppable>
         </div>
       ))}
