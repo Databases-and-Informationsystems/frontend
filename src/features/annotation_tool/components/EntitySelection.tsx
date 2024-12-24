@@ -11,6 +11,7 @@ function EntitySelection() {
 
   const [entityData, setEntityData] = useState<any>()
   const [mentionData, setMentionData] = useState<any>()
+  const [tokenData, setTokenData] = useState<any>()
   const entityIds = useMemo(
     () => entityData?.map((entity) => entity.id) || [],
     [entityData]
@@ -20,13 +21,8 @@ function EntitySelection() {
     const mentions = async () => {
       try {
         const response = await axios.get('http://localhost:3033/mentions');
-        const resData = response.data;
-        console.log("ResData: ", resData);
-        setMentionData(resData);
-        console.log("Mention response: ", response.data);
-        console.log("Mention state1: ", mentionData);
         setMentionData(response.data);
-        console.log("Mention state2: ", mentionData);
+        console.log("Mention state: ", response.data);
       } catch (error) {
         console.log("Error: ", error);
       } finally {
@@ -34,6 +30,21 @@ function EntitySelection() {
       }
     }
     mentions()
+  }, [])
+
+  useEffect(() => {
+    const tokens = async () => {
+      try {
+        const response = await axios.get('http://localhost:3033/tokens');
+        setTokenData(response.data);
+        console.log("Token state: ", response.data);
+      } catch (error) {
+        console.log("Error: ", error);
+      } finally {
+        console.log("finallyMentions");
+      }
+    }
+    tokens()
   }, [])
 
   useEffect(() => {
@@ -82,10 +93,11 @@ function EntitySelection() {
           <MultipleDroppables
             names={entityIds}
             items={droppableItemLists}
-            all={entityData}
+            allEntities={entityData}
+            allTokens={tokenData}
           ></MultipleDroppables>
-          <DraggableHand id={'Eins'}></DraggableHand>
-          <DraggableHand id={'Zwei'}></DraggableHand>
+          {/*<DraggableHand id={1}></DraggableHand>
+          <DraggableHand id={2}></DraggableHand>*/}
           <DragOverlay>
             {' '}
             {activeId ? <DraggableHand id={activeId} /> : null}{' '}
