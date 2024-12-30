@@ -63,7 +63,7 @@ export function MultipleDroppables({ names, items, allEntities, allTokens }: Mul
           <Droppable id={id} key={id}>
             Droppable container id: {id}
             {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
-            {getMentionIdsById(id).map((i) => ( <DraggableHand id={i}></DraggableHand> ))}
+            {getMentionIdsById(id).map((i) => ( <DraggableHand id={i} allEntities={allEntities}></DraggableHand> ))}
             {/*<Token token={t}></Token>*/}
             {/*<Mention mention={{id: 1, tag: "testing", isShownRecommendation: true, token_ids: [1]}} tokens={[t]}></Mention>*/}
           </Droppable>
