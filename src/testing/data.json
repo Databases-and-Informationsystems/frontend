@@ -83,15 +83,6 @@
       ]
     },
     {
-      "id": "3104",
-      "tag": "Actor",
-      "isShownRecommendation": false,
-      "token_ids": [
-        "1",
-        "2"
-      ]
-    },
-    {
       "id": "6221",
       "tag": "Activity Data",
       "isShownRecommendation": false,
@@ -108,6 +99,15 @@
         "7",
         "8"
       ]
+    },
+    {
+      "id": "9053",
+      "tag": "Actor",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "1",
+        "2"
+      ]
     }
   ],
   "relations": [
@@ -119,5 +119,61 @@
       "mention_head_id": "2",
       "mention_tail_id": "1"
     }
-  ]
+  ],
+  "schema": {
+    "mentions": [
+      {
+        "id": "1",
+        "tag": "Actor",
+        "color": "#dc2626"
+      },
+      {
+        "id": "2",
+        "tag": "Activity",
+        "color": "#3b82f6"
+      },
+      {
+        "id": "3",
+        "tag": "Activity Data",
+        "color": "#16a34a"
+      }
+    ],
+    "relations": [
+      {
+        "id": "1",
+        "tag": "is performed by"
+      },
+      {
+        "id": "2",
+        "tag": "uses"
+      },
+      {
+        "id": "3",
+        "tag": "is received by"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "1",
+        "isDirected": true,
+        "schema_relation_id": "1",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "1"
+      },
+      {
+        "id": "2",
+        "isDirected": false,
+        "schema_relation_id": "2",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "3"
+      },
+      {
+        "id": "3",
+        "isDirected": true,
+        "schema_relation_id": "3",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "1"
+      }
+    ]
+  }
 }

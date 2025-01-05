@@ -9,12 +9,14 @@ import { useSelection } from '../hooks/useSelection';
 import { MentionStep } from '../pages/MentionStep';
 import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
+import { SchemaProvider } from '../provider/SchemaProvider';
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
 
   return (
     <TokenProvider>
+      <SchemaProvider>
       <SelectionProvider>
         <MentionProvider>
           <RelationProvider>
@@ -33,6 +35,7 @@ export const AnnotationLayout = () => {
           </RelationProvider>
         </MentionProvider>
       </SelectionProvider>
+      </SchemaProvider>
     </TokenProvider>
   )
 }

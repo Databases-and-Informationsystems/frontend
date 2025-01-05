@@ -1,8 +1,6 @@
-import React from 'react'
 import { Relation as RelationType } from '../types'
 import { useMentionContext } from '../context/useMentionContext';
 import { Mention } from './Mention';
-import { MOCK_RELATION_SCHEMA } from '@/testing/mocks/documentMocks';
 import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRelationContext } from '../context/useRelationContext';
 import { Button } from '@/components/ui/button';
@@ -39,19 +37,5 @@ export const Relation = ({ relation }: RelationProps) => {
         <Trash2 />
       </Button>
     </div>
-  )
-}
-
-export const RelationSelector = () => {
-  const [document] = React.useState({
-    relationSchema: MOCK_RELATION_SCHEMA,
-  });
-
-  return (
-    <Select>
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-    </Select>
   )
 }

@@ -1,21 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import React from 'react'
 import { useSelection } from '../hooks/useSelection'
 import { Button } from '@/components/ui/button';
-import { MOCK_MENTION_SCHEMA, MOCK_RELATION_SCHEMA, MOCK_SCHEMA_DEPENDENCIES } from '@/testing/mocks/documentMocks';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
+import { useSchema } from '../hooks/useSchema';
 
 export const AnnotationControlBox = () => {
   const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
   const { mentions, handleCreateMention, handleUpdateMention } = useMentionContext();
   const { handleCreateRelation } = useRelationContext();
-  const [schema] = React.useState({
-    schemaMentions: MOCK_MENTION_SCHEMA,
-    schemaRelations: MOCK_RELATION_SCHEMA,
-    schemaConstraints: MOCK_SCHEMA_DEPENDENCIES
-  })
+  const { schema } = useSchema();
 
   const createMention = (tokens: string[], tag: string) => {
     handleCreateMention({
@@ -67,7 +62,7 @@ export const AnnotationControlBox = () => {
           </CardTitle>
           <CardContent>
             <div>
-              {schema.schemaMentions.map((mention) => (
+              {schema?.mentions.map((mention) => (
                 <Button
                   onClick={() => createMention(selectedTokens, mention.tag)}
                   key={mention.id}
@@ -92,7 +87,7 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           <div>
-            {schema.schemaMentions.map((mention) => (
+            {schema?.mentions.map((mention) => (
               <Button
                 onClick={() => updateMention(selectedMentions[0], mention.tag)}
                 key={mention.id}
@@ -117,8 +112,8 @@ export const AnnotationControlBox = () => {
     const matchingConstraints = getMatchingConstraints(
       mentionHead,
       mentionTail,
-      schema.schemaConstraints,
-      schema.schemaMentions
+      schema!.dependencies,
+      schema!.mentions
     );
 
     if (matchingConstraints.length === 0) {
@@ -145,7 +140,7 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           {matchingConstraints.map((constraint) => {
-            const relation = schema.schemaRelations.find(
+            const relation = schema?.relations.find(
               (relation) => relation.id === constraint.schema_relation_id
             );
             return (

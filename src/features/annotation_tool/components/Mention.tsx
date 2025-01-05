@@ -1,12 +1,11 @@
-import React from 'react'
 import { Mention as MentionType } from '../types/mention'
 import { Badge } from '@/components/ui/badge';
 import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';
 import { useTokens } from '../hooks/useTokens';
+import { useSchema } from '../hooks/useSchema';
 
 interface MentionProps {
   mention: MentionType;
@@ -17,15 +16,13 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
   const { handleDeleteMention } = useMentionContext();
   const { tokens } = useTokens();
-
-  const [schema] = React.useState({
-    schemaMentions: MOCK_MENTION_SCHEMA
-  })
+  const { schema } = useSchema();
+  
 
   const isSelected = selectedMentions.includes(mention.id);
 
   const getMentionColor = (tag: string) => {
-    const mention = schema.schemaMentions.find(mention => mention.tag === tag)
+    const mention = schema!.mentions.find(mention => mention.tag === tag)
     return mention ? mention.color : '#000'
   }
 
