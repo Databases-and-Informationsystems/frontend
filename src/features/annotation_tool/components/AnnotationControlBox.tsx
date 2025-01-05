@@ -9,17 +9,17 @@ import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 
 export const AnnotationControlBox = () => {
   const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
-  const { mentions, createMention, updateMention } = useMentionContext();
-  const { createRelation } = useRelationContext();
+  const { mentions, handleCreateMention, handleUpdateMention } = useMentionContext();
+  const { handleCreateRelation } = useRelationContext();
   const [schema] = React.useState({
     schemaMentions: MOCK_MENTION_SCHEMA,
     schemaRelations: MOCK_RELATION_SCHEMA,
     schemaConstraints: MOCK_SCHEMA_DEPENDENCIES
   })
 
-  const handleCreateMention = (tokens: number[], tag: string) => {
-    createMention({
-      id: Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
+  const createMention = (tokens: string[], tag: string) => {
+    handleCreateMention({
+      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
       tag: tag,
       isShownRecommendation: false,
       token_ids: tokens
@@ -28,26 +28,26 @@ export const AnnotationControlBox = () => {
   }
 
 
-  const getMentionById = (id: number) => {
+  const getMentionById = (id: string) => {
     return mentions.find(mention => mention.id === id)
   }
 
 
-  const handleUpdateMention = (mentionId: number, tag: string) => {
+  const updateMention = (mentionId: string, tag: string) => {
     let mentionToUpdate = getMentionById(mentionId)
     if (!mentionToUpdate) return
     mentionToUpdate = {
       ...mentionToUpdate,
       tag: tag
     }
-    updateMention(mentionToUpdate.id, mentionToUpdate)
+    handleUpdateMention(mentionToUpdate.id, mentionToUpdate)
     resetMentions()
   }
 
 
-  const handleCreateRelation = (mentionIds: number[], tag: string) => {
-    createRelation({
-      id: Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
+  const createRelation = (mentionIds: string[], tag: string) => {
+    handleCreateRelation({
+      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
       tag,
       isDirected: false,
       isShownRecommendation: false,
@@ -69,7 +69,7 @@ export const AnnotationControlBox = () => {
             <div>
               {schema.schemaMentions.map((mention) => (
                 <Button
-                  onClick={() => handleCreateMention(selectedTokens, mention.tag)}
+                  onClick={() => createMention(selectedTokens, mention.tag)}
                   key={mention.id}
                   className='mr-2'
                   style={{ backgroundColor: mention.color }}>
@@ -94,7 +94,7 @@ export const AnnotationControlBox = () => {
           <div>
             {schema.schemaMentions.map((mention) => (
               <Button
-                onClick={() => handleUpdateMention(selectedMentions[0], mention.tag)}
+                onClick={() => updateMention(selectedMentions[0], mention.tag)}
                 key={mention.id}
                 className='mr-2'
                 style={{ backgroundColor: mention.color }}>
@@ -151,7 +151,7 @@ export const AnnotationControlBox = () => {
             return (
               <Button
                 key={constraint.id}
-                onClick={() => handleCreateRelation(selectedMentions, relation?.tag || '')}
+                onClick={() => createRelation(selectedMentions, relation?.tag || '')}
                 className='mr-2'>
                 {relation?.tag || ''}
               </Button>

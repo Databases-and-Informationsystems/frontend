@@ -1,13 +1,10 @@
-import React from 'react'
 import { AnnotatedText } from '../components/AnnotatedText'
-import { MOCK_TOKENS } from '@/testing/mocks/documentMocks';
+import { useTokens } from '../hooks/useTokens';
 
 export const MentionStep = () => {
-  const [document] = React.useState({
-    tokens: MOCK_TOKENS,
-  });
+  const { tokens } = useTokens();
 
   return (
-    <AnnotatedText tokens={document.tokens}/>
+    <AnnotatedText tokens={tokens}/>
   )
 }

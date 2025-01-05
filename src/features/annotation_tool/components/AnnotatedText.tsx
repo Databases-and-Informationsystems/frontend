@@ -10,12 +10,15 @@ interface AnnotatedTextProps {
 }
 
 export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
-  const { mentions } = useMentionContext();
+  const { mentions, loading } = useMentionContext();
+  
+  if (loading) {
+    return <p>Loading mentions...</p>;
+  }
 
-
-  // Find mention by token id
-  const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
+  const getMentionByTokenId = (tokenId: string): MentionType | undefined => (
     mentions.find(mention => mention.token_ids.includes(tokenId)));
+
 
   // Group tokens by sentence index
   const groupedTokensBySentence = tokens.reduce((acc, token) => {
@@ -29,7 +32,7 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
 
   // Render each sentence with its tokens and mentions
   const renderAnnotatedSentence = (sentenceTokens: TokenType[]) => {
-    const renderedTokenIds = new Set<number>();
+    const renderedTokenIds = new Set<string>();
 
     return sentenceTokens.map((token) => {
       if (renderedTokenIds.has(token.id)) {

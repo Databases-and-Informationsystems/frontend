@@ -14,7 +14,7 @@ interface RelationProps {
 
 export const Relation = ({ relation }: RelationProps) => {
   const { mentions } = useMentionContext();
-  const { deleteRelation } = useRelationContext(); 
+  const { handleDeleteRelation } = useRelationContext(); 
 
   const headMention = mentions.find(mention => mention.id === relation.mention_head_id);
   const tailMention = mentions.find(mention => mention.id === relation.mention_tail_id);
@@ -34,7 +34,7 @@ export const Relation = ({ relation }: RelationProps) => {
       <Button className="h-auto w-auto p-1"
         onClick={(e) => {
           e.stopPropagation();
-          deleteRelation(relation.id);
+          handleDeleteRelation(relation.id);
         }}>
         <Trash2 />
       </Button>

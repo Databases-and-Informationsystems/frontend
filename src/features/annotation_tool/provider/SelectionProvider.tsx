@@ -1,31 +1,31 @@
 import React, { createContext, useState } from "react";
-import { Token as TokenType } from "../types";
+import { useTokens } from "../hooks/useTokens";
 
 interface SelectionContextType {
-  selectedTokens: number[];
-  selectedMentions: number[];
+  selectedTokens: string[];
+  selectedMentions: string[];
   setCurrentStep: (step: number) => void;
   currentStep: number;
-  handleTokenClick: (tokenId: number, sentenceIndex: number) => void;
-  handleMentionClick: (mentionId: number) => void;
+  handleTokenClick: (tokenId: string, sentenceIndex: number) => void;
+  handleMentionClick: (mentionId: string) => void;
   resetTokens: () => void;
   resetMentions: () => void;
 }
 
 interface SelectionProviderProps {
-  initialTokens: TokenType[];
   children: React.ReactNode;
 }
 
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
-export const SelectionProvider = ({ children, initialTokens }: SelectionProviderProps) => {
-  const [currentStep, setCurrentStep] = useState<number>(3);
-  const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
-  const [selectedMentions, setSelectedMentions] = useState<number[]>([]);
+export const SelectionProvider = ({ children }: SelectionProviderProps) => {
+  const { tokens: initialTokens } = useTokens();
+  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
+  const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
 
   // Select Tokens and reset selected Mentions
-  const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
+  const handleTokenClick = (tokenId: string, sentenceIndex: number) => {
     setSelectedMentions([]);
 
     if (selectedTokens.includes(tokenId)) {
@@ -58,7 +58,7 @@ export const SelectionProvider = ({ children, initialTokens }: SelectionProvider
     }
   };
 
-  const handleMentionClick = (mentionId: number) => {
+  const handleMentionClick = (mentionId: string) => {
     setSelectedTokens([]);
 
     // Deselect mention if it is already selected

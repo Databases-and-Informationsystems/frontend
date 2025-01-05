@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Relation as RelationType } from '../types'
+import { Relation } from '../types'
 import { useSelection } from './useSelection'
-import { MOCK_RELATIONS } from '@/testing/mocks/documentMocks'
+import { createRelation, deleteRelation, fetchRelations, updateRelation } from '../api/relation'
 
 export const useRelation = () => {
-  const [relations, setRelations] = useState<RelationType[]>([])
+  const [relations, setRelations] = useState<Relation[]>([])
   const { currentStep } = useSelection()
   const [loading, setLoading] = useState(false)
 
@@ -12,49 +12,58 @@ export const useRelation = () => {
 
   useEffect(() => {
     if (currentStep === 3 && !relationsFetched.current) {
-      fetchRelations();
+      loadRelations();
     }
   }, [currentStep]);
 
-  useEffect(() => {
-    console.log('Current Relations:', relations);
-  }, [relations]);
 
-
-  const fetchRelations = async () => {
+  const loadRelations = async () => {
     setLoading(true);
     try {
-      setRelations(MOCK_RELATIONS);
+      const data = await fetchRelations();
+      setRelations(data);
+      relationsFetched.current = true;
     } catch (error) {
-      console.error(error);
+      console.error('Failed to fetch relations:', error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  const createRelation = (relation: RelationType) => {
-    setRelations([...relations, relation])
-  }
+  const handleCreateRelation = async (relation: Relation) => {
+    try {
+      const createdRelation = await createRelation(relation);
+      setRelations((prev) => [...prev, createdRelation]);
+    } catch (error) {
+      console.error('Failed to create relation:', error);
+    }
+  };
 
-  const deleteRelation = (relationId: number) => {
-    setRelations((prev) =>
-      prev.filter((relation) => relation.id !== relationId)
-    )
-  }
+  const handleDeleteRelation = async (relationId: string) => {
+    try {
+      await deleteRelation(relationId);
+      setRelations((prev) => prev.filter((relation) => relation.id !== relationId));
+    } catch (error) {
+      console.error('Failed to delete relation:', error);
+    }
+  };
 
-  const updateRelation = (relationId: number, newRelation: RelationType) => {
-    setRelations(
-      relations.map((relation) =>
-        relation.id === relationId ? newRelation : relation
-      )
-    )
-  }
+  const handleUpdateRelation = async (relationId: string, updatedRelation: Relation) => {
+    try {
+      const updated = await updateRelation(relationId, updatedRelation);
+      setRelations((prev) =>
+        prev.map((relation) => (relation.id === relationId ? updated : relation))
+      );
+    } catch (error) {
+      console.error('Failed to update relation:', error);
+    }
+  };
 
   return {
     relations,
     loading,
-    createRelation,
-    deleteRelation,
-    updateRelation,
+    handleCreateRelation,
+    handleDeleteRelation,
+    handleUpdateRelation,
   }
 }

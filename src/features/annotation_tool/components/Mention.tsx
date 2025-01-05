@@ -5,7 +5,8 @@ import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import { MOCK_MENTION_SCHEMA, MOCK_TOKENS } from '@/testing/mocks/documentMocks';
+import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';
+import { useTokens } from '../hooks/useTokens';
 
 interface MentionProps {
   mention: MentionType;
@@ -14,11 +15,8 @@ interface MentionProps {
 
 export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
-  const { deleteMention } = useMentionContext();
-
-  const [document] = React.useState({
-    tokens: MOCK_TOKENS,
-  });
+  const { handleDeleteMention } = useMentionContext();
+  const { tokens } = useTokens();
 
   const [schema] = React.useState({
     schemaMentions: MOCK_MENTION_SCHEMA
@@ -32,7 +30,7 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
   }
 
 
-  const mentionTokens = document.tokens.filter((token) => (
+  const mentionTokens = tokens.filter((token) => (
     mention.token_ids.includes(token.id)
   ));
 
@@ -58,7 +56,7 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
       {showDeleteButton && (<Button className="h-auto w-auto p-1"
         onClick={(e) => {
           e.stopPropagation();
-          deleteMention(mention.id)
+          handleDeleteMention(mention.id)
         }}>
         <Trash2 />
       </Button>)}

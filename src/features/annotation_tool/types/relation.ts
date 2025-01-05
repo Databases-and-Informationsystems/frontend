@@ -1,8 +1,8 @@
 export type Relation = {
-    id: number;
+    id: string;
     tag: string;
     isDirected: boolean;
     isShownRecommendation: boolean;
-    mention_head_id: number;
-    mention_tail_id: number;
+    mention_head_id: string;
+    mention_tail_id: string;
 }

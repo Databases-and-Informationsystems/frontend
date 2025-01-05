@@ -1,34 +1,38 @@
 import { useEffect, useState } from 'react'
-import { Mention as MentionType } from '../types'
+import { Mention } from '../types'
+import { createMention, deleteMention, updateMention } from '../api/mention';
 
-export const useMentions = (initialMentions: MentionType[]) => {
-  const [mentions, setMentions] = useState<MentionType[]>(initialMentions)
-  //const [loading, setLoading] = useState(false)
+export const useMentions = () => {
+  const [mentions, setMentions] = useState<Mention[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log('Current Mentions:', mentions);
   }, [mentions]);
 
-  const createMention = (mention: MentionType) => {
-    setMentions([...mentions, mention])
-  }
+  const handleCreateMention = async (newMention: Mention) => {
+    const createdMention = await createMention(newMention);
+    setMentions((prev) => [...prev, createdMention]);
+  };
 
-  const deleteMention = (mentionId: number) => {
-    setMentions((prev) => prev.filter((mention) => mention.id !== mentionId))
-  }
+  const handleUpdateMention = async (mentionId: string, updatedMention: Mention) => {
+    const updated = await updateMention(mentionId, updatedMention);
+    setMentions((prev) => prev.map((mention) => (mention.id === mentionId ? updated : mention)));
+  };
 
-  const updateMention = (mentionId: number, newMention: MentionType) => {
-    setMentions(
-      mentions.map((mention) =>
-        mention.id === mentionId ? newMention : mention
-      )
-    )
-  }
+  const handleDeleteMention = async (mentionId: string) => {
+    await deleteMention(mentionId);
+    setMentions((prev) => prev.filter((mention) => mention.id !== mentionId));
+  };
+
 
   return {
     mentions,
-    createMention,
-    deleteMention,
-    updateMention,
+    setMentions,
+    loading,
+    setLoading,
+    handleCreateMention,
+    handleUpdateMention,
+    handleDeleteMention,
   }
 }
