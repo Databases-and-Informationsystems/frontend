@@ -3,17 +3,22 @@ import { Mention as MentionType, Token as TokenType } from '../types'
 import { Mention } from './Mention';
 import { Token } from './Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMentionContext } from '../context/useMentionContext';
 
 interface AnnotatedTextProps {
   tokens: TokenType[];
-  mentions: MentionType[];
 }
 
-export const AnnotatedText = ({ tokens, mentions }: AnnotatedTextProps) => {
+export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
+  const { mentions, loading } = useMentionContext();
+  
+  if (loading) {
+    return <p>Loading mentions...</p>;
+  }
 
-  // Find mention by token id
-  const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
+  const getMentionByTokenId = (tokenId: string): MentionType | undefined => (
     mentions.find(mention => mention.token_ids.includes(tokenId)));
+
 
   // Group tokens by sentence index
   const groupedTokensBySentence = tokens.reduce((acc, token) => {
@@ -24,9 +29,10 @@ export const AnnotatedText = ({ tokens, mentions }: AnnotatedTextProps) => {
     return acc;
   }, {} as Record<number, TokenType[]>);
 
+
   // Render each sentence with its tokens and mentions
   const renderAnnotatedSentence = (sentenceTokens: TokenType[]) => {
-    const renderedTokenIds = new Set<number>();
+    const renderedTokenIds = new Set<string>();
 
     return sentenceTokens.map((token) => {
       if (renderedTokenIds.has(token.id)) {
@@ -43,23 +49,21 @@ export const AnnotatedText = ({ tokens, mentions }: AnnotatedTextProps) => {
         mentionTokens.forEach((token) => renderedTokenIds.add(token.id));
 
         return (
-          <>
+          <React.Fragment key={`mention-${token.id}`}>
             <Mention
               key={token.id}
               mention={mention}
-              tokens={mentionTokens}
             />
             &nbsp;
-          </>
+          </React.Fragment>
         );
       }
-
       renderedTokenIds.add(token.id);
       return (
-        <>
+        <React.Fragment key={`token=${token.id}`}>
           <Token key={token.id} token={token} />
           &nbsp;
-        </>
+        </React.Fragment>
       );
     })
   }

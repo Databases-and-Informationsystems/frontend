@@ -1,0 +1,21 @@
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+import React from 'react'
+import { AnnotatedText } from '../components/AnnotatedText';
+import { RelationContainer } from '../components/RelationContainer';
+import { useTokens } from '../hooks/useTokens';
+
+export const RelationStep = () => {
+  const { tokens } = useTokens();
+
+  return (
+    <ResizablePanelGroup direction='horizontal'>
+      <ResizablePanel>
+        <AnnotatedText tokens={tokens}/>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel>
+        <RelationContainer />
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  )
+}

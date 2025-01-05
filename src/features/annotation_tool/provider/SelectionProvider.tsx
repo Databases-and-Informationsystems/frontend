@@ -1,34 +1,39 @@
 import React, { createContext, useState } from "react";
-import { Token as TokenType } from "../types";
+import { useTokens } from "../hooks/useTokens";
 
 interface SelectionContextType {
-  selectedTokens: number[];
-  selectedMentions: number[];
+  selectedTokens: string[];
+  selectedMentions: string[];
   setCurrentStep: (step: number) => void;
   currentStep: number;
-  handleTokenClick: (tokenId: number, sentenceIndex: number) => void;
-  handleMentionClick: (mentionId: number) => void;
+  handleTokenClick: (tokenId: string, sentenceIndex: number) => void;
+  handleMentionClick: (mentionId: string) => void;
   resetTokens: () => void;
   resetMentions: () => void;
 }
 
 interface SelectionProviderProps {
-  tokens: TokenType[];
   children: React.ReactNode;
 }
 
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
-export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) => {
+export const SelectionProvider = ({ children }: SelectionProviderProps) => {
+  const { tokens: initialTokens } = useTokens();
   const [currentStep, setCurrentStep] = useState<number>(2);
-  const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
-  const [selectedMentions, setSelectedMentions] = useState<number[]>([]);
+  const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
+  const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
 
   // Select Tokens and reset selected Mentions
-  const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
+  const handleTokenClick = (tokenId: string, sentenceIndex: number) => {
     setSelectedMentions([]);
 
-    const currentToken = tokens.find((token) => token.id === tokenId);
+    if (selectedTokens.includes(tokenId)) {
+      setSelectedTokens(selectedTokens.filter((id) => id !== tokenId));
+      return;
+    }
+
+    const currentToken = initialTokens.find((token) => token.id === tokenId);
     if (!currentToken) return;
 
     if (selectedTokens.length === 0) {
@@ -38,7 +43,7 @@ export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) 
 
     // Check if current token is adjacent to the selected tokens
     const isAdjacent = selectedTokens.some((selectedId) => {
-      const selectedToken = tokens.find((token) => token.id === selectedId);
+      const selectedToken = initialTokens.find((token) => token.id === selectedId);
       return (
         selectedToken &&
         Math.abs(selectedToken.index_in_document - currentToken.index_in_document) === 1 &&
@@ -53,7 +58,7 @@ export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) 
     }
   };
 
-  const handleMentionClick = (mentionId: number) => {
+  const handleMentionClick = (mentionId: string) => {
     setSelectedTokens([]);
 
     // Deselect mention if it is already selected
@@ -71,12 +76,12 @@ export const SelectionProvider = ({ children, tokens }: SelectionProviderProps) 
     }
 
     // Entity step
-    if (currentStep === 3) {
+    if (currentStep === 5) {
       setSelectedMentions([...selectedMentions, mentionId]);
     }
 
     // Relation step
-    if (currentStep === 5) {
+    if (currentStep === 3) {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mentionId]);
       }

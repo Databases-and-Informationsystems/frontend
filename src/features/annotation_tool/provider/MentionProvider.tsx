@@ -1,0 +1,65 @@
+import React, { createContext, useEffect } from "react";
+import { useMentions } from "../hooks/useMention";
+import { Mention as MentionType } from "../types";
+import { fetchMentions } from "../api/mention";
+
+interface MentionContextType {
+  handleCreateMention: (mention: MentionType) => void;
+  handleDeleteMention: (mentionId: string) => void;
+  handleUpdateMention: (mentionId: string, newMention: MentionType) => void;
+  mentions: MentionType[];
+  loading: boolean;
+}
+
+const MentionContext = createContext<MentionContextType | undefined>(undefined);
+
+interface MentionProviderProps {
+  children: React.ReactNode;
+}
+
+export const MentionProvider = ({ children }: MentionProviderProps) => {
+  const {
+    mentions,
+    setMentions,
+    loading,
+    setLoading,
+    handleCreateMention,
+    handleUpdateMention,
+    handleDeleteMention,
+  } = useMentions();
+
+  useEffect(() => {
+    const loadMentions = async () => {
+      setLoading(true);
+      try {
+        //TODO Remove conversion later on 
+        const data = await fetchMentions();
+        console.log("Fetched Mentions:", data);
+        setMentions(data.map((mention) => ({
+          ...mention,
+          id: String(mention.id),
+          token_ids: mention.token_ids.map(String),
+        })));
+      } catch (err) {
+        console.error("Failed to fetch mentions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadMentions();
+  }, [setMentions, setLoading]);
+
+  return (
+    <MentionContext.Provider value={{
+      mentions,
+      loading,
+      handleCreateMention,
+      handleUpdateMention,
+      handleDeleteMention,
+    }}>
+      {children}
+    </MentionContext.Provider>
+  );
+};
+
+export default MentionContext;
