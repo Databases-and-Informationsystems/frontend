@@ -7,13 +7,16 @@ import { AnnotationEntity } from '@/features/annotation_tool/types/entity.ts'
 import axios from 'axios'
 import { useMentionContext } from '../context/useMentionContext'
 import { useTokens } from '../hooks/useTokens'
+import { TokenProvider } from '@/features/annotation_tool/provider/TokenProvider.tsx'
+import { MentionProvider } from '@/features/annotation_tool/provider/MentionProvider.tsx'
+import { useMentions } from '@/features/annotation_tool/hooks/useMention.ts'
 
 
 function EntitySelection() {
 
   const [entityData, setEntityData] = useState<any>()
-  const { mentions } = useMentionContext();
-  const { tokens} = useTokens();
+  const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
+  //const { tokens } = useTokens();
   const entityIds = useMemo(
     () => entityData?.map((entity) => entity.id) || [],
     [entityData]
@@ -22,7 +25,7 @@ function EntitySelection() {
   useEffect(() => {
     const entity = async () => {
       try {
-        const response = await axios.get('http://localhost:3033/entities')
+        const response = await axios.get('http://localhost:3000/entities')
           .then((response) => setEntityData(response.data));
       } catch (error) {
         console.log("Error: ", error);
@@ -62,12 +65,14 @@ function EntitySelection() {
       <div className="bg-blue-300 overflow-auto text-black">
         /* TODO: left scroll */
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <MultipleDroppables
-            names={entityIds}
-            items={droppableItemLists}
-            allEntities={entityData}
-            allTokens={tokenData}
-          ></MultipleDroppables>
+          <TokenProvider>
+            <MultipleDroppables
+              names={entityIds}
+              items={droppableItemLists}
+              allEntities={entityData}
+              allTokens={mentions}
+            ></MultipleDroppables>
+          </TokenProvider>
           {/*<DraggableHand id={1}></DraggableHand>
           <DraggableHand id={2}></DraggableHand>*/}
           <DragOverlay>
@@ -78,6 +83,11 @@ function EntitySelection() {
       </div>
       <div className="bg-lime-300 overflow-auto text-black">
         /* TODO: text / mention view */
+        <MentionProvider>
+          {
+            mentions.map((mention) => (<p>{mention.tag}</p>))
+          }
+        </MentionProvider>
       </div>
     </div>
   )
