@@ -5,47 +5,19 @@ import { useEffect, useState, SyntheticEvent, useMemo } from 'react'
 import { Mention } from '@/features/annotation_tool/types'
 import { AnnotationEntity } from '@/features/annotation_tool/types/entity.ts'
 import axios from 'axios'
+import { useMentionContext } from '../context/useMentionContext'
+import { useTokens } from '../hooks/useTokens'
 
 
 function EntitySelection() {
 
   const [entityData, setEntityData] = useState<any>()
-  const [mentionData, setMentionData] = useState<any>()
-  const [tokenData, setTokenData] = useState<any>()
+  const { mentions } = useMentionContext();
+  const { tokens} = useTokens();
   const entityIds = useMemo(
     () => entityData?.map((entity) => entity.id) || [],
     [entityData]
   );
-
-  useEffect(() => {
-    const mentions = async () => {
-      try {
-        const response = await axios.get('http://localhost:3033/mentions');
-        setMentionData(response.data);
-        console.log("Mention state: ", response.data);
-      } catch (error) {
-        console.log("Error: ", error);
-      } finally {
-        console.log("finallyMentions");
-      }
-    }
-    mentions()
-  }, [])
-
-  useEffect(() => {
-    const tokens = async () => {
-      try {
-        const response = await axios.get('http://localhost:3033/tokens');
-        setTokenData(response.data);
-        console.log("Token state: ", response.data);
-      } catch (error) {
-        console.log("Error: ", error);
-      } finally {
-        console.log("finallyMentions");
-      }
-    }
-    tokens()
-  }, [])
 
   useEffect(() => {
     const entity = async () => {
