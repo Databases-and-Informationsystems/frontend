@@ -2,7 +2,7 @@ import { MultipleDroppables } from '@/features/annotation_tool/components/Droppa
 import { DraggableHand } from '@/features/annotation_tool/components/DraggableHandler.tsx'
 import { DndContext, DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState, SyntheticEvent, useMemo } from 'react'
-import { Mention } from '@/features/annotation_tool/types'
+import { Mention as MentionType } from '@/features/annotation_tool/types'
 import { AnnotationEntity } from '@/features/annotation_tool/types/entity.ts'
 import axios from 'axios'
 import { useMentionContext } from '../context/useMentionContext'
@@ -10,6 +10,8 @@ import { useTokens } from '../hooks/useTokens'
 import { TokenProvider } from '@/features/annotation_tool/provider/TokenProvider.tsx'
 import { MentionProvider } from '@/features/annotation_tool/provider/MentionProvider.tsx'
 import { useMentions } from '@/features/annotation_tool/hooks/useMention.ts'
+import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
+import { SelectionProvider } from '@/features/annotation_tool/provider/SelectionProvider.tsx'
 
 
 function EntitySelection() {
@@ -85,7 +87,7 @@ function EntitySelection() {
         /* TODO: text / mention view */
         <MentionProvider>
           {
-            mentions.map((mention) => (<p>{mention.tag}</p>))
+            mentions.map((mention) => (<TokenProvider><SelectionProvider><Mention key={mention.id} mention={mention} ></Mention></SelectionProvider></TokenProvider>))
           }
         </MentionProvider>
       </div>
