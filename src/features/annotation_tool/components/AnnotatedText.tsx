@@ -49,14 +49,17 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
         mentionTokens.forEach((token) => renderedTokenIds.add(token.id));
 
         return (
-          <EnhancedMention
-            key={`mention-${token.id}`}
-            mention={mention} />
+          <React.Fragment key={`mention-fragment-${token.id}`}>
+            <EnhancedMention
+              key={`mention-${mention.id}`}
+              mention={mention} />
+            &nbsp;
+          </React.Fragment>
         );
       }
       renderedTokenIds.add(token.id);
       return (
-        <React.Fragment key={`token=${token.id}`}>
+        <React.Fragment key={`token-fragment-${token.id}`}>
           <Token key={token.id} token={token} />
           &nbsp;
         </React.Fragment>

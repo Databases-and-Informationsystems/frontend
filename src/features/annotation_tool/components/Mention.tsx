@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Check, Clock, Trash2 } from 'lucide-react';
 import { useTokens } from '../hooks/useTokens';
 import { useSchema } from '../hooks/useSchema';
 
@@ -17,7 +17,7 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
   const { handleDeleteMention } = useMentionContext();
   const { tokens } = useTokens();
   const { schema } = useSchema();
-  
+
 
   const isSelected = selectedMentions.includes(mention.id);
 
@@ -50,13 +50,25 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
         {mention.tag}
       </Badge>
       &nbsp;
-      {showDeleteButton && (<Button className="h-auto w-auto p-1"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDeleteMention(mention.id)
-        }}>
-        <Trash2 />
-      </Button>)}
+      {showDeleteButton ? (
+        <Button
+          className="h-auto w-auto p-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteMention(mention.id);
+          }}
+        >
+          <Trash2 />
+        </Button>
+      ) : mention.isShownRecommendation ? (
+        <Button className="h-auto w-auto p-1">
+          <Clock />
+        </Button>
+      ) : (
+        <Button className="h-auto w-auto p-1">
+          <Check />
+        </Button>
+      )}
     </span>
   )
 }
