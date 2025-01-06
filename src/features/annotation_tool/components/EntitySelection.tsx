@@ -24,6 +24,11 @@ function EntitySelection() {
     [entityData]
   );
 
+  const getMentionById = (id) => {
+    //console.log("Searching for id: " + id);
+    return mentions.find((ment) => ment.id == id); // used for getting the mention for the draggable overlay
+  };
+
   useEffect(() => {
     const entity = async () => {
       try {
@@ -79,7 +84,7 @@ function EntitySelection() {
           <DraggableHand id={2}></DraggableHand>*/}
           <DragOverlay>
             {' '}
-            {activeId ? <DraggableHand id={activeId} /> : null}{' '}
+            {activeId ? <DraggableHand m={getMentionById(activeId)} id={activeId} /> : null}{' '}
           </DragOverlay>
         </DndContext>
       </div>

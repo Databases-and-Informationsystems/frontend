@@ -4,6 +4,7 @@ import { Token } from '@/features/annotation_tool/components/Token.tsx'
 import { Component } from 'react'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { DraggableHand } from '@/features/annotation_tool/components/DraggableHandler.tsx'
+import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
 
 function Droppable(props) {
   const { setNodeRef } = useDroppable({
@@ -25,33 +26,18 @@ interface MultipleDroppablesProps {
 }
 
 export function MultipleDroppables({ names, items, allEntities, allTokens }: MultipleDroppablesProps) {
+  const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
+
+  const getMentionById = (id) => {
+    //console.log("Searching for id: " + id);
+    return mentions.find((ment) => ment.id == id); // Search for the mention
+  };
+
   //get all mention ids for the current entity id
   const getMentionIdsById = (id) => {
     const entity = allEntities.find((item) => item.id === id);
     return entity ? entity.mention_ids : [];
   };
-
-  const getTokenObjectById = (tId: number) => {
-    const tokenContents = allTokens.find((item) => item.id === tId);
-    if (!tokenContents) {
-      console.log("Error, token not found.");
-    }else {
-      console.log("success: ", tokenContents);
-      return getTokenTypeObject(tokenContents);
-    }
-  }
-
-  const t: TokenType = {
-    bio_tag: '',
-    id: 0,
-    index_in_document: 0,
-    pos_tag: '',
-    sentence_index: 0,
-    text: 'test'
-  }
-
-  console.log("t: ",t);
-  console.log("token in: ",allTokens)
 
   return (
     <section className="bg-red-300 m-1">
@@ -63,7 +49,7 @@ export function MultipleDroppables({ names, items, allEntities, allTokens }: Mul
           <Droppable id={id} key={id}>
             Droppable container id: {id}
             {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
-            {getMentionIdsById(id).map((i) => ( <DraggableHand key={i} id={i} allEntities={allEntities}></DraggableHand> ))}
+            {getMentionIdsById(id).map((i) => ( <DraggableHand key={i} id={i} m={getMentionById(i)} allEntities={allEntities}></DraggableHand> ))} {/*loads the corresponding mentions*/}
             {/*<Token token={t}></Token>*/}
             {/*<Mention mention={{id: 1, tag: "testing", isShownRecommendation: true, token_ids: [1]}} tokens={[t]}></Mention>*/}
           </Droppable>
