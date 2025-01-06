@@ -5,6 +5,9 @@ export const MentionStep = () => {
   const { tokens } = useTokens();
 
   return (
-    <AnnotatedText tokens={tokens}/>
+    <>
+      <div>Second Step</div>
+      <AnnotatedText tokens={tokens} />
+    </>
   )
 }

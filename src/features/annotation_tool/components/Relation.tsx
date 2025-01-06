@@ -1,7 +1,6 @@
 import { Relation as RelationType } from '../types'
 import { useMentionContext } from '../context/useMentionContext';
 import { Mention } from './Mention';
-import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRelationContext } from '../context/useRelationContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
