@@ -10,9 +10,10 @@ import { useSchema } from '../hooks/useSchema';
 interface MentionProps {
   mention: MentionType;
   showDeleteButton?: boolean;
+  isInRelation?: boolean;
 }
 
-export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
+export const Mention = ({ mention, showDeleteButton = true, isInRelation = false }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
   const { handleDeleteMention } = useMentionContext();
   const { tokens } = useTokens();
@@ -50,7 +51,7 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
         {mention.tag}
       </Badge>
       &nbsp;
-      {showDeleteButton ? (
+      {!isInRelation && (showDeleteButton ? (
         <Button
           className="h-auto w-auto p-1"
           onClick={(e) => {
@@ -68,7 +69,7 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
         <Button className="h-auto w-auto p-1">
           <Check />
         </Button>
-      )}
+      ))}
     </span>
   )
 }

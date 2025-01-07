@@ -34,7 +34,6 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
       try {
         //TODO Remove conversion later on 
         const data = await fetchMentions();
-        console.log("Fetched Mentions:", data);
         setMentions(data.map((mention) => ({
           ...mention,
           id: String(mention.id),

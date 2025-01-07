@@ -101,7 +101,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (currentStep === 3 && selectedMentions.length === 2) {
+  if (currentStep === 4 && selectedMentions.length === 2) {
     const mentionHead = getMentionById(selectedMentions[0]);
     const mentionTail = getMentionById(selectedMentions[1]);
 

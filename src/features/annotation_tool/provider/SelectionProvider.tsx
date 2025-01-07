@@ -20,7 +20,7 @@ const SelectionContext = createContext<SelectionContextType | undefined>(undefin
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
   const { tokens: initialTokens } = useTokens();
-  const [currentStep, setCurrentStep] = useState<number>(4);
+  const [currentStep, setCurrentStep] = useState<number>(3);
   const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
 
@@ -81,7 +81,7 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
     }
 
     // Relation step
-    if (currentStep === 3) {
+    if (currentStep === 4) {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mentionId]);
       }
