@@ -7,9 +7,10 @@ import { EnhancedMention } from './EnhancedMention';
 
 interface AnnotatedTextProps {
   tokens: TokenType[];
+  showDeleteButton?: boolean;
 }
 
-export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
+export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) => {
   const { mentions, loading } = useMentionContext();
 
   if (loading) {
@@ -52,7 +53,9 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
           <React.Fragment key={`mention-fragment-${token.id}`}>
             <EnhancedMention
               key={`mention-${mention.id}`}
-              mention={mention} />
+              mention={mention} 
+              showDeleteButton={showDeleteButton}
+              />
             &nbsp;
           </React.Fragment>
         );

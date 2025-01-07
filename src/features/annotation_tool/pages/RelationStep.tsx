@@ -12,7 +12,7 @@ export const RelationStep = () => {
       <ResizablePanel>
         <AnnotatedText tokens={tokens}/>
       </ResizablePanel>
-      <ResizableHandle withHandle />
+      <ResizableHandle withHandle className='bg-transparent'/>
       <ResizablePanel>
         <RelationContainer />
       </ResizablePanel>

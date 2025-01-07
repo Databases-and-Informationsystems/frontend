@@ -34,7 +34,7 @@ export const Mention = ({ mention, showDeleteButton = true, isInRelation = false
 
 
   return (
-    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'}`}
+    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'} ${mention.isShownRecommendation ? 'opacity-50' : ''}`}
       onClick={() => handleMentionClick(mention.id)}
       style={{ backgroundColor: getMentionColor(mention.tag) }}
     >

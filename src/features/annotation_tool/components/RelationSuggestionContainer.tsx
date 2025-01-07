@@ -21,7 +21,7 @@ export const RelationSuggestionContainer = () => {
   const handleAccept = () => {
     handleUpdateRelation(
       currentRelation!.id,
-      { 
+      {
         ...currentRelation!,
         isShownRecommendation: false,
         tag: relationTag || currentRelation!.tag
@@ -33,11 +33,12 @@ export const RelationSuggestionContainer = () => {
   }
 
   return (
-    <div>
-      <Button
+    <>
+      <div className="flex gap-4 py-6 w-96">
+        <Button
           onClick={() =>
             handleAccept()
-            }>Accept</Button>
+          }>Accept</Button>
         <Select value={relationTag} onValueChange={(value: string) => setRelationTag(value)}>
           <SelectTrigger>
             <SelectValue>{relationTag}</SelectValue>
@@ -59,9 +60,10 @@ export const RelationSuggestionContainer = () => {
           </SelectContent>
         </Select>
         <Button onClick={() => handleReject()}>Reject</Button>
-        <div>
-          <Relation relation={currentRelation!}/>
-        </div>
-    </div>
+      </div>
+      <div>
+        <Relation relation={currentRelation!} />
+      </div>
+    </>
   )
 }

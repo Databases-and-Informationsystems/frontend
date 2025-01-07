@@ -27,8 +27,7 @@ export const MentionSuggestionStep = () => {
 
   return (
     <>
-      <div>First Step</div>
-      <AnnotatedText tokens={tokens} />
+      <AnnotatedText tokens={tokens} showDeleteButton={false}/>
     </>
   )
 }
