@@ -33,7 +33,11 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate, projects
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" onKeyDown={handleKeyPress} tabIndex={0}>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" // Priorité visuelle
+      onKeyDown={handleKeyPress}
+      tabIndex={0}
+    >
       <div className="bg-white p-6 rounded-lg w-1/3">
         <h2 className="text-lg font-bold mb-4">Create Document</h2>
 

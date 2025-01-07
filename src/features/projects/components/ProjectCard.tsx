@@ -21,7 +21,7 @@ interface ProjectCardProps {
   };
   onAddDocument: () => void;
   onOpenProject: () => void;
-  onCloseProject: () => void;
+  onCloseProject?: () => void;
   onPreview: (content: string) => void;
   onDeleteDocument: (id: number) => void;
 }

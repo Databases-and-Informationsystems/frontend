@@ -36,14 +36,14 @@ const ProjectPage: React.FC = () => {
   const [isAddDocOpen, setIsAddDocOpen] = useState(false);
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
-  
+
   const [projectName, setProjectName] = useState('');
   const [schema, setSchema] = useState('');
   const [team, setTeam] = useState('');
   const [teams] = useState(['Team Alpha', 'Team Beta']);
   const [schemas] = useState(['Schema A', 'Schema B']);
 
-  const handleAddDocument = (name: string, content: string,project:string) => {
+  const handleAddDocument = (name: string, content: string, project: string) => {
     const newDocument: Document = {
       id: Date.now(),
       name,
@@ -62,17 +62,17 @@ const ProjectPage: React.FC = () => {
     console.log(`Document with id ${id} deleted`);
   };
 
-const handlePreviewDocument = (content: string) => {
+  const handlePreviewDocument = (content: string) => {
     if (content) {
-        setPreviewContent(content);
+      setPreviewContent(content);
     } else {
-        setPreviewContent("No content available for preview.");
+      setPreviewContent("No content available for preview.");
     }
   };
 
   const handleOpenProject = () => setIsDetailsVisible(true);
   const handleCloseProject = () => setIsDetailsVisible(false);
-  
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {!isDetailsVisible && (
@@ -98,11 +98,10 @@ const handlePreviewDocument = (content: string) => {
                   open: openDocs.filter((doc) => doc.project === project.title),
                   completed: completedDocs.filter((doc) => doc.project === project.title),
                 }}
-                onPreview={handlePreviewDocument} // Ensure onPreview is included
+                onPreview={handlePreviewDocument}
                 onDeleteDocument={handleDeleteDocument}
                 onAddDocument={() => setIsAddDocOpen(true)}
                 onOpenProject={handleOpenProject}
-                onCloseProject={handleCloseProject} // Add this line
               />
             ))}
           </div>
@@ -110,7 +109,7 @@ const handlePreviewDocument = (content: string) => {
       )}
 
       {isDetailsVisible && (
-        <div className="modal bg-white p-6 rounded-lg shadow-lg relative">
+        <div className="modal bg-white p-6 rounded-lg shadow-lg relative z-40">
           <button
             className="absolute top-2 right-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700"
             onClick={handleCloseProject}
@@ -134,17 +133,18 @@ const handlePreviewDocument = (content: string) => {
       )}
 
       {previewContent && (
-        <DocumentPreview onClose={() => setPreviewContent(null)} /> // Remove 'content' prop
+        <DocumentPreview onClose={() => setPreviewContent(null)} />
       )}
 
       {isAddDocOpen && (
-        <DocumentForm
-          onClose={() => setIsAddDocOpen(false)}
-          onCreate={handleAddDocument}
-          projects={projects.map((project) => project.title)} // Passez la liste des titres de projets
-        />
+        <div className="relative z-50"> {/* Priorité visuelle */}
+          <DocumentForm
+            onClose={() => setIsAddDocOpen(false)}
+            onCreate={handleAddDocument}
+            projects={projects.map((project) => project.title)}
+          />
+        </div>
       )}
-      
 
       {isProjectModalOpen && (
         <Modal
