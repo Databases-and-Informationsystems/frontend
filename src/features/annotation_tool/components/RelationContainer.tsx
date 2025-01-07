@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export const RelationContainer = () => {
   const { relations } = useRelationContext();
 
+  console.log(relations);
+
   return (
     <Card>
       <CardHeader>

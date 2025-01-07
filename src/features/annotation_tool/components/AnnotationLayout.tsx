@@ -10,6 +10,7 @@ import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
 import { SchemaProvider } from '../provider/SchemaProvider';
 import { MentionSuggestionStep } from '../pages/MentionSuggestionStep';
+import { RelationSuggestionStep } from '../pages/RelationSuggestionStep';
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
@@ -49,7 +50,9 @@ const CurrentStepRender = () => {
       return <MentionSuggestionStep />
     case 2:
       return <MentionStep />
-    case 3:
+    case 3: 
+      return <RelationSuggestionStep />
+    case 4:
       return <RelationStep />
   }
 }

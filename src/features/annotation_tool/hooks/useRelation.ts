@@ -6,8 +6,7 @@ import { createRelation, deleteRelation, fetchRelations, updateRelation } from '
 export const useRelation = () => {
   const [relations, setRelations] = useState<Relation[]>([])
   const { currentStep } = useSelection()
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(true)
   const relationsFetched = useRef<boolean>(false)
 
   useEffect(() => {

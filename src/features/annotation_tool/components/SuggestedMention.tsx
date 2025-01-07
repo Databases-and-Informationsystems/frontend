@@ -12,7 +12,7 @@ interface SuggestedMentionProps {
 }
 
 export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
-  const [selectedTag, setSelectedTag] = useState(mention.tag);
+  const [selectedTag, setSelectedTag] = useState<string>(mention.tag);
   const { handleDeleteMention, handleUpdateMention } = useMentionContext();
   const { schema } = useSchema();
 
@@ -32,7 +32,7 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
                 isShownRecommendation: false,
               }
             )}>Accept</Button>
-        <Select value={selectedTag} onValueChange={(value) => setSelectedTag(value)}>
+        <Select value={selectedTag} onValueChange={(value: string) => setSelectedTag(value)}>
           <SelectTrigger style={{ color: getMentionColor(mention.tag) }}>
             <SelectValue>{selectedTag}</SelectValue>
           </SelectTrigger>

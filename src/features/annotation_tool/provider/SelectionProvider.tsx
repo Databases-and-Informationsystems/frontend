@@ -20,7 +20,7 @@ const SelectionContext = createContext<SelectionContextType | undefined>(undefin
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
   const { tokens: initialTokens } = useTokens();
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(4);
   const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
 
