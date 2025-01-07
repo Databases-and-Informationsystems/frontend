@@ -11,8 +11,8 @@ const steps = [
 
 
 export function NavigationHeader(props: { project_name: string }) {
-
   const { step, handleStepChange } = useStepNavigation();
+  
 
   return (
     <div className="top-0">

@@ -76,7 +76,7 @@
   "mentions": [
     {
       "id": "6221",
-      "tag": "Activity",
+      "tag": "Actor",
       "isShownRecommendation": false,
       "token_ids": [
         "4",
@@ -85,7 +85,7 @@
     },
     {
       "id": "9879",
-      "tag": "Actor",
+      "tag": "Activity Data",
       "isShownRecommendation": false,
       "token_ids": [
         "7",

@@ -1,11 +1,10 @@
 import React, { createContext, useState } from "react";
 import { useTokens } from "../hooks/useTokens";
+import { useStepNavigation } from "../hooks/useStepNavigation";
 
 interface SelectionContextType {
   selectedTokens: string[];
   selectedMentions: string[];
-  setCurrentStep: (step: number) => void;
-  currentStep: number;
   handleTokenClick: (tokenId: string, sentenceIndex: number) => void;
   handleMentionClick: (mentionId: string) => void;
   resetTokens: () => void;
@@ -20,7 +19,7 @@ const SelectionContext = createContext<SelectionContextType | undefined>(undefin
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
   const { tokens: initialTokens } = useTokens();
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const { step } = useStepNavigation();
   const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
 
@@ -70,18 +69,18 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
     }
 
     // Mention step
-    if (currentStep === 2) {
+    if (step === 'mentionEditing') {
       setSelectedMentions([mentionId]);
       return;
     }
 
     // Entity step
-    if (currentStep === 5) {
+    if (step === 'entitySelection') {
       setSelectedMentions([...selectedMentions, mentionId]);
     }
 
     // Relation step
-    if (currentStep === 4) {
+    if (step === 'relationEditing') {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mentionId]);
       }
@@ -102,8 +101,6 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
       value={{
         selectedTokens,
         selectedMentions,
-        setCurrentStep,
-        currentStep,
         handleTokenClick,
         handleMentionClick,
         resetTokens,

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Relation } from '../types'
-import { useSelection } from './useSelection'
 import { createRelation, deleteRelation, fetchRelations, updateRelation } from '../api/relation'
+import { useStepNavigation } from './useStepNavigation'
 
 export const useRelation = () => {
   const [relations, setRelations] = useState<Relation[]>([])
-  const { currentStep } = useSelection()
+  const { step } = useStepNavigation()
   const [loading, setLoading] = useState(true)
   const relationsFetched = useRef<boolean>(false)
 
@@ -23,10 +23,10 @@ export const useRelation = () => {
         setLoading(false);
       }
     };
-    if (currentStep === 3 && !relationsFetched.current) {
+    if (step === 'relationSuggestion' && !relationsFetched.current) {
       loadRelations();
     }
-  }, [currentStep]);
+  }, [step]);
 
   const handleCreateRelation = async (relation: Relation) => {
     try {
