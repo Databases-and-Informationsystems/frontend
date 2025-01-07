@@ -1,5 +1,6 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu.tsx'
 import { useStepNavigation } from '../hooks/useStepNavigation'
+import { useBlockStep } from '../hooks/useBlockStep';
 
 const steps = [
   { key: 'mentionSuggestion', label: 'Mention Suggestion' },
@@ -12,7 +13,17 @@ const steps = [
 
 export function NavigationHeader(props: { project_name: string }) {
   const { step, handleStepChange } = useStepNavigation();
-  
+
+  const isBlocked = useBlockStep(step);
+
+  const handleStepClick = (key: string) => {
+    if (isBlocked) {
+      alert("You cannot navigate away until all suggestions are completed.");
+      return;
+    }
+    handleStepChange(key);
+  }
+
 
   return (
     <div className="top-0">
@@ -23,7 +34,7 @@ export function NavigationHeader(props: { project_name: string }) {
             {steps.map(({ key, label }) => (
               <NavigationMenuItem key={key}>
                 <NavigationMenuLink
-                  onClick={() => handleStepChange(key)}
+                  onClick={() => handleStepClick(key)}
                   style={{ cursor: 'pointer' }}
                   className={`text-lg font-medium ${key === step ? 'text-blue-500' : 'text-gray-500'
                     }`}
