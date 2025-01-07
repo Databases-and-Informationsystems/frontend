@@ -1,6 +1,5 @@
 import { AnnotationLayout } from '@/features/annotation_tool/components/AnnotationLayout'
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
-import React from 'react'
 import { Routes, Route } from 'react-router'
 
 const AppRoutes = () => {

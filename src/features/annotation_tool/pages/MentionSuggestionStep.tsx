@@ -21,6 +21,10 @@ export const MentionSuggestionStep = () => {
     return <p>Loading suggestions...</p>; // Ladeanzeige
   }
 
+  if (!hasSuggestions) {
+    return <p>No suggestions available. This step is complete.</p>;
+  }
+
   return (
     <>
       <div>First Step</div>
