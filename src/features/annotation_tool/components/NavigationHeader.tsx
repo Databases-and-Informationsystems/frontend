@@ -3,7 +3,8 @@ import { useStepNavigation } from '../hooks/useStepNavigation'
 import { useBlockStep } from '../hooks/useBlockStep';
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
-import { CircleCheckBig, Save } from 'lucide-react';
+import { CircleCheckBig, Save, TriangleAlert } from 'lucide-react';
+import { toast } from 'sonner';
 
 const steps = [
   { key: 'mentionSuggestion', label: 'Mention Suggestion' },
@@ -21,7 +22,12 @@ export function NavigationHeader(props: { project_name: string }) {
 
   const handleStepClick = (key: string) => {
     if (isBlocked) {
-      alert("You cannot navigate away until all suggestions are completed.");
+      toast.warning('You have to finish all suggestions, before you can proceed to the next step.',
+        {
+          className: 'text-base',
+          icon: <TriangleAlert />,
+        }
+      );
       return;
     }
     handleStepChange(key);
@@ -73,10 +79,10 @@ export function NavigationHeader(props: { project_name: string }) {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-              <div className='flex border-2 rounded-lg p-2 gap-2'>
-                <CircleCheckBig />
-                Finish Annotation
-              </div>
+                <div className='flex border-2 rounded-lg p-2 gap-2'>
+                  <CircleCheckBig />
+                  Finish Annotation
+                </div>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>

@@ -33,7 +33,7 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
               }
             )}>Accept</Button>
         <Select value={selectedTag} onValueChange={(value: string) => setSelectedTag(value)}>
-          <SelectTrigger style={{ color: getMentionColor(mention.tag) }}>
+          <SelectTrigger style={{ color: getMentionColor(selectedTag) }}>
             <SelectValue>{selectedTag}</SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -62,10 +62,13 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
     <Popover>
       <PopoverTrigger asChild>
         <span>
-          <Mention mention={mention} showDeleteButton={false}/>
+          <Mention mention={mention} showDeleteButton={false} />
         </span>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        align="center"
+        side="bottom"
+        className="w-fit">
         {content()}
       </PopoverContent>
     </Popover>
