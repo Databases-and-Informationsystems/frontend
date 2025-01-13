@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-
+import { useNavigate } from 'react-router'; 
 interface Document {
   name: string;
   project: string;
@@ -28,7 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showOngoing, setShowOngoing] = useState(false);
   const [showOpen, setShowOpen] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
-
+  const navigate = useNavigate();
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Ongoing":
@@ -40,6 +40,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       default:
         return "text-black";
     }
+  };
+  const handleOpenProject = () => {
+    // Redirection vers la page '/projects' lorsque l'utilisateur clique sur le bouton
+    navigate('/projects');
   };
 
   return (
@@ -143,7 +147,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
       {/* Bouton Open Project */}
       <div className="mt-4">
-        <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+        <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+         onClick={handleOpenProject} >
           Open Project
         </button>
       </div>
