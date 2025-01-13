@@ -12,11 +12,13 @@ import { MentionProvider } from '@/features/annotation_tool/provider/MentionProv
 import { useMentions } from '@/features/annotation_tool/hooks/useMention.ts'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { SelectionProvider } from '@/features/annotation_tool/provider/SelectionProvider.tsx'
+import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 
 
 function EntitySelection() {
 
   const [entityData, setEntityData] = useState<any>()
+  const {setEntities} = useEntity();
   const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
   //const { tokens } = useTokens();
   const entityIds = useMemo(
@@ -33,7 +35,7 @@ function EntitySelection() {
     const entity = async () => {
       try {
         const response = await axios.get('http://localhost:3000/entities')
-          .then((response) => setEntityData(response.data));
+          .then((response) => {setEntityData(response.data); setEntities(response.data)});
       } catch (error) {
         console.log("Error: ", error);
       } finally {
@@ -92,7 +94,7 @@ function EntitySelection() {
         /* TODO: text / mention view */
         <MentionProvider>
           {
-            mentions.map((mention) => (<TokenProvider><SelectionProvider><Mention key={mention.id} mention={mention} ></Mention></SelectionProvider></TokenProvider>))
+            mentions.map((mention) => (<TokenProvider><SelectionProvider><Mention key={mention.id} mention={mention} showDeleteButton={false} ></Mention></SelectionProvider></TokenProvider>))
           }
         </MentionProvider>
       </div>
