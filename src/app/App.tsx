@@ -9,9 +9,9 @@ function App() {
   return (
     <AppProvider>
       <div style={{height:"42px"}}></div>
-      <MentionProvider>
+      {/*<MentionProvider>
         <EntitySelection></EntitySelection>
-      </MentionProvider>
+      </MentionProvider>*/}
       <AppRoutes/>
     </AppProvider>
   )

@@ -25,11 +25,12 @@ export function DraggableHand({id,eid,allEntities,m}: props) {
     <div ref={setNodeRef} className="border-solid border-2 border-orange-600 flex ml-1 mr-1 mt-1 mb-1">
       {/*Mention id: {id}
       m: {JSON.stringify(m)}*/}
-      <TokenProvider>
+      {/*<TokenProvider>
         <SelectionProvider>
           <Mention key={id} mention={m}></Mention>
         </SelectionProvider>
-      </TokenProvider>
+      </TokenProvider>*/}
+      <Mention key={id} mention={m}></Mention>
       <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 rounded-md">Drag handle</div>
       <Button onClick={()=>handleRemoveFromEntity(eid,id)}>remove</Button>
     </div>

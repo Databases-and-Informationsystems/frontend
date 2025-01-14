@@ -9,6 +9,7 @@ import { useSelection } from '../hooks/useSelection';
 import { MentionStep } from '../pages/MentionStep';
 import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
+import EntitySelection from '@/features/annotation_tool/components/EntitySelection.tsx'
 
 export const AnnotationLayout = () => {
   //const { currentStep, handleStepChange } = useStepNavigation();
@@ -26,7 +27,7 @@ export const AnnotationLayout = () => {
                 I will be the navbar
               </h2>
               {/* Add Navigation here*/}
-              <AnnotationControlBox />
+              {/*<AnnotationControlBox />*/}
               <CurrentStepRender />
               <ModeToggle />
             </div>
@@ -42,7 +43,7 @@ const CurrentStepRender = () => {
 
   switch (currentStep) {
     case 2:
-      return <MentionStep />
+      return <EntitySelection />
     case 3:
       return <RelationStep />
   }

@@ -67,7 +67,7 @@ function EntitySelection() {
     setActiveId(null)
   }
 
-  if (eLoading) {
+  if (eLoading || loading) {
     return (<p>Loading Entities...</p>)
   }
 
@@ -80,14 +80,14 @@ function EntitySelection() {
       <div className="bg-blue-300 overflow-auto text-black">
         /* TODO: left scroll */
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <TokenProvider>
+          {/*<TokenProvider>*/}
             <MultipleDroppables
               names={entityIds}
               items={droppableItemLists}
               allEntities={entities}
               allTokens={mentions}
             ></MultipleDroppables>
-          </TokenProvider>
+          {/*}</TokenProvider>*/}
           {/*<DraggableHand id={1}></DraggableHand>
           <DraggableHand id={2}></DraggableHand>*/}
           <DragOverlay>
@@ -98,11 +98,11 @@ function EntitySelection() {
       </div>
       <div className="bg-lime-300 overflow-auto text-black">
         /* TODO: text / mention view */
-        <MentionProvider>
+        {/*<MentionProvider>*/}
           {
-            mentions.map((mention) => (<TokenProvider><SelectionProvider><Mention key={mention.id} mention={mention} showDeleteButton={false} ></Mention></SelectionProvider></TokenProvider>))
+            mentions.map((mention) => (<Mention key={mention.id} mention={mention} showDeleteButton={false} ></Mention>))
           }
-        </MentionProvider>
+        {/*</MentionProvider>*/}
       </div>
     </div>
   )
