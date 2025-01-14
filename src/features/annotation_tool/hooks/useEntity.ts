@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnnotationEntity } from '../types'
 import { createEntity, deleteEntity, updateEntity } from '../api/annotationEntityHelper';
+import axios from 'axios'
 
 export const useEntity = () => {
   const [entities, setEntities] = useState<AnnotationEntity[]>([]);
@@ -11,13 +12,13 @@ export const useEntity = () => {
   }, [entities]);
 
   const getEntityById = (id: any) => {
-    console.log('Current Entities:', entities);
+    console.log('Current Entities while searching:', entities);
     const res = entities.find((ent) => ent.id == id);
     console.log(`Searching for entity ${id}, type: ${typeof id}, found: ${JSON.stringify(res)}`);
     return res // used for getting the mention for the draggable overlay
   };
 
-  const handleCreateEntity = async (newEntity: AnnotaionEntity) => {
+  const handleCreateEntity = async (newEntity: AnnotationEntity) => {
     const createdEntity = await createEntity(newEntity);
     setEntities((prev) => [...prev, createdEntity]);
   };

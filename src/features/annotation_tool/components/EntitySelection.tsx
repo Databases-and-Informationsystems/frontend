@@ -22,8 +22,8 @@ function EntitySelection() {
   const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
   //const { tokens } = useTokens();
   const entityIds = useMemo(
-    () => entityData?.map((entity) => entity.id) || [],
-    [entityData]
+    () => entities?.map((entity) => entity.id) || [],
+    [entities]
   );
 
   const getMentionById = (id) => {
@@ -84,7 +84,7 @@ function EntitySelection() {
             <MultipleDroppables
               names={entityIds}
               items={droppableItemLists}
-              allEntities={entityData}
+              allEntities={entities}
               allTokens={mentions}
             ></MultipleDroppables>
           </TokenProvider>
