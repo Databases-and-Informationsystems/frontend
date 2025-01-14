@@ -32,7 +32,7 @@ export const useEntity = () => {
   const handleRemoveFromEntity = async (entityId: any, mentionId: any) => {
     const entity = getEntityById(entityId)
     console.log("Searched for entity ", entityId)
-    entity.mention_ids = entity.mention_ids.filter((elem, idx) => elem == mentionId)
+    entity.mention_ids = entity.mention_ids.filter((elem, idx) => elem != mentionId)
     console.log(`Removed Mention with id ${mentionId} from Entity ${entityId}`)
   }
 
