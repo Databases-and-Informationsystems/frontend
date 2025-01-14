@@ -7,7 +7,7 @@ export const useEntity = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log('Current Entities:', entities);
+    console.log('Current Entities use:', entities);
   }, [entities]);
 
   const getEntityById = (id: any) => {

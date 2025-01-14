@@ -18,7 +18,7 @@ import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 function EntitySelection() {
 
   const [entityData, setEntityData] = useState<any>()
-  const {setEntities} = useEntity();
+  const {setLoading, loading:eLoading, entities, setEntities} = useEntity();
   const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
   //const { tokens } = useTokens();
   const entityIds = useMemo(
@@ -33,6 +33,7 @@ function EntitySelection() {
 
   useEffect(() => {
     const entity = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('http://localhost:3000/entities')
           .then((response) => {setEntityData(response.data); setEntities(response.data)});
@@ -40,10 +41,11 @@ function EntitySelection() {
         console.log("Error: ", error);
       } finally {
         console.log("finallyEntities");
+        setLoading(false);
       }
     }
     entity()
-  }, [])
+  }, [setEntities, setLoading])
 
   //Droppable / Draggable handling
   const [activeId, setActiveId] = useState(null)
@@ -63,6 +65,10 @@ function EntitySelection() {
       console.log(`Dropped ${active.id} in ${over.id}`)
     }
     setActiveId(null)
+  }
+
+  if (eLoading) {
+    return (<p>Loading Entities...</p>)
   }
 
   //HTML
