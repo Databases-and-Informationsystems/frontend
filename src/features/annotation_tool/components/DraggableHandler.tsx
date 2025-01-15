@@ -1,9 +1,7 @@
-import {useDraggable} from '@dnd-kit/core';
+import { useDraggable } from '@dnd-kit/core';
 import { Button } from '@/components/ui/button.tsx'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
-import {Mention as MentionType} from '../types/mention'
-import { SelectionProvider } from '@/features/annotation_tool/provider/SelectionProvider.tsx'
-import { TokenProvider } from '@/features/annotation_tool/provider/TokenProvider.tsx'
+import { Mention as MentionType } from '../types/mention'
 import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 
 interface props {
@@ -13,11 +11,11 @@ interface props {
   m: MentionType
 }
 
-export function DraggableHand({id,eid,allEntities,m}: props) {
+export function DraggableHand({ id, eid, allEntities, m }: props) {
 
-  const {entities, loading, handleRemoveFromEntity} = useEntity()
+  const { handleRemoveFromEntity } = useEntity()
 
-  const {attributes, listeners, setNodeRef} = useDraggable({
+  const { attributes, listeners, setNodeRef } = useDraggable({
     id: id,
   });
 
@@ -32,7 +30,7 @@ export function DraggableHand({id,eid,allEntities,m}: props) {
       </TokenProvider>*/}
       <Mention key={id} mention={m}></Mention>
       <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 rounded-md">Drag handle</div>
-      <Button onClick={()=>handleRemoveFromEntity(eid,id)}>remove</Button>
+      <Button onClick={() => handleRemoveFromEntity(eid, id)}>remove</Button>
     </div>
   );
 }
