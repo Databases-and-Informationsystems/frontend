@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import DocumentForm from './DocumentForm';
 import ProjectCard from './ProjectCard';
 import DocumentPreview from './DocumentPreview';
 import DocumentList from './DocumentList';
+import {
+  getProjects,
+  createProject,
+  //getDocumentsByProject,
+  createDocument,
+  deleteDocument,
+  getTeams,
+  getSchemas,
+} from '../api/api';
 
 interface Document {
   id: number;
@@ -14,64 +23,94 @@ interface Document {
   schema: string;
 }
 
+interface Project {
+  id: number;
+  title: string;
+  schema: string;
+  team: string;
+}
+
 const ProjectPage: React.FC = () => {
-  const [projects, setProjects] = useState([
-    { id: 1, title: 'Project A', schema: 'Schema A', team: 'Team Alpha' },
-    { id: 2, title: 'Project B', schema: 'Schema B', team: 'Team Beta' },
-  ]);
-
-  const [ongoingDocs, setOngoingDocs] = useState<Document[]>([
-    { id: 1, name: 'Ongoing Doc 1', content: 'Content 1', progress: 50, project: 'Project A', schema: 'Schema A' },
-  ]);
-
-  const [openDocs, setOpenDocs] = useState<Document[]>([
-    { id: 2, name: 'Open Doc 1', content: 'Content 2', progress: 0, project: 'Project A', schema: 'Schema A' },
-  ]);
-
-  const [completedDocs, setCompletedDocs] = useState<Document[]>([
-    { id: 3, name: 'Completed Doc 1', content: 'Content 3', progress: 100, project: 'Project A', schema: 'Schema A' },
-  ]);
-
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [ongoingDocs, setOngoingDocs] = useState<Document[]>([]);
+  const [openDocs, setOpenDocs] = useState<Document[]>([]);
+  const [completedDocs, setCompletedDocs] = useState<Document[]>([]);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isAddDocOpen, setIsAddDocOpen] = useState(false);
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
-
   const [projectName, setProjectName] = useState('');
   const [schema, setSchema] = useState('');
   const [team, setTeam] = useState('');
-  const [teams] = useState(['Team Alpha', 'Team Beta']);
-  const [schemas] = useState(['Schema A', 'Schema B']);
+  const [teams, setTeams] = useState<string[]>([]);
+  const [schemas, setSchemas] = useState<string[]>([]);
 
-  const handleAddDocument = (name: string, content: string, project: string) => {
-    const newDocument: Document = {
-      id: Date.now(),
-      name,
-      content,
-      progress: 0,
-      project,
-      schema,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [projectsData, teamsData, schemasData] = await Promise.all([
+          getProjects(),
+          getTeams(),
+          getSchemas(),
+        ]);
+        setProjects(projectsData);
+        setTeams(teamsData.map((team: { name: string }) => team.name));
+        setSchemas(schemasData.map((schema: { name: string }) => schema.name));
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      }
     };
-    setOpenDocs((prev) => [...prev, newDocument]);
+    fetchData();
+  }, []);
+
+
+
+  const handleAddDocument = async (name: string, content: string, project: string) => {
+    try {
+      const projectId = projects.find((p) => p.title === project)?.id;
+      if (!projectId) throw new Error('Project not found');
+
+      const newDoc = await createDocument(projectId, name, content);
+      setOpenDocs((prev) => [...prev, newDoc]);
+    } catch (error) {
+      console.error('Error adding document:', error);
+    }
   };
 
-  const handleDeleteDocument = (id: number) => {
-    setOngoingDocs((prev) => prev.filter((doc) => doc.id !== id));
-    setOpenDocs((prev) => prev.filter((doc) => doc.id !== id));
-    setCompletedDocs((prev) => prev.filter((doc) => doc.id !== id));
-    console.log(`Document with id ${id} deleted`);
+  const handleDeleteDocument = async (id: number) => {
+    try {
+      await deleteDocument(id);
+      setOngoingDocs((prev) => prev.filter((doc) => doc.id !== id));
+      setOpenDocs((prev) => prev.filter((doc) => doc.id !== id));
+      setCompletedDocs((prev) => prev.filter((doc) => doc.id !== id));
+      console.log(`Document with id ${id} deleted`);
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }
   };
 
   const handlePreviewDocument = (content: string) => {
-    if (content) {
-      setPreviewContent(content);
-    } else {
-      setPreviewContent("No content available for preview.");
-    }
+    setPreviewContent(content || 'No content available for preview.');
   };
 
   const handleOpenProject = () => setIsDetailsVisible(true);
   const handleCloseProject = () => setIsDetailsVisible(false);
+
+  const handleCreateProject = async (name: string, schemaName: string, teamName: string) => {
+    try {
+      const schemaId = schemas.find((s) => s === schemaName);
+      const teamId = teams.find((t) => t === teamName);
+      if (typeof schemaId === 'string') throw new Error('Schema ID is invalid.');
+      if (typeof teamId === 'string') throw new Error('Team ID is invalid.');
+      if (!schemaId || !teamId) throw new Error('Schema or team not found');
+
+      const newProject = await createProject(name, teamId, schemaId);
+      setProjects((prev) => [...prev, newProject]);
+      setIsProjectModalOpen(false);
+    } catch (error) {
+      console.error('Error creating project:', error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -137,7 +176,7 @@ const ProjectPage: React.FC = () => {
       )}
 
       {isAddDocOpen && (
-        <div className="relative z-50"> {/* Priorité visuelle */}
+        <div className="relative z-50">
           <DocumentForm
             onClose={() => setIsAddDocOpen(false)}
             onCreate={handleAddDocument}
@@ -150,10 +189,7 @@ const ProjectPage: React.FC = () => {
         <Modal
           isOpen={isProjectModalOpen}
           onClose={() => setIsProjectModalOpen(false)}
-          onCreate={(name, schema, team) => {
-            setProjects((prev) => [...prev, { id: Date.now(), title: name, schema, team }]);
-            setIsProjectModalOpen(false);
-          }}
+          onCreate={handleCreateProject}
           projectName={projectName}
           setProjectName={setProjectName}
           schema={schema}
