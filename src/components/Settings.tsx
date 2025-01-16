@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    username: '',
+    name: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '123456789',
+    username: 'john_doe',
   });
   const [passwords, setPasswords] = useState({
     oldPassword: '',
@@ -15,6 +15,7 @@ const Settings = () => {
   });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [updateMessage, setUpdateMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +28,26 @@ const Settings = () => {
   };
 
   const handleUpdateInfo = () => {
-    console.log('Updating user info:', userInfo);
-    setSuccessMessage('User information updated successfully.');
+    const updatedFields = [];
+    const noUpdates = Object.keys(userInfo).every((key) => !userInfo[key]);
+
+    if (noUpdates) {
+      setUpdateMessage('No updates were made.');
+      return;
+    }
+
+    // Check which fields were updated
+    if (userInfo.name) updatedFields.push('Name');
+    if (userInfo.lastName) updatedFields.push('Last Name');
+    if (userInfo.email) updatedFields.push('Email');
+    if (userInfo.phone) updatedFields.push('Phone');
+    if (userInfo.username) updatedFields.push('Username');
+
+    if (updatedFields.length > 0) {
+      setUpdateMessage(`${updatedFields.join(', ')} updated successfully.`);
+    }
+
+  
   };
 
   const handleChangePassword = () => {
@@ -58,46 +77,61 @@ const Settings = () => {
       <div className="w-full max-w-md mb-10">
         <h3 className="text-xl font-semibold mb-4">Update Your Information</h3>
         <div className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="name"
-            value={userInfo.name}
-            onChange={handleInputChange}
-            placeholder="First Name"
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            name="lastName"
-            value={userInfo.lastName}
-            onChange={handleInputChange}
-            placeholder="Last Name"
-            className="border p-2 rounded"
-          />
-          <input
-            type="email"
-            name="email"
-            value={userInfo.email}
-            onChange={handleInputChange}
-            placeholder="Email"
-            className="border p-2 rounded"
-          />
-          <input
-            type="tel"
-            name="phone"
-            value={userInfo.phone}
-            onChange={handleInputChange}
-            placeholder="Phone"
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            name="username"
-            value={userInfo.username}
-            onChange={handleInputChange}
-            placeholder="Username"
-            className="border p-2 rounded"
-          />
+          <div>
+            <label className="block text-sm font-semibold">Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={userInfo.name}
+              onChange={handleInputChange}
+              placeholder={userInfo.name}
+              className="border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold">Last Name:</label>
+            <input
+              type="text"
+              name="lastName"
+              value={userInfo.lastName}
+              onChange={handleInputChange}
+              placeholder={userInfo.lastName}
+              className="border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={userInfo.email}
+              onChange={handleInputChange}
+              placeholder={userInfo.email}
+              className="border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold">Phone:</label>
+            <input
+              type="tel"
+              name="phone"
+              value={userInfo.phone}
+              onChange={handleInputChange}
+              placeholder={userInfo.phone}
+              className="border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold">Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={userInfo.username}
+              onChange={handleInputChange}
+              placeholder={userInfo.username}
+              className="border p-2 rounded"
+            />
+          </div>
           <button
             onClick={handleUpdateInfo}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -106,6 +140,8 @@ const Settings = () => {
           </button>
         </div>
       </div>
+
+      {updateMessage && <p className="text-yellow-500 mt-4">{updateMessage}</p>}
 
       <hr className="w-full max-w-md border-gray-300" />
 
