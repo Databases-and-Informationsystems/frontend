@@ -16,8 +16,4 @@ export function useIsMobile() {
   }, [])
 
   return !!isMobile
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dashboard

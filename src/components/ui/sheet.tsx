@@ -137,8 +137,4 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dashboard
