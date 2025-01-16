@@ -12,4 +12,8 @@ function Skeleton({
   )
 }
 
+<<<<<<< HEAD
 export { Skeleton }
+=======
+export { Skeleton }
+>>>>>>> dashboard

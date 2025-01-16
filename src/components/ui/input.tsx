@@ -19,4 +19,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 )
 Input.displayName = "Input"
 
+<<<<<<< HEAD
 export { Input }
+=======
+export { Input }
+>>>>>>> dashboard
