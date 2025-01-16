@@ -27,4 +27,8 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
+<<<<<<< HEAD
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+=======
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+>>>>>>> dashboard
