@@ -1,12 +1,10 @@
 
 
-/* Overall page layout */
 .login-page {
     display: flex;
     height: 100vh;
   }
   
-  /* Left (white) half */
   .white-half {
     flex: 1;
     background-color: #ffffff;
@@ -17,7 +15,6 @@
     padding: 20px;
   }
   
-  /* Form styling */
   form {
     background: #f9f9f9;
     padding: 30px;
@@ -83,30 +80,27 @@
     display: block;
 }
 
-/* Default styling for the tab buttons */
 .tab {
     margin-bottom: 20px;
 
-    padding: 10px 20px; /* Adjust padding */
-    cursor: pointer; /* Show pointer on hover */
-    background-color: transparent; /* No background by default */
-    border: none; /* No border for cleaner look */
-    font-size: 1em; /* Adjust text size */
-    color: #565c62; /* Default text color */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    padding: 10px 20px; 
+    cursor: pointer; 
+    background-color: transparent; 
+    border: none; 
+    font-size: 1em; 
+    color: #565c62; 
+    transition: all 0.3s ease; 
   }
   
-  /* Styling for the active tab */
   .tab.active {
-    font-weight: bold; /* Highlight the active button */
-    color: #000; /* Change text color for active button */
-    border-bottom: 2px solid #000; /* Underline the active tab */
+    font-weight: bold;
+    color: #000; 
+    border-bottom: 2px solid #000; 
   }
   
-  /* Optional: Hover effect for all tabs */
   .tab:hover {
-    color: #333; /* Slightly darker on hover */
-    background-color: #f0f0f0; /* Light background on hover */
-    border-radius: 5px; /* Add rounded corners on hover */
+    color: #333; 
+    background-color: #f0f0f0; 
+    border-radius: 5px; 
   }
   

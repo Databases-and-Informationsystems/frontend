@@ -21,11 +21,9 @@ import Login from '@/features/login/pages/Login';
 import Settings from '@/features/dashboard/Settings/Settings';
 import Teams from '@/features/dashboard/Teams/Teams';
 
-// Wrapper to manage layout based on route
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
-  // Define routes where the sidebar should be hidden
   const noSidebarRoutes = ['/'];
 
   const shouldShowSidebar = !noSidebarRoutes.includes(location.pathname);

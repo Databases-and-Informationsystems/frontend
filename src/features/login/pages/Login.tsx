@@ -15,19 +15,18 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation for empty fields
     if (!email || !password || (!isSignIn && !username)) {
       setErrorMessage('Please fill out all fields!');
       return;
     }
 
     const url = isSignIn
-      ? 'http://localhost:5001/api/auth/login' // Login endpoint
-      : 'http://localhost:5001/api/auth/signup'; // Signup endpoint
+      ? 'http://localhost:5001/api/auth/login' 
+      : 'http://localhost:5001/api/auth/signup';
 
     const payload = isSignIn
-      ? { email, password } // For login, only email and password are required
-      : { username, email, password }; // For signup, username is also required
+      ? { email, password } 
+      : { username, email, password }; 
 
     try {
       const response = await fetch(url, {
@@ -44,17 +43,14 @@ const Login: React.FC = () => {
       }
 
       if (isSignIn) {
-        // Handle login success
         setSuccessMessage('Login successful!');
         setToken(data.token);
         localStorage.setItem('token', data.token); // Store token in local storage
         navigate('/settings');
       } else {
-        // Handle signup success
         setSuccessMessage('Account created successfully!');
       }
 
-      // Clear inputs and errors after success
       setEmail('');
       setPassword('');
       setUsername('');

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-// Utility function for API calls
 const apiFetch = async (
   endpoint: string,
   options: RequestInit = {}
 ): Promise<any> => {
-  const token = localStorage.getItem("token"); // Retrieve token from localStorage
+  const token = localStorage.getItem("token"); 
 
   if (!token) {
     alert("Unauthorized! Please log in.");
@@ -14,7 +13,7 @@ const apiFetch = async (
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`, // Attach token
+    Authorization: `Bearer ${token}`, 
     ...options.headers,
   };
 
@@ -44,7 +43,6 @@ const Teams: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch all teams when the component mounts
   useEffect(() => {
     const fetchTeams = async () => {
       try {
@@ -60,7 +58,6 @@ const Teams: React.FC = () => {
     fetchTeams();
   }, []);
 
-  // Handle creating a new team
   const handleCreateTeam = async () => {
     if (!newTeamName.trim()) {
       alert("Please enter a team name.");
@@ -73,13 +70,12 @@ const Teams: React.FC = () => {
         body: JSON.stringify({ name: newTeamName }),
       });
 
-      // Update the teams list with the new team
       setTeams((prev) => [
         ...prev,
         { id: data.id, name: newTeamName, members: [] },
       ]);
 
-      setNewTeamName(""); // Clear the input field
+      setNewTeamName(""); 
     } catch (err: any) {
       alert(err.message || "Failed to create team.");
     }

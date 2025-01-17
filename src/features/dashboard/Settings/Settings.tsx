@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useState({
-    name: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '123456789',
-    username: 'john_doe',
+    name: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    username: '',
   });
   const [passwords, setPasswords] = useState({
     oldPassword: '',
@@ -36,7 +36,6 @@ const Settings = () => {
       return;
     }
 
-    // Check which fields were updated
     if (userInfo.name) updatedFields.push('Name');
     if (userInfo.lastName) updatedFields.push('Last Name');
     if (userInfo.email) updatedFields.push('Email');
