@@ -9,9 +9,10 @@ interface props {
   eid: number
   allEntities: Record<number, any>
   m: MentionType
+  dev_mode: boolean
 }
 
-export function DraggableHand({ id, eid, allEntities, m }: props) {
+export function DraggableHand({ id, eid, allEntities, m, dev_mode }: props) {
 
   const { handleRemoveFromEntity } = useEntity()
 
@@ -19,8 +20,14 @@ export function DraggableHand({ id, eid, allEntities, m }: props) {
     id: id,
   });
 
+  let css_outer = "flex ml-1 mr-1 mt-1 mb-1";
+
+  if (dev_mode) {
+    css_outer = "border-solid border-2 border-orange-600 flex ml-1 mr-1 mt-1 mb-1";
+  }
+
   return (
-    <div ref={setNodeRef} className="border-solid border-2 border-orange-600 flex ml-1 mr-1 mt-1 mb-1">
+    <div ref={setNodeRef} className={css_outer}>
       {/*Mention id: {id}
       m: {JSON.stringify(m)}*/}
       {/*<TokenProvider>

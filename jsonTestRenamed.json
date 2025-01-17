@@ -71,6 +71,14 @@
       "pos_tag": ".",
       "bio_tag": "O",
       "sentence_index": 0
+    },
+    {
+      "id": "10",
+      "text": "something",
+      "index_in_document": 9,
+      "pos_tag": "NN",
+      "bio_tag": "I-Actor",
+      "sentence_index": 0
     }
   ],
   "mentions": [
@@ -91,6 +99,15 @@
       "token_ids": [
         "1",
         "2"
+      ]
+    },
+    {
+      "id": "4042",
+      "tag": "Actor",
+      "entity_id": "3",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "10"
       ]
     },
     {
@@ -137,6 +154,12 @@
       "mention_ids": [
         "6221",
         "6225"
+      ]
+    },
+    {
+      "id": "3",
+      "mention_ids": [
+        "4042"
       ]
     }
   ],

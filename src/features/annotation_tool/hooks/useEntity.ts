@@ -81,7 +81,11 @@ export const useEntity = () => {
       console.log('Updated Entities nach Remove:', newEntities)
 
       return newEntities
-    })
+    });
+    if (getEntityById(entityId).mention_ids.length === 0) {
+      console.log(getEntityById(entityId).mention_ids);
+      handleDeleteEntity(entityId);
+    }
   }
 
   const handleDeleteEntity = async (entityId: any) => {
@@ -99,5 +103,6 @@ export const useEntity = () => {
     handleAddToEntity,
     handleRemoveFromEntity,
     handleDeleteEntity,
+    getEntityById,
   }
 }
