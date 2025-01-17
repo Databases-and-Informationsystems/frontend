@@ -47,7 +47,7 @@ const Login: React.FC = () => {
         // Handle login success
         setSuccessMessage('Login successful!');
         setToken(data.token);
-        localStorage.setItem('authToken', data.token); // Store token in local storage
+        localStorage.setItem('token', data.token); // Store token in local storage
         navigate('/settings');
       } else {
         // Handle signup success
