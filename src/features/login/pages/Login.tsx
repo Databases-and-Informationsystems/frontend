@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -10,7 +9,6 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [token, setToken] = useState<string | null>(null);
-  const navigate = useNavigate(); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,8 +43,8 @@ const Login: React.FC = () => {
       if (isSignIn) {
         setSuccessMessage('Login successful!');
         setToken(data.token);
-        localStorage.setItem('token', data.token); // Store token in local storage
-        navigate('/settings');
+        localStorage.setItem('token', data.token); 
+        window.location.href = '/dashboard/settings';
       } else {
         setSuccessMessage('Account created successfully!');
       }

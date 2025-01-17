@@ -1,7 +1,7 @@
 import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import { PanelsTopLeft, FolderKanban, Users, SwatchBook, Settings } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 
 const sideBarItems = [
@@ -12,17 +12,17 @@ const sideBarItems = [
   },
   {
     title: "Projects",
-    url: "/projects",
+    url: "/dashboard/projects",
     icon: FolderKanban,
   },
   {
     title: "Teams",
-    url: "/teams",
+    url: "/dashboard/teams",
     icon: Users,
   },
   {
     title: "Schema",
-    url: "/schemas",
+    url: "/dashboard/schemas",
     icon: SwatchBook,
   }
 ]
@@ -68,7 +68,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size='lg' className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-              <Link to="/settings">
+              <Link to="/dashboard/settings">
                 <div>
                   <Settings size={32} />
                 </div>
