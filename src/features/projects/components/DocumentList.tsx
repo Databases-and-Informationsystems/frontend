@@ -1,12 +1,7 @@
 import React from 'react';
 import UIButton from './UIButton';
+import { Document } from './types';
 
-interface Document {
-  id: number;
-  name: string;
-  content: string;
-  progress: number;
-}
 
 interface DocumentListProps {
   ongoingDocs: Document[];
@@ -25,7 +20,6 @@ const DocumentList: React.FC<DocumentListProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      {/* Ongoing Section */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Ongoing ({ongoingDocs.length})</h2>
         <div className="space-y-4">
@@ -43,8 +37,6 @@ const DocumentList: React.FC<DocumentListProps> = ({
           ))}
         </div>
       </div>
-
-      {/* Open Section */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Open ({openDocs.length})</h2>
         <div className="space-y-4">
@@ -60,8 +52,6 @@ const DocumentList: React.FC<DocumentListProps> = ({
           ))}
         </div>
       </div>
-
-      {/* Completed Section */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Completed ({completedDocs.length})</h2>
         <div className="space-y-4">

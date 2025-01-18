@@ -4,8 +4,8 @@ interface UIButtonProps {
   label: string;
   onClick: () => void;
   className?: string;
-  disabled?: boolean; // Optional disabled prop
-  loading?: boolean;  // Optional loading state
+  disabled?: boolean;
+  loading?: boolean; 
 }
 
 const UIButton: React.FC<UIButtonProps> = ({ 

@@ -1,45 +1,37 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Document } from "../types/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { STATUS_STYLES } from "../types/types";
+import { Document, Project } from "../types/types";
 
 interface StatusFilterProps {
-  projects: {
-    title: string;
-    schema?: string;
-    documents: {
-      ongoing: Document[];
-      open: Document[];
-      completed: Document[];
-    };
-    progress: number;
-  }[];
-}
+  projects: Project[];
+  }
 
 const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
-  const ongoingDocs = projects.flatMap((project) =>
+  const ongoingDocs : Document[]=projects.flatMap((project) =>
     project.documents.ongoing.map((doc) => ({
       ...doc,
-      project: project.title,
+      project: project,
       schema: project.schema,
       status: "Ongoing",
       progress: project.progress,
     }))
   );
 
-  const openDocs = projects.flatMap((project) =>
+  const openDocs : Document[]=projects.flatMap((project) =>
     project.documents.open.map((doc) => ({
       ...doc,
-      project: project.title,
+      project: project,
       schema: project.schema,
       status: "Open",
     }))
   );
 
-  const completedDocs = projects.flatMap((project) =>
+  const completedDocs : Document[]=projects.flatMap((project) =>
     project.documents.completed.map((doc) => ({
       ...doc,
-      project: project.title,
+      project: project,
       schema: project.schema,
       status: "Completed",
     }))
@@ -48,9 +40,8 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
   return (
     <div className="p-6 bg-gray-50 rounded-lg shadow-lg">
       <Accordion type="single" collapsible>
-        {/* Ongoing Section */}
         <AccordionItem value="ongoing">
-          <AccordionTrigger className="text-xl font-bold text-green-600">
+          <AccordionTrigger className={`text-xl font-bold ${STATUS_STYLES.Ongoing}`}>
             Ongoing Documents
           </AccordionTrigger>
           <AccordionContent>
@@ -58,8 +49,8 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
               {ongoingDocs.map((doc, index) => (
                 <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
                   <p className="font-semibold text-gray-800">Document: {doc.name}</p>
-                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
-                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project.title}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema.name}</p>
                   <div className="flex items-center justify-between mt-3">
                     <div className="w-full h-2 bg-green-100 rounded-full mr-4">
                       <div
@@ -74,10 +65,8 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
             </div>
           </AccordionContent>
         </AccordionItem>
-
-        {/* Open Section */}
         <AccordionItem value="open">
-          <AccordionTrigger className="text-xl font-bold text-blue-600">
+          <AccordionTrigger className={`text-xl font-bold ${STATUS_STYLES.Open}`}>
             Open Documents
           </AccordionTrigger>
           <AccordionContent>
@@ -85,18 +74,16 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
               {openDocs.map((doc, index) => (
                 <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
                   <p className="font-semibold text-gray-800">Document: {doc.name}</p>
-                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
-                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project.title}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema.name}</p>
                   <Button variant="outline">Start Working</Button>
                 </div>
               ))}
             </div>
           </AccordionContent>
         </AccordionItem>
-
-        {/* Completed Section */}
         <AccordionItem value="completed">
-          <AccordionTrigger className="text-xl font-bold text-gray-600">
+          <AccordionTrigger className={`text-xl font-bold ${STATUS_STYLES.Completed}`}>
             Completed Documents
           </AccordionTrigger>
           <AccordionContent>
@@ -104,8 +91,8 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ projects }) => {
               {completedDocs.map((doc, index) => (
                 <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
                   <p className="font-semibold text-gray-800">Document: {doc.name}</p>
-                  <p className="text-sm text-gray-600">Project: {doc.project}</p>
-                  <p className="text-sm text-gray-600">Schema: {doc.schema}</p>
+                  <p className="text-sm text-gray-600">Project: {doc.project.title}</p>
+                  <p className="text-sm text-gray-600">Schema: {doc.schema.name}</p>
                   <Button variant="outline">Open Document</Button>
                 </div>
               ))}

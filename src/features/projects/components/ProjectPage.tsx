@@ -7,28 +7,13 @@ import DocumentList from './DocumentList';
 import {
   getProjects,
   createProject,
-  //getDocumentsByProject,
+  getDocumentsByProject,
   createDocument,
   deleteDocument,
   getTeams,
   getSchemas,
 } from '../api/api';
-
-interface Document {
-  id: number;
-  name: string;
-  content: string;
-  progress: number;
-  project: string;
-  schema: string;
-}
-
-interface Project {
-  id: number;
-  title: string;
-  schema: string;
-  team: string;
-}
+import { Document, Project } from './types';
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -44,7 +29,20 @@ const ProjectPage: React.FC = () => {
   const [team, setTeam] = useState('');
   const [teams, setTeams] = useState<string[]>([]);
   const [schemas, setSchemas] = useState<string[]>([]);
+  const fetchDocumentsForProject = async (projectId: number) => {
+    try {
+      const documents = await getDocumentsByProject(projectId);
+      const ongoing = documents.filter((doc:Document) => doc.status === 'ongoing');
+      const open = documents.filter((doc:Document) => doc.status === 'open');
+      const completed = documents.filter((doc:Document)=> doc.status === 'completed');
 
+      setOngoingDocs(ongoing);
+      setOpenDocs(open);
+      setCompletedDocs(completed);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,10 +65,10 @@ const ProjectPage: React.FC = () => {
 
   const handleAddDocument = async (name: string, content: string, project: string) => {
     try {
-      const projectId = projects.find((p) => p.title === project)?.id;
-      if (!projectId) throw new Error('Project not found');
+      const projectFound = projects.find((p) => p.title === project);
+      if (!projectFound) throw new Error('Project not found');
 
-      const newDoc = await createDocument(projectId, name, content);
+      const newDoc = await createDocument(projectFound.id, name, content);
       setOpenDocs((prev) => [...prev, newDoc]);
     } catch (error) {
       console.error('Error adding document:', error);
@@ -93,7 +91,10 @@ const ProjectPage: React.FC = () => {
     setPreviewContent(content || 'No content available for preview.');
   };
 
-  const handleOpenProject = () => setIsDetailsVisible(true);
+  const handleOpenProject = async (projectId: number) => {
+    setIsDetailsVisible(true);
+    fetchDocumentsForProject(projectId);
+  };
   const handleCloseProject = () => setIsDetailsVisible(false);
 
   const handleCreateProject = async (name: string, schemaName: string, teamName: string) => {
@@ -129,18 +130,11 @@ const ProjectPage: React.FC = () => {
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
-                title={project.title}
-                schema={project.schema}
-                team={project.team}
-                documents={{
-                  ongoing: ongoingDocs.filter((doc) => doc.project === project.title),
-                  open: openDocs.filter((doc) => doc.project === project.title),
-                  completed: completedDocs.filter((doc) => doc.project === project.title),
-                }}
+                Project={project}
                 onPreview={handlePreviewDocument}
                 onDeleteDocument={handleDeleteDocument}
                 onAddDocument={() => setIsAddDocOpen(true)}
-                onOpenProject={handleOpenProject}
+                onOpenProject={() => handleOpenProject(project.id)}
               />
             ))}
           </div>

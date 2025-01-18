@@ -1,45 +1,45 @@
+import { httpClient } from "./httpClient";
+
 export const getProjects = async () => {
   try {
-    const token = localStorage.getItem("authToken"); 
-    const response = await fetch("http://localhost:5001/api/projects/", {
+    const token = localStorage.getItem("authToken");
+
+if (!token) {
+  throw new Error("Token is missing from localStorage");
+}
+
+    const data = await httpClient({
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      endpoint: "/projects/",
+      token,
     });
 
-    if (!response.ok) {
-      throw new Error("Erreur lors de la récupération des projets");
-    }
-
-    const data = await response.json();
     return data.projects;
   } catch (error) {
-    console.error("Erreur lors de la récupération des projets", error);
+    console.error(	
+      'Data not found', error);
     throw error;
   }
 };
+
 
 export const getDocumentsByProject = async (projectId: number) => {
   try {
     const token = localStorage.getItem("authToken");
-    const response = await fetch(`http://localhost:5001/api/documents/project/${projectId}`, {
+
+if (!token) {
+  throw new Error("Token is missing from localStorage");
+}
+    const data = await httpClient({
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
-      },
+      endpoint: `/documents/project/${projectId}`,
+      token,
     });
 
-    if (!response.ok) {
-      throw new Error("Erreur lors de la récupération des documents");
-    }
-
-    const data = await response.json();
-    return data; 
+    return data;
   } catch (error) {
-    console.error("Erreur lors de la récupération des documents", error);
+    console.error("Data not found", error);
     throw error;
   }
 };
+

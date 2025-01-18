@@ -4,16 +4,16 @@ import UIButton from './UIButton';
 interface DocumentFormProps {
   onClose: () => void;
   onCreate: (name: string, content: string, project: string) => void;
-  projects: string[]; // Typage pour la liste des projets
+  projects: string[]; 
 }
 
 const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate, projects }) => {
   const [name, setName] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [selectedProject, setSelectedProject] = useState<string>(projects[0]); // Default to the first project
+  const [selectedProject, setSelectedProject] = useState<string>(projects[0]);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
-  // Mettre à jour la validité du formulaire lorsque name, content ou selectedProject changent
+
   useEffect(() => {
     setIsFormValid(name.trim() !== '' && content.trim() !== '' && selectedProject.trim() !== '');
   }, [name, content, selectedProject]);
@@ -34,7 +34,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate, projects
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" // Priorité visuelle
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" 
       onKeyDown={handleKeyPress}
       tabIndex={0}
     >

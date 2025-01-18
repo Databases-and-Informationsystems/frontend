@@ -5,7 +5,6 @@ export interface DocumentPreviewProps {
 }
 
 const DocumentPreview: React.FC<DocumentPreviewProps> = ({ onClose }) => {
-  // Implement your preview logic here
   return (
     <div style={{
       position: 'fixed',
