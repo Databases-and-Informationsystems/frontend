@@ -15,14 +15,14 @@ function Droppable(props) {
 // }
 
 interface MultipleDroppablesProps {
-  names: number[]
+  eIds: number[]
   items: Record<string, { id: string }[]>
   allEntities: Record<number, any>
   allTokens: Record<number, any>
   dev_mode: boolean
 }
 
-export function MultipleDroppables({ names, items, allEntities, allTokens, dev_mode }: MultipleDroppablesProps) {
+export function MultipleDroppables({ eIds, items, allEntities, allTokens, dev_mode }: MultipleDroppablesProps) {
   const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
 
   const getMentionById = (id) => {
@@ -46,20 +46,44 @@ export function MultipleDroppables({ names, items, allEntities, allTokens, dev_m
 
   return (
     <section className={css_bg}>
-      {names.map((id) => (
-        <div
-          key={id}
-          className={css_border}
-        >
+      {eIds.map((id) => (
+        <div key={id} className={css_border}>
           <Droppable id={id} key={id}>
             Droppable container id: {id}
             {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
-            {getMentionIdsById(id).map((i) => (<DraggableHand key={i} eid={id} id={i} m={getMentionById(i)} dev_mode={dev_mode} allEntities={allEntities}></DraggableHand>))} {/*loads the corresponding mentions*/}
+            {getMentionIdsById(id).map((i) => (
+              <DraggableHand
+                key={i}
+                eid={id}
+                id={i}
+                m={getMentionById(i)}
+                dev_mode={dev_mode}
+                allEntities={allEntities}
+              ></DraggableHand>
+            ))}{' '}
+            {/*loads the corresponding mentions*/}
             {/*<Token token={t}></Token>*/}
             {/*<Mention mention={{id: 1, tag: "testing", isShownRecommendation: true, token_ids: [1]}} tokens={[t]}></Mention>*/}
           </Droppable>
         </div>
       ))}
+      {/*mentions.length > 0 &&
+        (Array.isArray(m_not_in_entity) ? m_not_in_entity : [m_not_in_entity]).map((mention) => (
+          <div key={++max_eId} className={css_border}>
+            <Droppable id={++max_eId} key={++max_eId}>
+              Droppable container id: {max_eId}
+              <DraggableHand
+                key={mention.id}
+                eid={max_eId}
+                id={mention.id}
+                m={mention}
+                dev_mode={dev_mode}
+                allEntities={allEntities}
+              />
+            </Droppable>
+          </div>
+        ))*/
+      }
       <style>
         {`
         .flexEins div {

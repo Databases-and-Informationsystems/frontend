@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnnotationEntity } from '../types'
-import { createEntity, deleteEntity } from '../api/annotationEntityHelper'
+import { createEntity, deleteEntity, updateEntity } from '../api/annotationEntityHelper'
 import axios from 'axios'
 
 export const useEntity = () => {
@@ -29,6 +29,14 @@ export const useEntity = () => {
       `Searching for entity ${id}, type: ${typeof id}, found: ${JSON.stringify(res)}`
     )
     return res // used for getting the mention for the draggable overlay
+  }
+
+  const handleCreateEntityViaElements = (eId: any, mIds: number[]) => {
+    const newEntity: AnnotationEntity = {
+      id: eId,
+      mention_ids: mIds
+    }
+    handleCreateEntity(newEntity);
   }
 
   const handleCreateEntity = async (newEntity: AnnotationEntity) => {
@@ -67,9 +75,11 @@ export const useEntity = () => {
   ) => {
     setEntities((prevEntities) => {
       const newEntities = prevEntities.map((ent) => {
-        if (ent.id === entityId) {
-          const newMentionIds = ent.mention_ids.filter((m) => m !== mentionId)
-
+        if (ent.id == entityId) {
+          const newMentionIds = ent.mention_ids.filter((m) => m != mentionId)
+          let eToChange = getEntityById(entityId);
+          eToChange.mention_ids = newMentionIds;
+          updateEntity(entityId.toString(), eToChange);
           console.log(
             `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
           )
@@ -100,6 +110,7 @@ export const useEntity = () => {
     loading,
     setLoading,
     handleCreateEntity,
+    handleCreateEntityViaElements,
     handleAddToEntity,
     handleRemoveFromEntity,
     handleDeleteEntity,

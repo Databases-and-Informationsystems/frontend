@@ -85,7 +85,7 @@
     {
       "id": "2",
       "tag": "Activity",
-      "entity_id": "",
+      "entity_id": 4,
       "isShownRecommendation": true,
       "token_ids": [
         "3"
@@ -160,6 +160,12 @@
       "id": "3",
       "mention_ids": [
         "4042"
+      ]
+    },
+    {
+      "id": 4,
+      "mention_ids": [
+        2
       ]
     }
   ],

@@ -39,6 +39,7 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
           ...mention,
           id: String(mention.id),
           token_ids: mention.token_ids.map(String),
+          entity_id: String(mention.entity_id),
         })));
       } catch (err) {
         console.error("Failed to fetch mentions:", err);

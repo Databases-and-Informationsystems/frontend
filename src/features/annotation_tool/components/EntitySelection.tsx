@@ -10,8 +10,8 @@ import { Mention as MentionType } from '@/features/annotation_tool/types'
 
 const EntitySelection = () => {
 
-  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity } = useEntity();
-  const { mentions, loading } = useMentionContext();
+  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements } = useEntity();
+  const { mentions, loading, handleUpdateMention } = useMentionContext();
   const entityIds = useMemo(
     () => entities?.map((entity) => entity.id) || [],
     [entities]
@@ -59,11 +59,35 @@ const EntitySelection = () => {
     setActiveId(null)
   }
 
+
+  const m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
+  let max_eId = Math.max(...entityIds);
+  console.log(`Max eId: ${max_eId}`);
+  console.log("Mentions not in an entity: ", JSON.stringify(m_not_in_entity), " type: ", typeof m_not_in_entity);
+  if (m_not_in_entity != undefined) {
+    if (Array.isArray(m_not_in_entity)) {
+      m_not_in_entity.map((mention) => {
+        const ids: number[] = [];
+        ids.push(mention.id);
+        mention.entity_id = ++max_eId;
+        handleUpdateMention(mention.id.toString(), mention)
+        handleCreateEntityViaElements(max_eId, ids);
+      })
+    }else {
+      const ids: number[] = [];
+      ids.push(Number(m_not_in_entity.id));
+      m_not_in_entity.entity_id = ++max_eId;
+      handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
+      handleCreateEntityViaElements(max_eId, ids);
+    }
+  }
+
+
   if (eLoading || loading) {
     return (<p>Loading Entities...</p>)
   }
 
-  const dev_mode = false;
+  const dev_mode = true;
   let css_left = "overflow-auto text-black";
   let css_right = "overflow-auto text-black"
 
@@ -83,7 +107,7 @@ const EntitySelection = () => {
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           {/*<TokenProvider>*/}
           <MultipleDroppables
-            names={entityIds}
+            eIds={entityIds}
             items={droppableItemLists}
             allEntities={entities}
             allTokens={mentions}
