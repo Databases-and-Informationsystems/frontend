@@ -50,8 +50,9 @@ const EntitySelection = () => {
       const fromEntity = getEntityByMentionId(active.id).id;
       if (typeMInE === tempM.tag && fromEntity != over.id) {
         console.log("Can be inserted");
-        handleAddToEntity(over.id, active.id);
         handleRemoveFromEntity(fromEntity, active.id);
+        while (eLoading) {}
+        handleAddToEntity(over.id, active.id);
       }else {
         console.log("Can't be inserted");
       }
@@ -59,6 +60,9 @@ const EntitySelection = () => {
     setActiveId(null)
   }
 
+  if (eLoading || loading) {
+    return (<p>Loading Entities...</p>)
+  }
 
   const m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
   let max_eId = Math.max(...entityIds);
@@ -80,11 +84,6 @@ const EntitySelection = () => {
       handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
       handleCreateEntityViaElements(max_eId, ids);
     }
-  }
-
-
-  if (eLoading || loading) {
-    return (<p>Loading Entities...</p>)
   }
 
   const dev_mode = true;

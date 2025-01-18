@@ -16,7 +16,7 @@ export const useMentions = () => {
   };
 
   const handleUpdateMention = async (mentionId: string, updatedMention: Mention) => {
-    const updated = await updateMention(mentionId, updatedMention);
+    const updated = await updateMention(mentionId.toString(), updatedMention);
     setMentions((prev) => prev.map((mention) => (mention.id === mentionId ? updated : mention)));
   };
 

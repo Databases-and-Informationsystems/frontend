@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import { AnnotationEntity } from '../types'
 import { createEntity, deleteEntity, updateEntity } from '../api/annotationEntityHelper'
 import axios from 'axios'
+import { updateMention } from '@/features/annotation_tool/api/mention.ts'
+import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
 
 export const useEntity = () => {
   const [entities, setEntities] = useState<AnnotationEntity[]>([])
   const [loading, setLoading] = useState(false)
+  const { mentions } = useMentionContext();
 
   useEffect(() => {
     const fetchEntities = async () => {
@@ -55,6 +58,12 @@ export const useEntity = () => {
       return prevEntities.map((ent) => {
         if (ent.id == entityId) {
           const newMentionIds = [...ent.mention_ids, mentionId]
+
+          ent.mention_ids = newMentionIds;
+
+          let mToChange = mentions.find((ment) => ment.id == mentionId);
+          mToChange.entity_id = entityId.toString();
+
           return { ...ent, mention_ids: newMentionIds }
         }
         return ent
@@ -77,8 +86,14 @@ export const useEntity = () => {
       const newEntities = prevEntities.map((ent) => {
         if (ent.id == entityId) {
           const newMentionIds = ent.mention_ids.filter((m) => m != mentionId)
+
           let eToChange = getEntityById(entityId);
           eToChange.mention_ids = newMentionIds;
+
+          let mToChange = mentions.find((ment) => ment.id == mentionId);
+          mToChange.entity_id = "";
+
+          updateMention(mentionId.toString(), mToChange);
           updateEntity(entityId.toString(), eToChange);
           console.log(
             `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
@@ -93,7 +108,7 @@ export const useEntity = () => {
       return newEntities
     });
     if (getEntityById(entityId).mention_ids.length === 0) {
-      console.log(getEntityById(entityId).mention_ids);
+      console.log("Entity with id: ", entityId, " now has these mentions: ", JSON.stringify(getEntityById(entityId).mention_ids));
       handleDeleteEntity(entityId);
     }
   }
