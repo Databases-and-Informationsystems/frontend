@@ -98,9 +98,9 @@ const Teams: React.FC = () => {
         prev.map((team) =>
           team.id === teamId
             ? {
-                ...team,
-                members: [...team.members, { email: data.email, username: data.username }],
-              }
+              ...team,
+              members: [...team.members, { email: data.email, username: data.username }],
+            }
             : team
         )
       );
@@ -123,9 +123,9 @@ const Teams: React.FC = () => {
         prev.map((team) =>
           team.id === teamId
             ? {
-                ...team,
-                members: team.members.filter((member) => member.email !== userMail),
-              }
+              ...team,
+              members: team.members.filter((member) => member.email !== userMail),
+            }
             : team
         )
       );
