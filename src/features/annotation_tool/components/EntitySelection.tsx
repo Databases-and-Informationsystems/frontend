@@ -60,8 +60,8 @@ const EntitySelection = () => {
     setActiveId(null)
   }
 
-  if (eLoading || loading) {
-    return (<p>Loading Entities...</p>)
+  if (loading) {
+    return (<p>Loading Mentions...</p>)
   }
 
   const m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
@@ -88,6 +88,10 @@ const EntitySelection = () => {
         handleCreateEntityViaElements(max_eId, ids);
       }
     }
+  }
+
+  if (eLoading) {
+    return (<p>Loading Entities...</p>)
   }
 
   const dev_mode = true;
