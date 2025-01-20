@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { useNavigate } from 'react-router';
+import { useAuth } from '@/hooks/useAuth';
 
-const Login: React.FC = () => {
+const Login = () => {
+  const navigate = useNavigate();
+  const { login , register } = useAuth();
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [token, setToken] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,34 +21,13 @@ const Login: React.FC = () => {
       return;
     }
 
-    const url = isSignIn
-      ? 'http://localhost:5001/api/auth/login'
-      : 'http://localhost:5001/api/auth/signup';
-
-    const payload = isSignIn
-      ? { email, password }
-      : { username, email, password };
-
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setErrorMessage(data.message || 'An error occurred.');
-        return;
-      }
-
       if (isSignIn) {
+        await login(email, password);
         setSuccessMessage('Login successful!');
-        setToken(data.token);
-        localStorage.setItem('token', data.token);
-        window.location.href = '/dashboard';
+        navigate('/dashboard');
       } else {
+        await register(username, email, password);
         setSuccessMessage('Account created successfully!');
       }
 

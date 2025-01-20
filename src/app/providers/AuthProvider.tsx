@@ -1,4 +1,4 @@
-import { loginUser, logoutUser } from "@/features/login/api/login";
+import { loginUser, logoutUser, registerUser } from "@/features/login/api/login";
 import { createContext, useEffect, useState } from "react";
 
 interface AuthContextType {
@@ -7,6 +7,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
+  register: (username: string, email: string, password: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   login: () => { },
   logout: () => { },
+  register: () => { },
 });
 
 interface AuthProviderProps {
@@ -55,8 +57,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('token');
   }
 
+  const register = async (username: string, email: string, password: string) => {
+    try {
+      await registerUser(username, email, password);
+    }
+    catch (error) {
+      throw new Error('Failed to connect to the server. Error: ' + error);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated: !!token, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ token, isAuthenticated: !!token, isLoading, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );
