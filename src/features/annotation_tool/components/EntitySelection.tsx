@@ -38,6 +38,10 @@ const EntitySelection = () => {
     setActiveId(event.active.id)
   }
 
+  /**
+   * Handle moving Mentions into other Entities
+   * @param event
+   */
   function handleDragEnd(event) {
     const { active, over } = event
     if (over) {
@@ -64,6 +68,9 @@ const EntitySelection = () => {
     return (<p>Loading Mentions...</p>)
   }
 
+  /**
+   * Create Entities for single Mentions
+   */
   const m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
   let max_eId = Math.max(...entityIds);
   console.log(`Max eId: ${max_eId}`);
@@ -94,6 +101,9 @@ const EntitySelection = () => {
     return (<p>Loading Entities...</p>)
   }
 
+  /**
+   * Enables or disables a dev-mode to check the boundaries of some elements
+   */
   const dev_mode = true;
   let css_left = "overflow-auto text-black";
   let css_right = "overflow-auto text-black"
