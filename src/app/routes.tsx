@@ -5,6 +5,7 @@ import ProjectPage from '@/features/projects/components/ProjectPage';
 import SchemaPage from '@/features/schema/SchemaPage';
 import Login from '@/features/login/pages/Login';
 import Teams from '@/features/Teams/Teams';
+import Settings from '@/features/settings/Settings';
 
 const AppRoutes = () => {
   return (
@@ -17,7 +18,7 @@ const AppRoutes = () => {
         
         <Route path="projects" element={<ProjectPage />} />
         <Route path="schemas" element={<SchemaPage/>} />
-        <Route path="projects/settings" element={<div>Settings</div>} />
+        <Route path="projects/settings" element={<Settings/>} />
       </Route>
 
       <Route path="/annotation" element={<div>Annotation</div>} />
