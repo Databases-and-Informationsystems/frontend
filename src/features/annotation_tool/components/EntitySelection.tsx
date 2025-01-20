@@ -71,18 +71,22 @@ const EntitySelection = () => {
   if (m_not_in_entity != undefined) {
     if (Array.isArray(m_not_in_entity)) {
       m_not_in_entity.map((mention) => {
-        const ids: number[] = [];
-        ids.push(mention.id);
-        mention.entity_id = ++max_eId;
-        handleUpdateMention(mention.id.toString(), mention)
-        handleCreateEntityViaElements(max_eId, ids);
+        if (getEntityByMentionId(mention.id.toString()) == undefined) {
+          const ids: number[] = [];
+          ids.push(mention.id);
+          mention.entity_id = ++max_eId;
+          handleUpdateMention(mention.id.toString(), mention)
+          handleCreateEntityViaElements(max_eId, ids);
+        }
       })
     }else {
-      const ids: number[] = [];
-      ids.push(Number(m_not_in_entity.id));
-      m_not_in_entity.entity_id = ++max_eId;
-      handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
-      handleCreateEntityViaElements(max_eId, ids);
+      if (getEntityByMentionId(m_not_in_entity.id.toString()) == undefined) {
+        const ids: number[] = [];
+        ids.push(Number(m_not_in_entity.id));
+        m_not_in_entity.entity_id = ++max_eId;
+        handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
+        handleCreateEntityViaElements(max_eId, ids);
+      }
     }
   }
 
