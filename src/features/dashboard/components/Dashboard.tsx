@@ -1,0 +1,71 @@
+import React, { useState, useEffect } from "react";
+import ProjectCard from "./ProjectCard";
+import StatusFilter from "./StatusFilter";
+import { getProjects, getDocumentsByProject } from "../api/api";
+import { Project } from "../types/types";
+
+const Dashboard: React.FC = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjectsAndDocuments = async () => {
+      try {
+        const projectsData = await getProjects();
+        console.log("Projects retrieved : ", projectsData);
+
+        const projectsWithDocuments = await Promise.all(
+          projectsData.map(async (project: Project) => {
+            const documents = await getDocumentsByProject(project.id);
+            console.log("Documents retrieved for the project ", documents);
+
+            return {
+              ...project,
+              documents: {
+                ongoing: documents.filter(
+                  (doc: any) => doc.document_edit_state === "ongoing"
+                ),
+                open: documents.filter(
+                  (doc: any) => doc.document_edit_state === "open"
+                ),
+                completed: documents.filter(
+                  (doc: any) => doc.document_edit_state === "completed"
+                ),
+              },
+            };
+          })
+        );
+
+        setProjects(projectsWithDocuments);
+      } catch (error) {
+        console.error("Data not found",error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjectsAndDocuments();
+  }, []);
+
+  if (loading) {
+    return <div> Loading project ...</div>;
+  }
+
+  return (
+    <div className="dashboard p-4 sm:p-6 md:p-8 lg:p-12">
+      <StatusFilter projects={projects} />
+      <h1 className="text-2xl font-bold mt-6 mb-4">Projects</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            Project={project}
+            team=''
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
