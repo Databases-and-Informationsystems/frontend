@@ -83,6 +83,7 @@ const EntitySelection = () => {
           ids.push(mention.id);
           mention.entity_id = ++max_eId;
           //handleUpdateMention(mention.id.toString(), mention)
+          //while(loading){} //prevents double creation!!
           //handleCreateEntityViaElements(max_eId, ids);
         }
       })
@@ -92,6 +93,7 @@ const EntitySelection = () => {
         ids.push(Number(m_not_in_entity.id));
         m_not_in_entity.entity_id = ++max_eId;
         handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
+        while(loading){} //prevents double creation!!
         handleCreateEntityViaElements(max_eId, ids);
       }
     }
