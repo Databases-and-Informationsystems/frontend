@@ -25,14 +25,21 @@ export const createEntity = async (entity: AnnotationEntity) => {
 
 export const updateEntity = async (entityId: string, updatedEntity: AnnotationEntity) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${entityId}`, updatedEntity)
+
+    const entityToUpdate = {
+      ...updatedEntity,
+      mention_ids: Array.isArray(updatedEntity.mention_ids) ? updatedEntity.mention_ids : Object.values(updatedEntity.mention_ids)
+    };
+
+    const response = await axios.put(`${BASE_URL}/${entityId}`, entityToUpdate);
     console.log("Updated Entity: ", response.data);
-    return response.data
+    return response.data;
   } catch (error) {
-    console.error(`Failed to update entity with ID ${entityId}:`, error)
-    throw error
+    console.error(`Failed to update entity with ID ${entityId}:`, error);
+    throw error;
   }
 }
+
 
 export const deleteEntity = async (entityId: string) => {
   try {

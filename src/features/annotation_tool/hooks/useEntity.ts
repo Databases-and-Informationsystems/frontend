@@ -44,7 +44,13 @@ export const useEntity = () => {
 
   const handleCreateEntity = async (newEntity: AnnotationEntity) => {
     const createdEntity = await createEntity(newEntity)
-    setEntities((prev) => [...prev, createdEntity])
+    setEntities((prev) => {
+      const entityExists = prev.some((entity) => entity.id == createdEntity.id)
+      if (!entityExists) {
+        return [...prev, createdEntity]
+      }
+      return prev
+    })
   }
 
   // const handleAddToEntity = async (entityId: any, mentionId: any) => {
@@ -53,23 +59,30 @@ export const useEntity = () => {
   //   //EntityState is possibly not updated - TOCHECK
   // }
 
-  const handleAddToEntity = (entityId: any, mentionId: any) => {
+  const handleAddToEntity = async (entityId: any, mentionId: any) => {
     setEntities((prevEntities) => {
       return prevEntities.map((ent) => {
         if (ent.id == entityId) {
-          const newMentionIds = [...ent.mention_ids, mentionId]
-
-          ent.mention_ids = newMentionIds;
-
-          let mToChange = mentions.find((ment) => ment.id == mentionId);
-          mToChange.entity_id = entityId.toString();
-
+          const newMentionIds = ent.mention_ids.includes(mentionId)
+            ? ent.mention_ids
+            : [...ent.mention_ids, mentionId]
+          let mToChange = {
+            ...mentions.find((ment) => ment.id == mentionId),
+            entity_id: entityId.toString(),
+          }
+          const eChanged = ent;
+          eChanged.mention_ids = newMentionIds;
+          console.log("Changed Entity: ", JSON.stringify(eChanged));
+          updateMention(mentionId.toString(), mToChange)
+          updateEntity(entityId.toString(), eChanged)
+          console.log('Add Mention ${mentionId} to Entity id ${entityId}')
           return { ...ent, mention_ids: newMentionIds }
         }
         return ent
       })
     })
   }
+
 
   // const handleRemoveFromEntity = async (entityId: any, mentionId: any) => {
   //   const entity = getEntityById(entityId)

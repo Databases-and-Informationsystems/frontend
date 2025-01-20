@@ -82,8 +82,8 @@ const EntitySelection = () => {
           const ids: number[] = [];
           ids.push(mention.id);
           mention.entity_id = ++max_eId;
-          handleUpdateMention(mention.id.toString(), mention)
-          handleCreateEntityViaElements(max_eId, ids);
+          //handleUpdateMention(mention.id.toString(), mention)
+          //handleCreateEntityViaElements(max_eId, ids);
         }
       })
     }else {
