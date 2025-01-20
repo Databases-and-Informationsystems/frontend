@@ -12,7 +12,7 @@ import {
   deleteDocument,
   getTeams,
   getSchemas,
-} from '../api/api';
+} from '../api/projects';
 import { Document, Project } from '../types/types';
 
 const ProjectPage: React.FC = () => {
