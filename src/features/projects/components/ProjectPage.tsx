@@ -13,7 +13,7 @@ import {
   getTeams,
   getSchemas,
 } from '../api/api';
-import { Document, Project } from './types';
+import { Document, Project } from '../types/types';
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);

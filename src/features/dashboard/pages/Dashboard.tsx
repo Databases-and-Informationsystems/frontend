@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ProjectCard from "./ProjectCard";
-import StatusFilter from "./StatusFilter";
-import { getProjects, getDocumentsByProject } from "../api/api";
+import ProjectCard from "../components/ProjectCard";
+import StatusFilter from "../components/StatusFilter";
+import { getProjects, getDocumentsByProject } from "../api/dashboard";
 import { Project } from "../types/types";
 
 const Dashboard: React.FC = () => {

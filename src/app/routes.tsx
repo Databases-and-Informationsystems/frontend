@@ -1,6 +1,6 @@
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout';
 import { Routes, Route, Navigate } from 'react-router';
-import Dashboard from '@/features/dashboard/components/Dashboard';
+import Dashboard from '@/features/dashboard/pages/Dashboard';
 import ProjectPage from '@/features/projects/components/ProjectPage';
 import SchemaPage from '@/features/schema/SchemaPage';
 import Login from '@/features/login/pages/Login';

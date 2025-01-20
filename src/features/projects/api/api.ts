@@ -2,7 +2,7 @@ import { httpClient } from "./httpClients";
 
 export const getProjects = async () => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     
 
    if (!token) {
@@ -22,7 +22,7 @@ export const getProjects = async () => {
 
 export const createProject = async (name: string, teamId: number, schemaId: number) => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("	Authorization required");
     }
@@ -44,7 +44,7 @@ export const createProject = async (name: string, teamId: number, schemaId: numb
 
 export const getDocumentsByProject = async (projectId: number) => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Authorization required");
     }
@@ -61,7 +61,7 @@ export const getDocumentsByProject = async (projectId: number) => {
 
 export const createDocument = async (projectId: number, fileName: string, fileContent: string) => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Authorization required");
     }
@@ -83,7 +83,7 @@ export const createDocument = async (projectId: number, fileName: string, fileCo
 
 export const deleteDocument = async (documentId: number) => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("TAuthorization required");
     }
@@ -100,7 +100,7 @@ export const deleteDocument = async (documentId: number) => {
 
 export const getTeams = async () => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Authorization required");
     }
@@ -117,7 +117,7 @@ export const getTeams = async () => {
 
 export const getSchemas = async () => {
   try {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Authorization required");
     }

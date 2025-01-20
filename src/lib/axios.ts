@@ -12,13 +12,13 @@ axiosInstance.interceptors.request.use(
     }
     return config
   },
-  (error) => {
-    if (error.response.status === 401 || error.response.status === 403) {
-      console.log('Here');
-      localStorage.removeItem('token')
-      window.location.href = '/login' // react router not accessible here
-    }
-  }
+  // (error) => {
+  //   if (error.response.status === 401 || error.response.status === 403) {
+  //     console.log('Here');
+  //     localStorage.removeItem('token')
+  //     window.location.href = '/login' // react router not accessible here
+  //   }
+  // }
 )
 
 axiosInstance.interceptors.response.use(
