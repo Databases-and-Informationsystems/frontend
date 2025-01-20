@@ -4,7 +4,7 @@ import Dashboard from '@/features/dashboard/components/Dashboard';
 import ProjectPage from '@/features/projects/components/ProjectPage';
 import SchemaPage from '@/features/schema/SchemaPage';
 import Login from '@/features/login/pages/Login';
-import Teams from '@/features/teams/Teams';
+import Teams from '@/features/teams/page/Teams';
 import Settings from '@/features/settings/Settings';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
