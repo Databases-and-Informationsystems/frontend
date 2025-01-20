@@ -4,7 +4,7 @@ import Dashboard from '@/features/dashboard/components/Dashboard';
 import ProjectPage from '@/features/projects/components/ProjectPage';
 import SchemaPage from '@/features/schema/SchemaPage';
 import Login from '@/features/login/pages/Login';
-import Teams from '@/features/Teams/Teams';
+import Teams from '@/features/teams/Teams';
 import Settings from '@/features/settings/Settings';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
@@ -21,7 +21,7 @@ const AppRoutes = () => {
 
           <Route path="projects" element={<ProjectPage />} />
           <Route path="schemas" element={<SchemaPage />} />
-          <Route path="projects/settings" element={<Settings />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Route>
       <Route path="/annotation" element={<div>Annotation</div>} />

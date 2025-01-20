@@ -34,6 +34,7 @@ form input {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  color: black;
 }
 
 form button {
