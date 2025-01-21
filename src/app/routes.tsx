@@ -11,8 +11,6 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
@@ -23,8 +21,8 @@ const AppRoutes = () => {
           <Route path="schemas" element={<SchemaPage />} />
           <Route path="settings" element={<Settings />} />
         </Route>
+        <Route path="/annotation" element={<div>Annotation</div>} />
       </Route>
-      <Route path="/annotation" element={<div>Annotation</div>} />
 
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>

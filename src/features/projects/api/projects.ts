@@ -1,7 +1,7 @@
 import axiosInstance from '@/lib/axios'
 
 export const getProjects = async () => {
-  const response = await axiosInstance.get('/projects')
+  const response = await axiosInstance.get('/projects/')
   return response.data
 }
 
@@ -10,7 +10,7 @@ export const createProject = async (
   teamId: number,
   schemaId: number
 ) => {
-  const response = await axiosInstance.post('/projects', {
+  const response = await axiosInstance.post('/projects/', {
     name,
     team_id: teamId,
     schema_id: schemaId,
