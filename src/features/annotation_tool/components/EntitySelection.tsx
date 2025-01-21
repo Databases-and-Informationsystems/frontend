@@ -10,7 +10,7 @@ import { Mention as MentionType } from '@/features/annotation_tool/types'
 
 const EntitySelection = () => {
 
-  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements } = useEntity();
+  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
   const { mentions, loading, handleUpdateMention } = useMentionContext();
   const entityIds = useMemo(
     () => entities?.map((entity) => entity.id) || [],
@@ -68,17 +68,25 @@ const EntitySelection = () => {
     return (<p>Loading Mentions...</p>)
   }
 
+  entities.map((entity) => {
+    if(entity.mention_ids.length === 0) {
+      handleDeleteEntity(entity.id.toString());
+    }
+  })
+
   /**
    * Create Entities for single Mentions
+   * TODO: This code generates duplicated Entities after a single Mention is deleted and before it gets reimported (but twice)
    */
-  const m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
+  let m_not_in_entity = mentions.find((mention) => mention.entity_id === '');
   let max_eId = Math.max(...entityIds);
   console.log(`Max eId: ${max_eId}`);
-  console.log("Mentions not in an entity: ", JSON.stringify(m_not_in_entity), " type: ", typeof m_not_in_entity);
-  if (m_not_in_entity != undefined) {
+  console.log(`Mentions not in an entity: `, JSON.stringify(m_not_in_entity), " type: ", typeof m_not_in_entity);
+  if (m_not_in_entity !== undefined && false) { //remove && false to enable bug and adding single Mentions into new Entities
+    console.log("%c Nicht undefined!", "color: orange");
     if (Array.isArray(m_not_in_entity)) {
       m_not_in_entity.map((mention) => {
-        if (getEntityByMentionId(mention.id.toString()) == undefined) {
+        if (getEntityByMentionId(mention.id.toString()) === undefined) {
           const ids: number[] = [];
           ids.push(mention.id);
           mention.entity_id = ++max_eId;
@@ -88,16 +96,23 @@ const EntitySelection = () => {
         }
       })
     }else {
-      if (getEntityByMentionId(m_not_in_entity.id.toString()) == undefined) {
+      if (getEntityByMentionId(m_not_in_entity.id.toString()) === undefined) {
+        console.log("%c Nicht undefined! Single one to be added", "color: #f7e545");
         const ids: number[] = [];
         ids.push(Number(m_not_in_entity.id));
         m_not_in_entity.entity_id = ++max_eId;
-        handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
-        while(loading){} //prevents double creation!!
-        handleCreateEntityViaElements(max_eId, ids);
+        if(getEntityByMentionId(m_not_in_entity.id.toString()) === undefined) {
+          console.log("%c Noch nicht hinzugefügt", "color: #456ef7");
+          handleUpdateMention(m_not_in_entity.id.toString(), m_not_in_entity)
+          while (loading) {
+          } //prevents double creation!!
+          handleCreateEntityViaElements(max_eId, ids);
+        }
       }
     }
   }
+
+  m_not_in_entity = undefined;
 
   if (eLoading) {
     return (<p>Loading Entities...</p>)
