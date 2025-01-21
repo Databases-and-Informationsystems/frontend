@@ -1,7 +1,7 @@
 import { MultipleDroppables } from '@/features/annotation_tool/components/DroppableHandler.tsx'
 import { DraggableHand } from '@/features/annotation_tool/components/DraggableHandler.tsx'
 import { DndContext, DragOverlay } from '@dnd-kit/core'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useMentionContext } from '../context/useMentionContext'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
@@ -9,6 +9,16 @@ import { Mention as MentionType } from '@/features/annotation_tool/types'
 
 
 const EntitySelection = () => {
+
+  const hasRun = useRef(false);
+  const renderCount = useRef(0);
+  useEffect(() => {
+    renderCount.current++;
+    if (!hasRun.current) {
+      hasRun.current = true;
+    }
+    hasRun.current = !hasRun.current;
+  })
 
   const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
   const { mentions, loading, handleUpdateMention } = useMentionContext();
@@ -82,7 +92,10 @@ const EntitySelection = () => {
   let max_eId = Math.max(...entityIds);
   console.log(`Max eId: ${max_eId}`);
   console.log(`Mentions not in an entity: `, JSON.stringify(m_not_in_entity), " type: ", typeof m_not_in_entity);
-  if (m_not_in_entity !== undefined && false) { //remove && false to enable bug and adding single Mentions into new Entities
+  console.log("%c Run: ", "color: aquamarine", renderCount.current)
+  if (m_not_in_entity !== undefined && hasRun && renderCount.current === 4) { //remove && false to enable bug and adding single Mentions into new Entities
+    console.log("%c Has run", "color: #49ef23")
+    console.log("Render count: ", renderCount)
     console.log("%c Nicht undefined!", "color: orange");
     if (Array.isArray(m_not_in_entity)) {
       m_not_in_entity.map((mention) => {
