@@ -12,8 +12,8 @@ import {
   deleteDocument,
   getTeams,
   getSchemas,
-} from '../api/api';
-import { Document, Project } from './types';
+} from '../api/projects';
+import { Document, Project } from '../types/types';
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);

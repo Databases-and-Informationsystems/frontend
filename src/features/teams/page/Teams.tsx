@@ -1,51 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { addMemberToTeam, createTeam, deleteMemberFromTeam, getTeams } from "../api/teams";
 
-const apiFetch = async (
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<any> => {
-  const token = localStorage.getItem("token");
+interface Team {
+  id: number;
+  name: string;
+  members: {
+    email: string;
+    username: string;
+  }[];
+}
 
-  if (!token) {
-    alert("Unauthorized! Please log in.");
-    throw new Error("Unauthorized");
-  }
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-    ...options.headers,
-  };
-
-  const response = await fetch(`http://localhost:5001/api${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.msg || "Something went wrong");
-  }
-
-  return response.json();
-};
-
-const Teams: React.FC = () => {
-  const [teams, setTeams] = useState<
-    { id: number; name: string; members: { email: string; username: string }[] }[]
-  >([]);
+const Teams = () => {
+  const [teams, setTeams] = useState<Team[]>([]);
   const [newTeamName, setNewTeamName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
-
   const [newMemberEmail, setNewMemberEmail] = useState("");
 
   // Fetch Teams
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const data = await apiFetch("/teams/");
+        const data = await getTeams();
         setTeams(data.teams);
       } catch (err: any) {
         setError(err.message || "Failed to fetch teams.");
@@ -65,16 +42,9 @@ const Teams: React.FC = () => {
     }
 
     try {
-      const data = await apiFetch("/teams/", {
-        method: "POST",
-        body: JSON.stringify({ name: newTeamName }),
-      });
-
-      setTeams((prev) => [
-        ...prev,
-        { id: data.id, name: newTeamName, members: [] },
-      ]);
-
+      const data = await createTeam(newTeamName);
+      console.log('API response:', data);
+      setTeams((prev) => [...prev, data]);
       setNewTeamName("");
     } catch (err: any) {
       alert(err.message || "Failed to create team.");
@@ -89,18 +59,15 @@ const Teams: React.FC = () => {
     }
 
     try {
-      const data = await apiFetch("/teams/members", {
-        method: "POST",
-        body: JSON.stringify({ user_mail: newMemberEmail, team_id: teamId }),
-      });
+      const data = await addMemberToTeam(teamId, newMemberEmail);
 
       setTeams((prev) =>
         prev.map((team) =>
           team.id === teamId
             ? {
-                ...team,
-                members: [...team.members, { email: data.email, username: data.username }],
-              }
+              ...team,
+              members: [...team.members, { email: data.email, username: data.username }],
+            }
             : team
         )
       );
@@ -114,18 +81,14 @@ const Teams: React.FC = () => {
   // Delete a member from the team
   const handleDeleteMember = async (teamId: number, userMail: string) => {
     try {
-      await apiFetch("/teams/members", {
-        method: "DELETE",
-        body: JSON.stringify({ user_mail: userMail, team_id: teamId }),
-      });
-
+      await deleteMemberFromTeam(teamId, userMail);
       setTeams((prev) =>
         prev.map((team) =>
           team.id === teamId
             ? {
-                ...team,
-                members: team.members.filter((member) => member.email !== userMail),
-              }
+              ...team,
+              members: team.members.filter((member) => member.email !== userMail),
+            }
             : team
         )
       );
