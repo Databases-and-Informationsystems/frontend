@@ -20,9 +20,10 @@ interface MultipleDroppablesProps {
   allEntities: Record<number, any>
   allTokens: Record<number, any>
   dev_mode: boolean
+  onMentionRemoved: (eid: number | string, mid: number | string) => void
 }
 
-export function MultipleDroppables({ eIds, items, allEntities, allTokens, dev_mode }: MultipleDroppablesProps) {
+export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved, allTokens, dev_mode }: MultipleDroppablesProps) {
   const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
 
   const getMentionById = (id) => {
@@ -56,6 +57,7 @@ export function MultipleDroppables({ eIds, items, allEntities, allTokens, dev_mo
                 key={i}
                 eid={id}
                 id={i}
+                onMentionRemoved={onMentionRemoved}
                 m={getMentionById(i)}
                 dev_mode={dev_mode}
                 allEntities={allEntities}

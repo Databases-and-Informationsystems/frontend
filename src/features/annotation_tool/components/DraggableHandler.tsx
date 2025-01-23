@@ -10,11 +10,10 @@ interface props {
   allEntities: Record<number, any>
   m: MentionType
   dev_mode: boolean
+  onMentionRemoved: (eid: number | string, mid: number | string) => void
 }
 
-export function DraggableHand({ id, eid, allEntities, m, dev_mode }: props) {
-
-  const { handleRemoveFromEntity } = useEntity()
+export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props) {
 
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: id,
@@ -35,9 +34,9 @@ export function DraggableHand({ id, eid, allEntities, m, dev_mode }: props) {
           <Mention key={id} mention={m}></Mention>
         </SelectionProvider>
       </TokenProvider>*/}
-      <Mention key={id} mention={m}></Mention>
+      <Mention key={id} mention={m} showDeleteButton={false}></Mention>
       <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 rounded-md">Drag handle</div>
-      <Button onClick={() => handleRemoveFromEntity(eid, id)}>remove</Button>
+      <Button onClick={() => onMentionRemoved(eid, id)}>remove</Button>
     </div>
   );
 }
