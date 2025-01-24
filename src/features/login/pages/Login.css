@@ -1,0 +1,104 @@
+.login-page {
+  display: flex;
+  height: 100vh;
+}
+
+.white-half {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+form {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 400px;
+}
+
+form h2 {
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: black;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+form button:hover {
+  background-color: #303131;
+}
+
+/* Right (black) half */
+.black-half {
+  flex: 1;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.black-half h1 {
+  font-size: 7rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+form span {
+  margin-bottom: -10px;
+
+  color: #565c62;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.67em;
+  display: block;
+}
+
+.tab {
+  margin-bottom: 20px;
+
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  font-size: 1em;
+  color: #565c62;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  font-weight: bold;
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+.tab:hover {
+  color: #333;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
