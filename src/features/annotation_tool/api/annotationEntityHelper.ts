@@ -1,11 +1,11 @@
-import axios from 'axios'
 import { AnnotationEntity } from '../types'
+import axiosInstance from '@/lib/axios.ts'
 
-const BASE_URL = 'http://localhost:3000/entities'
+//const BASE_URL = 'http://localhost:3000/entities'
 
-export const fetchEntities = async (): Promise<AnnotationEntity[]> => {
+export const fetchEntities = async (document_edit_id: number | string): Promise<AnnotationEntity[]> => {
   try {
-    const response = await axios.get(BASE_URL)
+    const response = await axiosInstance.get(`/entities/${document_edit_id}`)
     return response.data
   } catch (error) {
     console.error('Failed to fetch mentions:', error)
@@ -15,7 +15,7 @@ export const fetchEntities = async (): Promise<AnnotationEntity[]> => {
 
 export const createEntity = async (entity: AnnotationEntity) => {
   try {
-    const response = await axios.post(BASE_URL, entity)
+    const response = await axiosInstance.post("/entities/", entity)
     return response.data
   } catch (error) {
     console.error('Failed to create entity:', error)
@@ -31,7 +31,7 @@ export const updateEntity = async (entityId: string, updatedEntity: AnnotationEn
       mention_ids: Array.isArray(updatedEntity.mention_ids) ? updatedEntity.mention_ids : Object.values(updatedEntity.mention_ids)
     };
 
-    const response = await axios.put(`${BASE_URL}/${entityId}`, entityToUpdate);
+    const response = await axiosInstance.put(`/entities/${entityId}`, entityToUpdate);
     console.log("Updated Entity: ", response.data);
     return response.data;
   } catch (error) {
@@ -43,7 +43,7 @@ export const updateEntity = async (entityId: string, updatedEntity: AnnotationEn
 
 export const deleteEntity = async (entityId: string) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/${entityId}`)
+    const response = await axiosInstance.delete(`/entities/${entityId}`)
     console.log("Deleted Entity: ", response.data);
     return response.data
   } catch (error) {
