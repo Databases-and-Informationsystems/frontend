@@ -13,7 +13,7 @@ import {
   getTeams,
   getSchemas,
 } from '../api/projects'
-import { Document, Project } from '../types/types'
+import { Document, Project, Schema, Team } from '../types/types'
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
@@ -25,10 +25,10 @@ const ProjectPage: React.FC = () => {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false)
   const [previewContent, setPreviewContent] = useState<string | null>(null)
   const [projectName, setProjectName] = useState('')
-  const [schema, setSchema] = useState('')
-  const [team, setTeam] = useState('')
-  const [teams, setTeams] = useState<string[]>([])
-  const [schemas, setSchemas] = useState<string[]>([])
+  const [schema, setSchema] = useState<Schema | undefined>(undefined)
+  const [team, setTeam] = useState<Team | undefined>(undefined)
+  const [teams, setTeams] = useState<Team[]>([])
+  const [schemas, setSchemas] = useState<Schema[]>([])
   const fetchDocumentsForProject = async (projectId: number) => {
     try {
       const documents = await getDocumentsByProject(projectId)
@@ -59,8 +59,8 @@ const ProjectPage: React.FC = () => {
         ])
         console.log('ProjectsData: ', projectsData)
         setProjects(projectsData)
-        setTeams(teamsData.map((team: { name: string }) => team.name))
-        setSchemas(schemasData.map((schema: { name: string }) => schema.name))
+        setTeams(teamsData)
+        setSchemas(schemasData)
       } catch (error) {
         console.error('Error fetching initial data:', error)
       }
@@ -108,17 +108,12 @@ const ProjectPage: React.FC = () => {
 
   const handleCreateProject = async (
     name: string,
-    schemaName: string,
-    teamName: string
+    schema: Schema,
+    team: Team
   ) => {
+    console.log('handleCreateProject')
     try {
-      const schemaId = schemas.find((s) => s === schemaName)
-      const teamId = teams.find((t) => t === teamName)
-      if (typeof schemaId === 'string') throw new Error('Schema ID is invalid.')
-      if (typeof teamId === 'string') throw new Error('Team ID is invalid.')
-      if (!schemaId || !teamId) throw new Error('Schema or team not found')
-
-      const newProject = await createProject(name, teamId, schemaId)
+      const newProject = await createProject(name, team.id, schema.id)
       setProjects((prev) => [...prev, newProject])
       setIsProjectModalOpen(false)
     } catch (error) {

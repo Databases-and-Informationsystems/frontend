@@ -18,14 +18,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const navigate = useNavigate()
 
   const handleOpenProject = () => {
-    navigate('/projects')
+    // This does not make sense, as navigation is to page of projects
+    navigate('/dashboard/projects')
   }
 
   return (
     <div className="project-card bg-white p-8 rounded-lg shadow-lg w-full">
       <h3 className="text-2xl font-bold">{project.name}</h3>
-      <p className="text-sm text-gray-600">Schema: {project.schema.name}</p>
-      <p className="text-sm text-gray-600">Team: {project.team.name}</p>
+      <p className="text-sm text-gray-600">Schema: {project.schema?.name}</p>
+      <p className="text-sm text-gray-600">Team: {project.team?.name}</p>
       <p className="text-sm text-gray-800 font-medium">
         Total Documents: {project.documents.length}
       </p>
