@@ -7,9 +7,9 @@ interface ModalPropsCreate {
   onCreate: (name: string, schema: Schema, team: Team) => void
   projectName: string
   setProjectName: React.Dispatch<React.SetStateAction<string>>
-  team: Team
+  team: Team | undefined
   setTeam: React.Dispatch<React.SetStateAction<Team | undefined>>
-  schema: Schema
+  schema: Schema | undefined
   setSchema: React.Dispatch<React.SetStateAction<Schema | undefined>>
   teams: Team[]
   schemas: Schema[]
@@ -19,8 +19,8 @@ interface ModalPropsDetails {
   isOpen: boolean
   onClose: () => void
   title: string
-  schema: Schema
-  team: Team
+  schema: Schema | undefined
+  team: Team | undefined
   documents: {
     ongoing: { name: string; project: string; schema: string }[]
     open: { name: string; project: string; schema: string }[]
@@ -118,9 +118,16 @@ const Modal: React.FC<ModalProps> = (props) => {
             <div className="flex justify-end">
               <button
                 className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-                onClick={() =>
-                  props.onCreate(props.projectName, props.schema, props.team)
-                }
+                disabled={!props.schema || !props.team}
+                onClick={() => {
+                  if (props.schema && props.team) {
+                    props.onCreate(
+                      props.projectName,
+                      props.schema!,
+                      props.team!
+                    )
+                  }
+                }}
                 aria-label="Create project"
               >
                 Create
@@ -131,8 +138,8 @@ const Modal: React.FC<ModalProps> = (props) => {
 
         {'documents' in props && (
           <>
-            <p className="text-sm text-black">Schema: {props.schema.name}</p>
-            <p className="text-sm text-black">Team: {props.team.name}</p>
+            <p className="text-sm text-black">Schema: {props.schema?.name}</p>
+            <p className="text-sm text-black">Team: {props.team?.name}</p>
             <div className="mt-4">
               <h3 className="font-semibold text-lg">Ongoing Projects</h3>
               <ul className="space-y-2">

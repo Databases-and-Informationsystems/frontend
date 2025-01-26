@@ -1,12 +1,13 @@
-import DashboardLayout from '@/features/dashboard/components/DashboardLayout';
-import { Routes, Route, Navigate } from 'react-router';
-import Dashboard from '@/features/dashboard/pages/Dashboard';
-import ProjectPage from '@/features/projects/components/ProjectPage';
-import SchemaPage from '@/features/schema/SchemaPage';
-import Login from '@/features/login/pages/Login';
-import Teams from '@/features/teams/page/Teams';
-import Settings from '@/features/settings/Settings';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
+import { Routes, Route, Navigate } from 'react-router'
+import Dashboard from '@/features/dashboard/pages/Dashboard'
+import ProjectPage from '@/features/projects/components/ProjectPage'
+import SchemaPage from '@/features/schema/components/SchemaPage'
+import SchemasPage from '@/features/schema/components/SchemasPage'
+import Login from '@/features/login/pages/Login'
+import Teams from '@/features/teams/page/Teams'
+import Settings from '@/features/settings/Settings'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 const AppRoutes = () => {
   return (
@@ -18,7 +19,8 @@ const AppRoutes = () => {
           <Route path="teams" element={<Teams />} />
 
           <Route path="projects" element={<ProjectPage />} />
-          <Route path="schemas" element={<SchemaPage />} />
+          <Route path="schemas/:id" element={<SchemaPage />} />
+          <Route path="schemas" element={<SchemasPage />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="/annotation" element={<div>Annotation</div>} />
@@ -26,7 +28,7 @@ const AppRoutes = () => {
 
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes
