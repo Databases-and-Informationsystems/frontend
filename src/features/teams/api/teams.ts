@@ -1,12 +1,12 @@
 import axiosInstance from '@/lib/axios'
 
 export const getTeams = async () => {
-  const response = await axiosInstance.get('/teams/')
+  const response = await axiosInstance.get('/teams')
   return response.data
 }
 
 export const createTeam = async (name: string) => {
-  const response = await axiosInstance.post('/teams/', { name })
+  const response = await axiosInstance.post('/teams', { name })
   return response.data
 }
 

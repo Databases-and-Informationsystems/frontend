@@ -1,3 +1,4 @@
+import { DocumentState } from "@/features/dashboard/types/types";
 
 export interface Document {
   id: number;         
@@ -6,23 +7,16 @@ export interface Document {
   progress: number;  
   project:Project;   
   schema: Schema;  
-  status:string; 
-}
-
-
-export interface Documents {
-  ongoing: Document[];   
-  open: Document[];     
-  completed: Document[]; 
+  status: DocumentState; 
 }
 
 
 export interface Project {
   id:number;
-  title: string;         
-  schema: string;        
+  name: string;         
+  schema: Schema;        
   team: Team ;          
-  documents: Documents; 
+  documents?: Document[]; 
 }
 export interface Schema {
   id: number;
@@ -31,4 +25,22 @@ export interface Schema {
 export interface Team {
   id: number;
   name: string;
+}
+
+
+// The following is very bad practice but required because of the structure of the backend api...
+export interface TeamsWrapper {
+  teams: Team[];
+}
+
+export interface ProjectWrapper {
+  projects: Project[];
+}
+
+export interface SchemaWrapper {
+  schemas: Schema[];
+}
+
+export interface DocumentWrapper {
+  documents: Document[];
 }
