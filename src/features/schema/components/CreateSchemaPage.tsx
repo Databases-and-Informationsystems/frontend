@@ -131,19 +131,19 @@ const CreateSchemaPage = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="p-4 bg-gray-100 rounded-lg shadow">
-        <h1 className="text-2xl font-bold text-center">Create new Schema</h1>
+      <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow">
+        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
+          Create new Schema
+        </h1>
       </div>
 
-      {/* Schema Name Input */}
-      <label className="block mt-4">
+      <label className="block mt-4 text-gray-900 dark:text-gray-100">
         Schema Name
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border p-2 mt-1 rounded"
+          className="w-full border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 mt-1 rounded"
         />
       </label>
 
@@ -153,7 +153,7 @@ const CreateSchemaPage = () => {
         onChange={(e) =>
           setTeam(teams.find((t) => t.id === Number(e.target.value)))
         }
-        className="form-control w-full border p-2 rounded"
+        className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 rounded"
       >
         <option value="">Select Team</option>
         {teams.map((t) => (
@@ -163,10 +163,9 @@ const CreateSchemaPage = () => {
         ))}
       </select>
 
-      {/* Mentions List */}
-      <div className="mt-4 p-4 bg-white rounded-lg shadow">
+      <div className="mt-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
         <h2
-          className="text-xl font-semibold cursor-pointer"
+          className="text-xl font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
           onClick={() => setAreMentionsCollapsed(!areMentionsCollapsed)}
         >
           <FontAwesomeIcon
@@ -185,7 +184,7 @@ const CreateSchemaPage = () => {
                 .map((mention, index) => (
                   <span
                     key={index}
-                    className="text-gray-800 rounded-full py-1 px-3"
+                    className="text-gray-900 dark:text-gray-100 rounded-full py-1 px-3"
                     style={{ backgroundColor: mention.color }}
                   >
                     {mention.tag}
@@ -193,13 +192,15 @@ const CreateSchemaPage = () => {
                 ))}
             </div>
           ) : (
-            <p> No mentions added yet.</p>
+            <p className="text-gray-900 dark:text-gray-300">
+              No mentions added yet.
+            </p>
           )
         ) : (
           mentions.map((mention, index) => (
             <div
               key={index}
-              className="mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm relative"
+              className="mt-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm relative"
             >
               {index !== 0 && (
                 <button
@@ -209,15 +210,14 @@ const CreateSchemaPage = () => {
                   Delete
                 </button>
               )}
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Mention {index + 1}
               </h3>
-              <div className="space-y-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+              <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 <div className="form-group">
-                  {/* Form group for Tag */}
                   <label
                     htmlFor={`tag-${index}`}
-                    className="form-label font-medium"
+                    className="form-label font-medium text-gray-900 dark:text-gray-100"
                   >
                     Tag
                   </label>
@@ -229,14 +229,13 @@ const CreateSchemaPage = () => {
                       handleMentionChange(index, 'tag', e.target.value)
                     }
                     placeholder="Enter a tag"
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   />
                 </div>
-                {/* Form group for Description */}
                 <div className="form-group">
                   <label
                     htmlFor={`description-${index}`}
-                    className="form-label font-medium"
+                    className="form-label font-medium text-gray-900 dark:text-gray-100"
                   >
                     Description
                   </label>
@@ -248,7 +247,7 @@ const CreateSchemaPage = () => {
                       handleMentionChange(index, 'description', e.target.value)
                     }
                     placeholder="Enter a description"
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   />
                 </div>
                 <div className="flex items-center">
@@ -259,9 +258,12 @@ const CreateSchemaPage = () => {
                     onChange={(e) =>
                       handleMentionChange(index, 'color', e.target.value)
                     }
-                    className="border rounded"
+                    className="border dark:border-gray-600 bg-white dark:bg-gray-800 rounded"
                   />
-                  <label htmlFor={`color-${index}`} className="ml-2">
+                  <label
+                    htmlFor={`color-${index}`}
+                    className="ml-2 text-gray-900 dark:text-gray-100"
+                  >
                     Color
                   </label>
                 </div>
@@ -277,11 +279,11 @@ const CreateSchemaPage = () => {
                         e.target.checked
                       )
                     }
-                    className="border p-2 rounded"
+                    className="border dark:border-gray-600 bg-white dark:bg-gray-800 rounded"
                   />
                   <label
                     htmlFor={`entityPossible-${index}`}
-                    className="form-label font-medium ml-2"
+                    className="form-label font-medium ml-2 text-gray-900 dark:text-gray-100"
                   >
                     Entity Possible
                   </label>
@@ -296,7 +298,7 @@ const CreateSchemaPage = () => {
           <div className="flex justify-end">
             <button
               onClick={handleAddMention}
-              className="mt-4 p-2 bg-blue-500 text-white rounded"
+              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
             >
               Add Mention
             </button>
@@ -304,10 +306,9 @@ const CreateSchemaPage = () => {
         )}
       </div>
 
-      {/* Relations List */}
-      <div className="mt-4 p-4 bg-white rounded-lg shadow">
+      <div className="mt-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
         <h2
-          className="text-xl font-semibold cursor-pointer"
+          className="text-xl font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
           onClick={() => setAreRelationsCollapsed(!areRelationsCollapsed)}
         >
           <FontAwesomeIcon
@@ -333,13 +334,13 @@ const CreateSchemaPage = () => {
                 ))}
             </div>
           ) : (
-            <p>No relations added yet.</p>
+            <p className="text-gray-900 dark:text-gray-300"> No relations added yet.</p>
           )
         ) : (
           relations.map((relation, index) => (
             <div
               key={index}
-              className="mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm relative"
+              className="mt-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm relative"
             >
               {index !== 0 && (
                 <button
@@ -349,10 +350,10 @@ const CreateSchemaPage = () => {
                   Delete
                 </button>
               )}
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className="text-lg font-semibold mb-2  text-gray-900 dark:text-gray-100">
                 Relation {index + 1}
               </h3>
-              <div className="space-y-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+              <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 <div className="form-group">
                   {/* Form group for Tag */}
                   <label
@@ -369,14 +370,14 @@ const CreateSchemaPage = () => {
                       handleRelationChange(index, 'tag', e.target.value)
                     }
                     placeholder="Enter a tag"
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   />
                 </div>
                 {/* Form group for Description */}
                 <div className="form-group">
                   <label
                     htmlFor={`relation-description-${index}`}
-                    className="form-label font-medium"
+                    className="form-label font-medium text-gray-900 dark:text-gray-100"
                   >
                     Description
                   </label>
@@ -388,7 +389,7 @@ const CreateSchemaPage = () => {
                       handleRelationChange(index, 'description', e.target.value)
                     }
                     placeholder="Enter a description"
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   />
                 </div>
               </div>
@@ -401,17 +402,18 @@ const CreateSchemaPage = () => {
           <div className="flex justify-end">
             <button
               onClick={handleAddRelation}
-              className="mt-4 p-2 bg-blue-500 text-white rounded"
+              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
             >
               Add Relation
             </button>
           </div>
         )}
       </div>
+
       {/* Constraint Card */}
-      <div className="mt-4 p-4 bg-white rounded-lg shadow">
+      <div className="mt-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
         <h2
-          className="text-xl font-semibold cursor-pointer"
+          className="text-xl font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
           onClick={() => setAreConstraintsCollapsed(!areConstraintsCollaped)}
         >
           <FontAwesomeIcon
@@ -438,30 +440,30 @@ const CreateSchemaPage = () => {
                     className="flex justify-between items-center p-2 shadow"
                   >
                     {/* Mention Head Tag */}
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-gray-800dark:text-gray-100 font-medium">
                       {constraint.mention_head_tag}
                     </span>
 
                     {/* Relation Tag */}
-                    <span className="text-gray-800 font-semibold">
+                    <span className="text-gray-800dark:text-gray-100 font-semibold">
                       {constraint.relation_tag}
                     </span>
 
                     {/* Mention Tail Tag */}
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-gray-800dark:text-gray-100 font-medium">
                       {constraint.mention_tail_tag}
                     </span>
                   </div>
                 ))}
             </div>
           ) : (
-            <p>No constrains added yet.</p>
+            <p className="text-gray-900 dark:text-gray-300">No constrains added yet.</p>
           )
         ) : (
           constraints.map((constraint, index) => (
             <div
               key={index}
-              className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-inner relative"
+              className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 rounded-lg shadow-inner relative"
             >
               {index !== 0 && (
                 <button
@@ -471,10 +473,10 @@ const CreateSchemaPage = () => {
                   Delete
                 </button>
               )}
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Constraint {index + 1}
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 {/* Mention Head Tag */}
                 <div className="form-group">
                   <label
@@ -493,7 +495,7 @@ const CreateSchemaPage = () => {
                         e.target.value
                       )
                     }
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   >
                     <option value="">Select Mention Head</option>
                     {mentions.map((m, idx) => (
@@ -507,7 +509,7 @@ const CreateSchemaPage = () => {
                 <div className="form-group">
                   <label
                     htmlFor={`relation-tag-${index}`}
-                    className="form-label font-medium"
+                    className="form-label font-medium text-gray-900 dark:text-gray-100"
                   >
                     Relation Tag
                   </label>
@@ -521,7 +523,7 @@ const CreateSchemaPage = () => {
                         e.target.value
                       )
                     }
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   >
                     <option value="">Select Relation Tag</option>
                     {relations.map((r, idx) => (
@@ -549,7 +551,7 @@ const CreateSchemaPage = () => {
                         e.target.value
                       )
                     }
-                    className="form-control w-full border p-2 rounded"
+                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
                   >
                     <option value="">Select Mention Tail</option>
                     {mentions.map((m, idx) => (
@@ -572,7 +574,7 @@ const CreateSchemaPage = () => {
                         e.target.checked
                       )
                     }
-                    className="border p-2 rounded"
+                    className="border p-2 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded"
                   />
                   <label
                     htmlFor={`is-directed-${index}`}
@@ -592,15 +594,16 @@ const CreateSchemaPage = () => {
           <div className="flex justify-end">
             <button
               onClick={handleAddConstraint}
-              className="mt-4 p-2 bg-blue-500 text-white rounded"
+              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
             >
               Add Constraint
             </button>
           </div>
         )}
       </div>
+
       <button
-        className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
+        className="ml-2 bg-blue-500 dark:bg-blue-700 text-white px-4 py-2 rounded"
         onClick={handleCreateSchema}
         disabled={
           !team ||
