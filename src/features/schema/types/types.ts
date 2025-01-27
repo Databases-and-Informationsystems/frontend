@@ -32,6 +32,10 @@ export interface SchemaConstraint {
     schema_mention_tail: Partial<SchemaMention> & {id: number};
 }
 
+export interface SchemaWrapper {
+    schemas: Schema[]
+}
+
 export interface NewConstraint {
     is_directed: boolean;
     mention_head_tag: string;

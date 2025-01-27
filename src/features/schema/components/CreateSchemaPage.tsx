@@ -6,6 +6,14 @@ import { createSchema } from '../api/schemas'
 import { useNavigate } from 'react-router'
 import { Team } from '@/features/dashboard/types/types'
 import { getTeams } from '@/features/projects/api/projects'
+import { Checkbox, Input } from '@/components/ui/input'
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 
 const CreateSchemaPage = () => {
   const navigate = useNavigate()
@@ -139,11 +147,10 @@ const CreateSchemaPage = () => {
 
       <label className="block mt-4 text-gray-900 dark:text-gray-100">
         Schema Name
-        <input
+        <Input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 mt-1 rounded"
         />
       </label>
 
@@ -203,62 +210,49 @@ const CreateSchemaPage = () => {
               className="mt-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm relative"
             >
               {index !== 0 && (
-                <button
+                <Button
                   onClick={() => handleDeleteMention(index)}
+                  variant="link"
                   className="absolute top-2 right-2 text-red-500 hover:text-red-700"
                 >
                   Delete
-                </button>
+                </Button>
               )}
               <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Mention {index + 1}
               </h3>
               <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 <div className="form-group">
-                  <label
-                    htmlFor={`tag-${index}`}
-                    className="form-label font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Tag
-                  </label>
-                  <input
-                    id={`tag-${index}`}
+                  <Input
                     type="text"
                     value={mention.tag}
                     onChange={(e) =>
                       handleMentionChange(index, 'tag', e.target.value)
                     }
                     placeholder="Enter a tag"
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    label="Tag"
                   />
                 </div>
                 <div className="form-group">
-                  <label
-                    htmlFor={`description-${index}`}
-                    className="form-label font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Description
-                  </label>
-                  <input
-                    id={`description-${index}`}
+                  <Input
                     type="text"
                     value={mention.description}
                     onChange={(e) =>
                       handleMentionChange(index, 'description', e.target.value)
                     }
                     placeholder="Enter a description"
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    label="Description"
                   />
                 </div>
                 <div className="flex items-center">
-                  <input
+                  <Input
                     id={`color-${index}`}
                     type="color"
                     value={mention.color}
                     onChange={(e) =>
                       handleMentionChange(index, 'color', e.target.value)
                     }
-                    className="border dark:border-gray-600 bg-white dark:bg-gray-800 rounded"
+                    className="w-6 h-6 rounded min-w-[1.5rem] dark:border-gray-600 bg-white dark:bg-gray-800 p-0"
                   />
                   <label
                     htmlFor={`color-${index}`}
@@ -268,9 +262,7 @@ const CreateSchemaPage = () => {
                   </label>
                 </div>
                 <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`entityPossible-${index}`}
+                  <Checkbox
                     checked={mention.entityPossible}
                     onChange={(e) =>
                       handleMentionChange(
@@ -279,14 +271,8 @@ const CreateSchemaPage = () => {
                         e.target.checked
                       )
                     }
-                    className="border dark:border-gray-600 bg-white dark:bg-gray-800 rounded"
+                    label="Entity Possible"
                   />
-                  <label
-                    htmlFor={`entityPossible-${index}`}
-                    className="form-label font-medium ml-2 text-gray-900 dark:text-gray-100"
-                  >
-                    Entity Possible
-                  </label>
                 </div>
               </div>
             </div>
@@ -295,13 +281,10 @@ const CreateSchemaPage = () => {
         {areMentionsCollapsed ? (
           <></>
         ) : (
-          <div className="flex justify-end">
-            <button
-              onClick={handleAddMention}
-              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
-            >
+          <div className="flex justify-end mt-4">
+            <Button onClick={handleAddMention} variant="default">
               Add Mention
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -334,7 +317,10 @@ const CreateSchemaPage = () => {
                 ))}
             </div>
           ) : (
-            <p className="text-gray-900 dark:text-gray-300"> No relations added yet.</p>
+            <p className="text-gray-900 dark:text-gray-300">
+              {' '}
+              No relations added yet.
+            </p>
           )
         ) : (
           relations.map((relation, index) => (
@@ -343,12 +329,13 @@ const CreateSchemaPage = () => {
               className="mt-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm relative"
             >
               {index !== 0 && (
-                <button
+                <Button
                   onClick={() => handleDeleteRelation(index)}
+                  variant="link"
                   className="absolute top-2 right-2 text-red-500 hover:text-red-700"
                 >
                   Delete
-                </button>
+                </Button>
               )}
               <h3 className="text-lg font-semibold mb-2  text-gray-900 dark:text-gray-100">
                 Relation {index + 1}
@@ -356,40 +343,26 @@ const CreateSchemaPage = () => {
               <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 <div className="form-group">
                   {/* Form group for Tag */}
-                  <label
-                    htmlFor={`relation-tag-${index}`}
-                    className="form-label font-medium"
-                  >
-                    Tag
-                  </label>
-                  <input
-                    id={`relation-tag-${index}`}
+                  <Input
                     type="text"
                     value={relation.tag}
                     onChange={(e) =>
                       handleRelationChange(index, 'tag', e.target.value)
                     }
                     placeholder="Enter a tag"
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    label="Tag"
                   />
                 </div>
                 {/* Form group for Description */}
                 <div className="form-group">
-                  <label
-                    htmlFor={`relation-description-${index}`}
-                    className="form-label font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Description
-                  </label>
-                  <input
-                    id={`relation-description-${index}`}
+                  <Input
                     type="text"
                     value={relation.description}
                     onChange={(e) =>
                       handleRelationChange(index, 'description', e.target.value)
                     }
                     placeholder="Enter a description"
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    label="Description"
                   />
                 </div>
               </div>
@@ -400,12 +373,13 @@ const CreateSchemaPage = () => {
           <></>
         ) : (
           <div className="flex justify-end">
-            <button
+            <Button
               onClick={handleAddRelation}
-              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
+              className="mt-4"
+              variant="default"
             >
               Add Relation
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -457,7 +431,9 @@ const CreateSchemaPage = () => {
                 ))}
             </div>
           ) : (
-            <p className="text-gray-900 dark:text-gray-300">No constrains added yet.</p>
+            <p className="text-gray-900 dark:text-gray-300">
+              No constrains added yet.
+            </p>
           )
         ) : (
           constraints.map((constraint, index) => (
@@ -466,12 +442,13 @@ const CreateSchemaPage = () => {
               className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 rounded-lg shadow-inner relative"
             >
               {index !== 0 && (
-                <button
+                <Button
                   onClick={() => handleDeleteConstraint(index)}
                   className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                  variant="link"
                 >
                   Delete
-                </button>
+                </Button>
               )}
               <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 Constraint {index + 1}
@@ -563,9 +540,7 @@ const CreateSchemaPage = () => {
                 </div>
                 {/* Is Directed */}
                 <div className="form-group">
-                  <input
-                    id={`is-directed-${index}`}
-                    type="checkbox"
+                  <Checkbox
                     checked={constraint.is_directed}
                     onChange={(e) =>
                       handleConstraintChange(
@@ -574,14 +549,8 @@ const CreateSchemaPage = () => {
                         e.target.checked
                       )
                     }
-                    className="border p-2 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded"
+                    label="Is Directed"
                   />
-                  <label
-                    htmlFor={`is-directed-${index}`}
-                    className="form-label font-medium ml-2"
-                  >
-                    Is Directed
-                  </label>
                 </div>
               </div>
             </div>
@@ -592,27 +561,43 @@ const CreateSchemaPage = () => {
           <></>
         ) : (
           <div className="flex justify-end">
-            <button
+            <Button
               onClick={handleAddConstraint}
-              className="mt-4 p-2 bg-blue-500 dark:bg-blue-700 text-white rounded"
+              className="mt-4"
+              variant="default"
             >
               Add Constraint
-            </button>
+            </Button>
           </div>
         )}
       </div>
 
-      <button
-        className="ml-2 bg-blue-500 dark:bg-blue-700 text-white px-4 py-2 rounded"
-        onClick={handleCreateSchema}
-        disabled={
-          !team ||
-          mentions.filter((m) => m.tag).length === 0 ||
-          relations.filter((r) => r.tag).length === 0
-        }
-      >
-        Create Schema
-      </button>
+      <Tooltip delayDuration={100} disableHoverableContent>
+        <TooltipTrigger asChild>
+          <div className="inline-block">
+            <Button
+              variant={
+                !team ||
+                !name ||
+                mentions.filter((m) => m.tag).length === 0 ||
+                relations.filter((r) => r.tag).length === 0
+                  ? 'ghost'
+                  : 'default'
+              }
+              onClick={handleCreateSchema}
+              disabled={
+                !team ||
+                !name ||
+                mentions.filter((m) => m.tag).length === 0 ||
+                relations.filter((r) => r.tag).length === 0
+              }
+            >
+              Create Schema
+            </Button>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="top">Required fields are missing</TooltipContent>
+      </Tooltip>
     </div>
   )
 }

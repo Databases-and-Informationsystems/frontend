@@ -4,12 +4,18 @@ import {
   Schema,
   SchemaMention,
   SchemaRelation,
+  SchemaWrapper
 } from '../types/types'
 import { Team } from '@/features/dashboard/types/types'
 
 export const getSchema = async (id: number): Promise<Schema> => {
   const response = await axiosInstance.get<Schema>(`/schemas/${id}`)
   return response.data
+}
+
+export const getSchemas = async () : Promise<Schema[]> => {
+  const response = await axiosInstance.get<SchemaWrapper>(`schemas`)
+  return response.data.schemas
 }
 
 export const createSchema = async (
