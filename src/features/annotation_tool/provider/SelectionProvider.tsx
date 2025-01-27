@@ -46,7 +46,7 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
       const selectedToken = initialTokens.find((token) => token.id === selectedId);
       return (
         selectedToken &&
-        Math.abs(selectedToken.index_in_document - currentToken.index_in_document) === 1 &&
+        Math.abs(selectedToken.document_index - currentToken.document_index) === 1 &&
         selectedToken.sentence_index === sentenceIndex
       );
     });
