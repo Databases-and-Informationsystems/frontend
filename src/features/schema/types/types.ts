@@ -30,3 +30,10 @@ export interface SchemaConstraint {
     schema_mention_head: Partial<SchemaMention> & {id: number};
     schema_mention_tail: Partial<SchemaMention> & {id: number};
 }
+
+export interface NewConstraint {
+    is_directed: boolean;
+    mention_head_tag: string;
+    relation_tag: string;
+    mention_tail_tag: string;
+}

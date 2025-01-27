@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
 //import { HexColorPicker } from "react-colorful";
 
 interface Mention {
@@ -102,8 +103,14 @@ const SchemasPage = () => {
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Schema Page</h1>
+    <div className="container mx-auto p-6 space-y-6">
+      <Link
+        to={`/dashboard/schemas/create`}
+        className="fixed top-6 right-6 bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0]"
+      >
+        Create Schema
+      </Link>
+      <h1 className="text-2xl font-bold">Schemas</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-4 ">
         {schemas.map((schema) => (
           <div
@@ -115,23 +122,21 @@ const SchemasPage = () => {
             <h2 className="text-xl font-semibold">{schema.name}</h2>
             <p>Mentions: {schema.mentions}</p>
             <p>Relations: {schema.relations}</p>
-            <button
-              className={`mt-2 px-4 py-2 rounded ${
-                schema.locked ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'
-              } text-white`}
-              disabled={schema.locked}
+
+            <Link
+              to={`/dashboard/schemas/${schema.id}`}
+              className="text-blue-600 hover:underline"
             >
-              {schema.locked ? 'Inspect' : 'Update'}
-            </button>
+              <button
+                className={`mt-2 px-4 py-2 rounded ${
+                  schema.locked ? 'bg-gray-400' : 'bg-blue-500'
+                } text-white`}
+              >
+                {schema.locked ? 'View' : 'Edit'}
+              </button>
+            </Link>
           </div>
         ))}
-
-        <button
-          onClick={() => setModalOpen(true)}
-          className="p-2 border rounded bg-green-500 text-white"
-        >
-          Create Schema
-        </button>
       </div>
 
       {isModalOpen && (

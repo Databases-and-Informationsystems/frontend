@@ -129,12 +129,12 @@ const ProjectPage: React.FC = () => {
             className="fixed top-6 right-6 bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0]"
             onClick={() => setIsProjectModalOpen(true)}
           >
-            Create Project :
+            Create Project
           </button>
 
           <h1 className="text-3xl font-bold mb-6">Projects</h1>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}

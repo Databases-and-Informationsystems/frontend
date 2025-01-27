@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { STATUS_STYLES } from '../types/types'
 import { Project } from '../types/types'
 
@@ -25,7 +25,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <div className="project-card bg-white p-8 rounded-lg shadow-lg w-full">
       <h3 className="text-2xl font-bold">{project.name}</h3>
-      <p className="text-sm text-gray-600">Schema: {project.schema?.name}</p>
+      <p className="text-sm text-gray-600">
+        Schema:{' '}
+        <Link
+          to={`/dashboard/schemas/${project.schema.id}`}
+          className="text-blue-600 hover:underline"
+        >
+          {project.schema.name}
+        </Link>
+      </p>
       <p className="text-sm text-gray-600">Team: {project.team?.name}</p>
       <p className="text-sm text-gray-800 font-medium">
         Total Documents: {project.documents.length}
@@ -58,7 +66,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
                     Continue Working
@@ -100,7 +114,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <button className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
                     Start Working
@@ -142,7 +162,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <button className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
                     Open Document

@@ -11,9 +11,11 @@ const SchemaPage = () => {
 
   const fetchSchema = async () => {
     try {
-      setLoading(true)
-      const fetchedSchema = await getSchema(id)
-      setSchema(fetchedSchema)
+      if (id) {
+        setLoading(true)
+        const fetchedSchema = await getSchema(Number(id))
+        setSchema(fetchedSchema)
+      }
     } catch (err: any) {
       console.log('Error: ', err)
       setError(err.message as string)
@@ -53,7 +55,7 @@ const SchemaPage = () => {
   )
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 container space-y-6">
       {/* Schema Name as Header */}
       <div className="p-4 bg-gray-100 rounded-lg shadow">
         <h1 className="text-2xl font-bold text-center">{schema!.name}</h1>
@@ -70,7 +72,7 @@ const SchemaPage = () => {
             >
               {/* Color Box */}
               <div
-                className="w-6 h-6 rounded"
+                className="w-6 h-6 rounded min-w-[1.5rem]"
                 style={{ backgroundColor: mention.color }}
               ></div>
               {/* Tag and Description */}
@@ -115,7 +117,7 @@ const SchemaPage = () => {
                 {/* Head Mention Tag (Left) */}
                 <div className="flex items-center justify-start space-x-4">
                   <div
-                    className="w-6 h-6 rounded"
+                    className="w-6 h-6 rounded min-w-[1.5rem]"
                     style={{
                       backgroundColor: constraint.schema_mention_head.color,
                     }}
@@ -136,14 +138,16 @@ const SchemaPage = () => {
 
                 {/* Tail Mention Tag (Right) */}
                 <div className="flex items-center justify-end space-x-4">
+                  <div className="text-lg font-semibold">
+                    {constraint.schema_mention_tail.tag}
+                  </div>
                   <div
-                    className="w-6 h-6 rounded"
+                    className="w-6 h-6 rounded min-w-[1.5rem]"
                     style={{
                       backgroundColor: constraint.schema_mention_tail.color,
                     }}
-                  ></div>
-                  <div className="text-lg font-semibold">
-                    {constraint.schema_mention_tail.tag}
+                  >
+                    {' '}
                   </div>
                 </div>
               </div>
