@@ -16,8 +16,8 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
     return <p>Loading mentions...</p>;
   }
 
-  const getMentionByTokenId = (tokenId: string): MentionType | undefined => (
-    mentions.find(mention => mention.token_ids.includes(tokenId)));
+  const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
+    mentions.find(mention => mention.tokens.some(token => token.id === tokenId)));
 
 
   // Group tokens by sentence index
@@ -32,7 +32,7 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
 
   // Render each sentence with its tokens and mentions
   const renderAnnotatedSentence = (sentenceTokens: TokenType[]) => {
-    const renderedTokenIds = new Set<string>();
+    const renderedTokenIds = new Set<number>();
 
     return sentenceTokens.map((token) => {
       if (renderedTokenIds.has(token.id)) {
@@ -43,7 +43,7 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
 
       if (mention) {
         const mentionTokens = sentenceTokens.filter((token) => (
-          mention.token_ids.includes(token.id)
+          mention.tokens.some(mentionToken => mentionToken.id === token.id)
         ));
 
         mentionTokens.forEach((token) => renderedTokenIds.add(token.id));

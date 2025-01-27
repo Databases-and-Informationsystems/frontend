@@ -10,3 +10,9 @@ export type Mention = {
   tokens: Token[];
   schema_mention: SchemaMention;
 }
+
+export type CreateMentionPayload = {
+  schmea_mention_id: number;
+  document_edit_id: number;
+  token_ids: number[];
+}

@@ -32,13 +32,8 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
     const loadMentions = async () => {
       setLoading(true);
       try {
-        //TODO Remove conversion later on 
         const data = await fetchMentions();
-        setMentions(data.map((mention) => ({
-          ...mention,
-          id: String(mention.id),
-          token_ids: mention.token_ids.map(String),
-        })));
+        setMentions(data);
       } catch (err) {
         console.error("Failed to fetch mentions:", err);
       } finally {

@@ -23,11 +23,7 @@ export const TokenProvider = ({ children }: TokenProviderProps) => {
     const loadTokens = async () => {
       try {
         const data = await fetchTokens();
-        setTokens(data.map((token) => ({
-          ...token,
-          id: String(token.id),
-        }))
-        );
+        setTokens(data);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch tokens: ' + err);
