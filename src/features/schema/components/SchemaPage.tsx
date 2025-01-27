@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getSchema } from '../api/schemas'
-import { Schema } from '../types/types'
+import { RecommendationModel, Schema } from '../types/types'
 
+interface StepWithModels {
+  stepName: string
+  models: RecommendationModel[]
+}
 const SchemaPage = () => {
   const { id } = useParams()
   const [schema, setSchema] = useState<Schema | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | undefined>(undefined)
+
+  const [modelsByStep, setModelsByStep] = useState<any>([])
 
   const fetchSchema = async () => {
     try {
@@ -15,6 +21,21 @@ const SchemaPage = () => {
         setLoading(true)
         const fetchedSchema = await getSchema(Number(id))
         setSchema(fetchedSchema)
+        const groupedByStep = fetchedSchema.models.reduce(
+          (acc: Record<number, StepWithModels>, model) => {
+            const stepId = model.step.id
+            if (!acc[stepId]) {
+              acc[stepId] = {
+                stepName: model.step.type,
+                models: [],
+              }
+            }
+            acc[stepId].models.push(model)
+            return acc
+          },
+          {} as Record<number, StepWithModels>
+        )
+        setModelsByStep(groupedByStep)
       }
     } catch (err: any) {
       console.log('Error: ', err)
@@ -38,7 +59,7 @@ const SchemaPage = () => {
   }
 
   if (!schema) {
-    ;<p> No schema found.</p>
+    return <p> No schema found.</p>
   }
 
   const renderArrow = (direction: 'left' | 'right') => (
@@ -58,14 +79,40 @@ const SchemaPage = () => {
     <div className="p-6 container space-y-6">
       {/* Schema Name as Header */}
       <div className="p-4 bg-gray-100 rounded-lg shadow">
-        <h1 className="text-2xl font-bold text-center">{schema!.name}</h1>
+        <h1 className="text-2xl font-bold text-center">{schema.name}</h1>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
+        {Object.keys(modelsByStep).map((stepId) => (
+          <div
+            key={stepId}
+            className={`w-full p-4 bg-gray-50 rounded-lg shadow-md`}
+          >
+            <h2 className="text-xl font-bold text-gray-700 mb-4">
+              {modelsByStep[stepId].stepName}
+            </h2>
+            <div className="space-y-4">
+              {modelsByStep[stepId].models.map((model: RecommendationModel) => (
+                <div
+                  key={model.id}
+                  className="p-4 bg-white rounded-lg shadow-sm border border-gray-200"
+                >
+                  <h3 className="text-lg font-medium text-gray-800">
+                    {model.name}
+                  </h3>
+                  <p className="text-gray-600">Type: {model.type}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Schema Mentions */}
       <div className="p-4 bg-white rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Mentions</h2>
         <div className="space-y-4">
-          {schema!.schema_mentions.map((mention) => (
+          {schema.schema_mentions.map((mention) => (
             <div
               key={mention.id}
               className="flex items-center space-x-4 p-4 border rounded-lg"
@@ -89,7 +136,7 @@ const SchemaPage = () => {
       <div className="p-4 bg-white rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Relations</h2>
         <div className="space-y-4">
-          {schema!.schema_relations.map((relation) => (
+          {schema.schema_relations.map((relation) => (
             <div
               key={relation.id}
               className="flex flex-col space-y-1 p-4 border rounded-lg"
@@ -105,7 +152,7 @@ const SchemaPage = () => {
       <div className="p-4 bg-white rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Constraints</h2>
         <div className="space-y-4">
-          {schema!.schema_constraints
+          {schema.schema_constraints
             .sort((a, b) =>
               a.schema_relation.tag!.localeCompare(b.schema_relation.tag!)
             )
