@@ -1,36 +1,37 @@
-import React from "react";
+import React from 'react'
+import { Schema, Team } from '../types/types'
 
 interface ModalPropsCreate {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreate: (name: string, schema: string, team: string) => void;
-  projectName: string;
-  setProjectName: React.Dispatch<React.SetStateAction<string>>;
-  team: string;
-  setTeam: React.Dispatch<React.SetStateAction<string>>;
-  schema: string;
-  setSchema: React.Dispatch<React.SetStateAction<string>>;
-  teams: string[];
-  schemas: string[];
+  isOpen: boolean
+  onClose: () => void
+  onCreate: (name: string, schema: Schema, team: Team) => void
+  projectName: string
+  setProjectName: React.Dispatch<React.SetStateAction<string>>
+  team: Team | undefined
+  setTeam: React.Dispatch<React.SetStateAction<Team | undefined>>
+  schema: Schema | undefined
+  setSchema: React.Dispatch<React.SetStateAction<Schema | undefined>>
+  teams: Team[]
+  schemas: Schema[]
 }
 
 interface ModalPropsDetails {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  schema: string;
-  team: string;
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  schema: Schema | undefined
+  team: Team | undefined
   documents: {
-    ongoing: { name: string; project: string; schema: string }[];
-    open: { name: string; project: string; schema: string }[];
-    completed: { name: string; project: string; schema: string }[];
-  };
+    ongoing: { name: string; project: string; schema: string }[]
+    open: { name: string; project: string; schema: string }[]
+    completed: { name: string; project: string; schema: string }[]
+  }
 }
 
-type ModalProps = ModalPropsCreate | ModalPropsDetails;
+type ModalProps = ModalPropsCreate | ModalPropsDetails
 
 const Modal: React.FC<ModalProps> = (props) => {
-  if (!props.isOpen) return null;
+  if (!props.isOpen) return null
 
   return (
     <div
@@ -44,13 +45,20 @@ const Modal: React.FC<ModalProps> = (props) => {
         role="document"
       >
         {'title' in props && (
-          <h2 className="text-xl font-bold mb-4" id="modal-title">{props.title}</h2>
+          <h2 className="text-xl font-bold mb-4" id="modal-title">
+            {props.title}
+          </h2>
         )}
-        
+
         {'onCreate' in props && (
           <>
             <div className="mb-4">
-              <label htmlFor="project-name" className="block text-sm font-semibold">Project Name</label>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-semibold"
+              >
+                Project Name
+              </label>
               <input
                 id="project-name"
                 type="text"
@@ -62,39 +70,64 @@ const Modal: React.FC<ModalProps> = (props) => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="team" className="block text-sm font-semibold">Team</label>
+              <label htmlFor="team" className="block text-sm font-semibold">
+                Team
+              </label>
               <select
                 id="team"
-                value={props.team}
-                onChange={(e) => props.setTeam(e.target.value)}
+                value={props.team?.id}
+                onChange={(e) =>
+                  props.setTeam(
+                    props.teams.find((t) => t.id === Number(e.target.value))
+                  )
+                }
                 className="w-full p-2 border border-gray-300 rounded-md"
                 aria-label="Select team"
               >
                 <option value="">Select Team</option>
-                {props.teams.map((t, index) => (
-                  <option key={index} value={t}>{t}</option>
+                {props.teams.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="schema" className="block text-sm font-semibold">Schema</label>
+              <label htmlFor="schema" className="block text-sm font-semibold">
+                Schema
+              </label>
               <select
                 id="schema"
-                value={props.schema}
-                onChange={(e) => props.setSchema(e.target.value)}
+                value={props.schema?.id}
+                onChange={(e) =>
+                  props.setSchema(
+                    props.schemas.find((s) => s.id === Number(e.target.value))
+                  )
+                }
                 className="w-full p-2 border border-gray-300 rounded-md"
                 aria-label="Select schema"
               >
                 <option value="">Select Schema</option>
-                {props.schemas.map((s, index) => (
-                  <option key={index} value={s}>{s}</option>
+                {props.schemas.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="flex justify-end">
               <button
                 className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-                onClick={() => props.onCreate(props.projectName, props.schema, props.team)}
+                disabled={!props.schema || !props.team}
+                onClick={() => {
+                  if (props.schema && props.team) {
+                    props.onCreate(
+                      props.projectName,
+                      props.schema!,
+                      props.team!
+                    )
+                  }
+                }}
                 aria-label="Create project"
               >
                 Create
@@ -105,13 +138,15 @@ const Modal: React.FC<ModalProps> = (props) => {
 
         {'documents' in props && (
           <>
-            <p className="text-sm text-black">Schema: {props.schema}</p>
-            <p className="text-sm text-black">Team: {props.team}</p>
+            <p className="text-sm text-black">Schema: {props.schema?.name}</p>
+            <p className="text-sm text-black">Team: {props.team?.name}</p>
             <div className="mt-4">
               <h3 className="font-semibold text-lg">Ongoing Projects</h3>
               <ul className="space-y-2">
                 {props.documents.ongoing.map((doc, index) => (
-                  <li key={index} className="text-sm">{doc.name}</li>
+                  <li key={index} className="text-sm">
+                    {doc.name}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -119,7 +154,9 @@ const Modal: React.FC<ModalProps> = (props) => {
               <h3 className="font-semibold text-lg">Open Projects</h3>
               <ul className="space-y-2">
                 {props.documents.open.map((doc, index) => (
-                  <li key={index} className="text-sm">{doc.name}</li>
+                  <li key={index} className="text-sm">
+                    {doc.name}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -127,7 +164,9 @@ const Modal: React.FC<ModalProps> = (props) => {
               <h3 className="font-semibold text-lg">Completed Projects</h3>
               <ul className="space-y-2">
                 {props.documents.completed.map((doc, index) => (
-                  <li key={index} className="text-sm">{doc.name}</li>
+                  <li key={index} className="text-sm">
+                    {doc.name}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -145,7 +184,7 @@ const Modal: React.FC<ModalProps> = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

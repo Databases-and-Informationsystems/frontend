@@ -1,9 +1,6 @@
-import React from 'react'
 import { Relation as RelationType } from '../types'
 import { useMentionContext } from '../context/useMentionContext';
 import { Mention } from './Mention';
-import { MOCK_RELATION_SCHEMA } from '@/testing/mocks/documentMocks';
-import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRelationContext } from '../context/useRelationContext';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
@@ -16,20 +13,22 @@ export const Relation = ({ relation }: RelationProps) => {
   const { mentions } = useMentionContext();
   const { handleDeleteRelation } = useRelationContext(); 
 
+  console.log('Relation', relation);
+
   const headMention = mentions.find(mention => mention.id === relation.mention_head_id);
   const tailMention = mentions.find(mention => mention.id === relation.mention_tail_id);
 
   if (!headMention || !tailMention) {
-    return null;
+    return <p>Relation mentions not found</p>; 
   }
 
   return (
     <div>
-      <Mention mention={headMention} showDeleteButton={false}/>
+      <Mention mention={headMention} showDeleteButton={false} isInRelation={true}/>
       &nbsp;
       <span className='p-1 text-xl font-semibold border rounded-lg border-gray-300'>{relation.tag}</span>
       &nbsp;
-      <Mention mention={tailMention} showDeleteButton={false}/>
+      <Mention mention={tailMention} showDeleteButton={false} isInRelation={true}/>
       &nbsp;
       <Button className="h-auto w-auto p-1"
         onClick={(e) => {
@@ -39,19 +38,5 @@ export const Relation = ({ relation }: RelationProps) => {
         <Trash2 />
       </Button>
     </div>
-  )
-}
-
-export const RelationSelector = () => {
-  const [document] = React.useState({
-    relationSchema: MOCK_RELATION_SCHEMA,
-  });
-
-  return (
-    <Select>
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-    </Select>
   )
 }

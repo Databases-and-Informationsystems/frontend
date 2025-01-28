@@ -1,57 +1,60 @@
-import  { useState } from "react";
+import { useState } from 'react'
 //import { HexColorPicker } from "react-colorful";
 
 interface Mention {
-  name: string;
-  color: string;
+  name: string
+  color: string
 }
 
 interface Relation {
-    name: string;
-  }
-  
-  interface Dependency {
-    fromMention: string;
-    relation: string;
-    toMention: string;
-  }
-  
-  interface Schema {
-    name: string;
-    mentions: Mention[];
-    relations: Relation[];
-    dependencies: Dependency[];
-  }
+  name: string
+}
+
+interface Dependency {
+  fromMention: string
+  relation: string
+  toMention: string
+}
+
+interface Schema {
+  name: string
+  mentions: Mention[]
+  relations: Relation[]
+  dependencies: Dependency[]
+}
 
 const mockSchemas = [
-  { id: 1, name: "Pet Schema", mentions: 6, relations: 7, locked: true },
-  { id: 2, name: "Test Schema", mentions: 6, relations: 7, locked: false },
-];
+  { id: 1, name: 'Pet Schema', mentions: 6, relations: 7, locked: true },
+  { id: 2, name: 'Test Schema', mentions: 6, relations: 7, locked: false },
+]
 
-const SchemaPage = () => {
-  const [schemas, setSchemas] = useState(mockSchemas);
-  const [isModalOpen, setModalOpen] = useState(false);
+const SchemasPage = () => {
+  const [schemas, setSchemas] = useState(mockSchemas)
+  const [isModalOpen, setModalOpen] = useState(false)
   const [newSchema, setNewSchema] = useState<Schema>({
-    name: "",
+    name: '',
     mentions: [],
     relations: [],
     dependencies: [],
-  });
-  const [mentionColor] = useState("#aabbcc");
-  const [mentionName, setMentionName] = useState("");
-  const [relationName, setRelationName] = useState("");
-  const [fromMention, setFromMention] = useState("");
-  const [toMention, setToMention] = useState("");
-  const [selectedRelation, setSelectedRelation] = useState("");
+  })
+  const [mentionColor] = useState('#aabbcc')
+  const [mentionName, setMentionName] = useState('')
+  const [relationName, setRelationName] = useState('')
+  const [fromMention, setFromMention] = useState('')
+  const [toMention, setToMention] = useState('')
+  const [selectedRelation, setSelectedRelation] = useState('')
   const addMention = () => {
     if (mentionName) {
       setNewSchema((prev) => ({
         ...prev,
-        mentions: [...prev.mentions, { name: mentionName, color: mentionColor }],
-      }));
-      setMentionName("");
+        mentions: [
+          ...prev.mentions,
+          { name: mentionName, color: mentionColor },
+        ],
+      }))
+      setMentionName('')
     }
-  };
+  }
   const addDependency = () => {
     if (fromMention && toMention && selectedRelation) {
       setNewSchema((prev) => ({
@@ -64,23 +67,22 @@ const SchemaPage = () => {
             toMention,
           },
         ],
-      }));
-      setFromMention("");
-      setToMention("");
-      setSelectedRelation("");
+      }))
+      setFromMention('')
+      setToMention('')
+      setSelectedRelation('')
     }
-  };
-
+  }
 
   const addRelation = () => {
     if (relationName) {
       setNewSchema((prev) => ({
         ...prev,
         relations: [...prev.relations, { name: relationName }],
-      }));
-      setRelationName("");
+      }))
+      setRelationName('')
     }
-  };
+  }
 
   const saveSchema = () => {
     if (newSchema.name) {
@@ -93,11 +95,11 @@ const SchemaPage = () => {
           relations: newSchema.relations.length,
           locked: false,
         },
-      ]);
-      setNewSchema({ name: "", mentions: [], relations: [], dependencies: [] });
-      setModalOpen(false);
+      ])
+      setNewSchema({ name: '', mentions: [], relations: [], dependencies: [] })
+      setModalOpen(false)
     }
-  };
+  }
 
   return (
     <div className="p-4">
@@ -107,7 +109,7 @@ const SchemaPage = () => {
           <div
             key={schema.id}
             className={`p-4 border rounded ${
-              schema.locked ? "bg-gray-200" : "bg-white"
+              schema.locked ? 'bg-gray-200' : 'bg-white'
             }`}
           >
             <h2 className="text-xl font-semibold">{schema.name}</h2>
@@ -115,11 +117,11 @@ const SchemaPage = () => {
             <p>Relations: {schema.relations}</p>
             <button
               className={`mt-2 px-4 py-2 rounded ${
-                schema.locked ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
+                schema.locked ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'
               } text-white`}
               disabled={schema.locked}
             >
-              {schema.locked ? "Inspect" : "Update"}
+              {schema.locked ? 'Inspect' : 'Update'}
             </button>
           </div>
         ))}
@@ -161,7 +163,7 @@ const SchemaPage = () => {
                   placeholder="Mention name"
                   className="border p-2 flex-1 rounded"
                 />
-                
+
                 <button
                   onClick={addMention}
                   className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
@@ -213,7 +215,7 @@ const SchemaPage = () => {
                 ))}
               </div>
             </div>
-           
+
             <div className="mt-6">
               <h3 className="font-bold">Dependencies</h3>
               <div className="flex items-center mt-2 space-x-2">
@@ -293,7 +295,7 @@ const SchemaPage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SchemaPage;
+export default SchemasPage

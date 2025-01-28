@@ -6,29 +6,27 @@ import { createRelation, deleteRelation, fetchRelations, updateRelation } from '
 export const useRelation = () => {
   const [relations, setRelations] = useState<Relation[]>([])
   const { currentStep } = useSelection()
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(true)
   const relationsFetched = useRef<boolean>(false)
 
   useEffect(() => {
+    const loadRelations = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchRelations();
+        setRelations(data);
+        relationsFetched.current = true;
+        console.log('Relations', data);
+      } catch (error) {
+        console.error('Failed to fetch relations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (currentStep === 3 && !relationsFetched.current) {
       loadRelations();
     }
   }, [currentStep]);
-
-
-  const loadRelations = async () => {
-    setLoading(true);
-    try {
-      const data = await fetchRelations();
-      setRelations(data);
-      relationsFetched.current = true;
-    } catch (error) {
-      console.error('Failed to fetch relations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleCreateRelation = async (relation: Relation) => {
     try {

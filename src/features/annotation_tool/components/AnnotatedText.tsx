@@ -1,9 +1,9 @@
 import React from 'react'
 import { Mention as MentionType, Token as TokenType } from '../types'
-import { Mention } from './Mention';
 import { Token } from './Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMentionContext } from '../context/useMentionContext';
+import { EnhancedMention } from './EnhancedMention';
 
 interface AnnotatedTextProps {
   tokens: TokenType[];
@@ -11,7 +11,7 @@ interface AnnotatedTextProps {
 
 export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
   const { mentions, loading } = useMentionContext();
-  
+
   if (loading) {
     return <p>Loading mentions...</p>;
   }
@@ -49,18 +49,17 @@ export const AnnotatedText = ({ tokens }: AnnotatedTextProps) => {
         mentionTokens.forEach((token) => renderedTokenIds.add(token.id));
 
         return (
-          <React.Fragment key={`mention-${token.id}`}>
-            <Mention
-              key={token.id}
-              mention={mention}
-            />
+          <React.Fragment key={`mention-fragment-${token.id}`}>
+            <EnhancedMention
+              key={`mention-${mention.id}`}
+              mention={mention} />
             &nbsp;
           </React.Fragment>
         );
       }
       renderedTokenIds.add(token.id);
       return (
-        <React.Fragment key={`token=${token.id}`}>
+        <React.Fragment key={`token-fragment-${token.id}`}>
           <Token key={token.id} token={token} />
           &nbsp;
         </React.Fragment>

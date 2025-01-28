@@ -1,31 +1,29 @@
-import React from 'react'
 import { Mention as MentionType } from '../types/mention'
 import { Badge } from '@/components/ui/badge';
 import { useSelection } from '../hooks/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
-import { MOCK_MENTION_SCHEMA } from '@/testing/mocks/documentMocks';
+import { Check, Clock, Trash2 } from 'lucide-react';
 import { useTokens } from '../hooks/useTokens';
+import { useSchema } from '../hooks/useSchema';
 
 interface MentionProps {
   mention: MentionType;
   showDeleteButton?: boolean;
+  isInRelation?: boolean;
 }
 
-export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
+export const Mention = ({ mention, showDeleteButton = true, isInRelation = false }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
   const { handleDeleteMention } = useMentionContext();
   const { tokens } = useTokens();
+  const { schema } = useSchema();
 
-  const [schema] = React.useState({
-    schemaMentions: MOCK_MENTION_SCHEMA
-  })
 
   const isSelected = selectedMentions.includes(mention.id);
 
   const getMentionColor = (tag: string) => {
-    const mention = schema.schemaMentions.find(mention => mention.tag === tag)
+    const mention = schema!.mentions.find(mention => mention.tag === tag)
     return mention ? mention.color : '#000'
   }
 
@@ -53,13 +51,25 @@ export const Mention = ({ mention, showDeleteButton = true }: MentionProps) => {
         {mention.tag}
       </Badge>
       &nbsp;
-      {showDeleteButton && (<Button className="h-auto w-auto p-1"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDeleteMention(mention.id)
-        }}>
-        <Trash2 />
-      </Button>)}
+      {!isInRelation && (showDeleteButton ? (
+        <Button
+          className="h-auto w-auto p-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteMention(mention.id);
+          }}
+        >
+          <Trash2 />
+        </Button>
+      ) : mention.isShownRecommendation ? (
+        <Button className="h-auto w-auto p-1">
+          <Clock />
+        </Button>
+      ) : (
+        <Button className="h-auto w-auto p-1">
+          <Check />
+        </Button>
+      ))}
     </span>
   )
 }

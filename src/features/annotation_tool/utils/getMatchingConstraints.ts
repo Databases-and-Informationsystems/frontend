@@ -1,13 +1,11 @@
-import {
-  DependenciesSchema,
-  MentionSchema,
-} from '@/testing/mocks/documentMocks'
-import { Mention as MentionType } from '../types'
+import { Mention } from "../types"
+import { DependenciesSchema, MentionSchema } from "../types/schema"
+
 
 export const getMatchingConstraints = (
-  mentionHead: MentionType,
-  mentionTail: MentionType,
-  schemaContraints: DependenciesSchema[],
+  mentionHead: Mention,
+  mentionTail: Mention,
+  schemaContraints: DependenciesSchema[] ,
   schemaMentions: MentionSchema[]
 ) => {
   // Workaround for now, until we have the option to compare the ids

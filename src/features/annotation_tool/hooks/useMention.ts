@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Mention } from '../types'
 import { createMention, deleteMention, updateMention } from '../api/mention';
 
 export const useMentions = () => {
   const [mentions, setMentions] = useState<Mention[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log('Current Mentions:', mentions);
-  }, [mentions]);
+  const [loading, setLoading] = useState(true);
 
   const handleCreateMention = async (newMention: Mention) => {
     const createdMention = await createMention(newMention);
