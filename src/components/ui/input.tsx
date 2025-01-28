@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Label } from './label'
 
 const Input = React.forwardRef<
   HTMLInputElement,
@@ -9,14 +10,7 @@ const Input = React.forwardRef<
   const id = crypto.randomUUID()
   return (
     <>
-      {label && (
-        <label
-          htmlFor={id}
-          className="form-label font-medium text-gray-900 dark:text-gray-100"
-        >
-          {label}
-        </label>
-      )}
+      {label && <Label htmlFor={id}>{label}</Label>}
       <input
         id={id}
         type={type}
@@ -32,31 +26,4 @@ const Input = React.forwardRef<
 })
 Input.displayName = 'Input'
 
-const Checkbox = React.forwardRef<
-  HTMLInputElement,
-  React.ComponentProps<'input'> & { label?: string }
->(({ className, type, label, ...props }, ref) => {
-  const id = crypto.randomUUID()
-  return (
-    <>
-      <input
-        type="checkbox"
-        id={id}
-        className={cn(
-          'border dark:border-gray-600 bg-white dark:bg-gray-800 rounded'
-        )}
-        ref={ref}
-        {...props}
-      />
-      <label
-        htmlFor={id}
-        className="form-label font-medium ml-2 text-gray-900 dark:text-gray-100"
-      >
-        {label}
-      </label>
-    </>
-  )
-})
-Checkbox.displayName = 'Checkbox'
-
-export { Input, Checkbox }
+export { Input }

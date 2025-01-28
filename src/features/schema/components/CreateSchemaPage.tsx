@@ -6,7 +6,7 @@ import { createSchema } from '../api/schemas'
 import { useNavigate } from 'react-router'
 import { Team } from '@/features/dashboard/types/types'
 import { getTeams } from '@/features/projects/api/projects'
-import { Checkbox, Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
 import {
   Tooltip,
   TooltipProvider,
@@ -14,6 +14,14 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+} from '@/components/ui/select'
 
 const CreateSchemaPage = () => {
   const navigate = useNavigate()
@@ -56,7 +64,11 @@ const CreateSchemaPage = () => {
 
   useEffect(() => {
     const fetchTeams = async () => {
-      setTeams(await getTeams())
+      const teams = await getTeams()
+      setTeams(teams)
+      if (teams.length === 1) {
+        setTeam(teams[0])
+      }
     }
     fetchTeams()
   }, [])
@@ -164,21 +176,23 @@ const CreateSchemaPage = () => {
         />
       </label>
 
-      <select
-        id={`team`}
-        value={team?.id}
-        onChange={(e) =>
-          setTeam(teams.find((t) => t.id === Number(e.target.value)))
-        }
-        className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 rounded"
-      >
-        <option value="">Select Team</option>
-        {teams.map((t) => (
-          <option key={t.id} value={t.id}>
-            {t.name}
-          </option>
-        ))}
-      </select>
+      <div className="form-group">
+        <Select
+          value={String(team?.id)}
+          onValueChange={(v) => setTeam(teams.find((t) => t.id === Number(v)))}
+        >
+          <SelectTrigger label="Team">
+            <SelectValue placeholder="Select a Team" />
+          </SelectTrigger>
+          <SelectContent>
+            {teams.map((t) => (
+              <SelectItem key={t.id} value={String(t.id)}>
+                {t.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <div className="mt-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
         <h2
@@ -274,13 +288,9 @@ const CreateSchemaPage = () => {
                 <div className="flex items-center">
                   <Checkbox
                     checked={mention.entityPossible}
-                    onChange={(e) =>
-                      handleMentionChange(
-                        index,
-                        'entityPossible',
-                        e.target.checked
-                      )
-                    }
+                    onCheckedChange={(checked) => {
+                      handleMentionChange(index, 'entityPossible', checked)
+                    }}
                     label="Entity Possible"
                   />
                 </div>
@@ -466,98 +476,79 @@ const CreateSchemaPage = () => {
               <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
                 {/* Mention Head Tag */}
                 <div className="form-group">
-                  <label
-                    htmlFor={`mention-head-${index}`}
-                    className="form-label font-medium"
-                  >
-                    Mention Head Tag
-                  </label>
-                  <select
-                    id={`mention-head-${index}`}
+                  <Select
                     value={constraint.mention_head_tag}
-                    onChange={(e) =>
-                      handleConstraintChange(
-                        index,
-                        'mention_head_tag',
-                        e.target.value
-                      )
+                    onValueChange={(v) =>
+                      handleConstraintChange(index, 'mention_head_tag', v)
                     }
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    disabled={mentions.filter((m) => m.tag).length === 0}
                   >
-                    <option value="">Select Mention Head</option>
-                    {mentions.map((m, idx) => (
-                      <option key={idx} value={m.tag}>
-                        {m.tag}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger label="Mention Head Tag">
+                      <SelectValue placeholder="Select Mention Head Tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mentions
+                        .filter((m) => m.tag)
+                        .map((m, idx) => (
+                          <SelectItem key={idx} value={m.tag}>
+                            {m.tag}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 {/* Relation Tag */}
                 <div className="form-group">
-                  <label
-                    htmlFor={`relation-tag-${index}`}
-                    className="form-label font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Relation Tag
-                  </label>
-                  <select
-                    id={`relation-tag-${index}`}
+                  <Select
                     value={constraint.relation_tag}
-                    onChange={(e) =>
-                      handleConstraintChange(
-                        index,
-                        'relation_tag',
-                        e.target.value
-                      )
+                    onValueChange={(v) =>
+                      handleConstraintChange(index, 'relation_tag', v)
                     }
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    disabled={relations.filter((r) => r.tag).length === 0}
                   >
-                    <option value="">Select Relation Tag</option>
-                    {relations.map((r, idx) => (
-                      <option key={idx} value={r.tag}>
-                        {r.tag}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger label="Relation Tag">
+                      <SelectValue placeholder="Select Relation Tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {relations
+                        .filter((r) => r.tag)
+                        .map((r, idx) => (
+                          <SelectItem key={idx} value={r.tag}>
+                            {r.tag}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 {/* Mention Tail Tag */}
                 <div className="form-group">
-                  <label
-                    htmlFor={`mention-tail-${index}`}
-                    className="form-label font-medium"
-                  >
-                    Mention Tail Tag
-                  </label>
-                  <select
-                    id={`mention-tail-${index}`}
+                  <Select
                     value={constraint.mention_tail_tag}
-                    onChange={(e) =>
-                      handleConstraintChange(
-                        index,
-                        'mention_tail_tag',
-                        e.target.value
-                      )
+                    onValueChange={(v) =>
+                      handleConstraintChange(index, 'mention_tail_tag', v)
                     }
-                    className="form-control w-full border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded"
+                    disabled={mentions.filter((m) => m.tag).length === 0}
                   >
-                    <option value="">Select Mention Tail</option>
-                    {mentions.map((m, idx) => (
-                      <option key={idx} value={m.tag}>
-                        {m.tag}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger label="Mention Tail Tag">
+                      <SelectValue placeholder="Select Mention Tail Tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mentions
+                        .filter((m) => m.tag)
+                        .map((m, idx) => (
+                          <SelectItem key={idx} value={m.tag}>
+                            {m.tag}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 {/* Is Directed */}
                 <div className="form-group">
                   <Checkbox
                     checked={constraint.is_directed}
-                    onChange={(e) =>
-                      handleConstraintChange(
-                        index,
-                        'is_directed',
-                        e.target.checked
-                      )
+                    onCheckedChange={(checked) =>
+                      handleConstraintChange(index, 'is_directed', checked)
                     }
                     label="Is Directed"
                   />
