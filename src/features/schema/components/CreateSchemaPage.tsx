@@ -18,11 +18,16 @@ import { Button } from '@/components/ui/button'
 const CreateSchemaPage = () => {
   const navigate = useNavigate()
 
+  const generateRandomHexColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+    return `#${randomColor.padStart(6, '0')}`
+  }
+
   const [mentions, setMentions] = useState<Omit<SchemaMention, 'id'>[]>([
     {
       tag: '',
       description: '',
-      color: '',
+      color: generateRandomHexColor(),
       entityPossible: false,
     },
   ])
@@ -58,7 +63,12 @@ const CreateSchemaPage = () => {
   const handleAddMention = () => {
     setMentions((prev) => [
       ...prev,
-      { tag: '', description: '', color: '', entityPossible: false },
+      {
+        tag: '',
+        description: '',
+        color: generateRandomHexColor(),
+        entityPossible: false,
+      },
     ])
   }
 
@@ -572,32 +582,36 @@ const CreateSchemaPage = () => {
         )}
       </div>
 
-      <Tooltip delayDuration={100} disableHoverableContent>
-        <TooltipTrigger asChild>
-          <div className="inline-block">
-            <Button
-              variant={
-                !team ||
-                !name ||
-                mentions.filter((m) => m.tag).length === 0 ||
-                relations.filter((r) => r.tag).length === 0
-                  ? 'ghost'
-                  : 'default'
-              }
-              onClick={handleCreateSchema}
-              disabled={
-                !team ||
-                !name ||
-                mentions.filter((m) => m.tag).length === 0 ||
-                relations.filter((r) => r.tag).length === 0
-              }
-            >
-              Create Schema
-            </Button>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="top">Required fields are missing</TooltipContent>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip delayDuration={100} disableHoverableContent>
+          <TooltipTrigger asChild>
+            <div className="inline-block">
+              <Button
+                variant={
+                  !team ||
+                  !name ||
+                  mentions.filter((m) => m.tag).length === 0 ||
+                  relations.filter((r) => r.tag).length === 0
+                    ? 'outline'
+                    : 'default'
+                }
+                onClick={handleCreateSchema}
+                disabled={
+                  !team ||
+                  !name ||
+                  mentions.filter((m) => m.tag).length === 0 ||
+                  relations.filter((r) => r.tag).length === 0
+                }
+              >
+                Create Schema
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            Required fields are missing
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   )
 }
