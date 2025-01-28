@@ -5,6 +5,7 @@ import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchema } from '../hooks/useSchema';
+import { Token } from '../types';
 
 export const AnnotationControlBox = () => {
   const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
@@ -12,9 +13,8 @@ export const AnnotationControlBox = () => {
   const { handleCreateRelation } = useRelationContext();
   const { schema } = useSchema();
 
-  const createMention = (tokens: string[], tag: string) => {
+  const createMention = (tokens: Token[], tag: string) => {
     handleCreateMention({
-      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
       tag: tag,
       isShownRecommendation: false,
       token_ids: tokens

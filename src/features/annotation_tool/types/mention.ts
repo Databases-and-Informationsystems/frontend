@@ -16,3 +16,9 @@ export type CreateMentionPayload = {
   document_edit_id: number;
   token_ids: number[];
 }
+
+export type UpdateMentionPayload = {
+  schmea_mention_id: number;
+  token_ids: number[];
+  entity_id: number;
+}

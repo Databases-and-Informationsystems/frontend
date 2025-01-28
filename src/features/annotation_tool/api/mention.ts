@@ -1,5 +1,6 @@
 import axiosInstance from '@/lib/axios'
 import { Mention } from '../types'
+import { CreateMentionPayload } from '../types/mention'
 
 export const fetchMentions = async (
   documentEditId: string
@@ -8,13 +9,13 @@ export const fetchMentions = async (
   return response.data.mentions
 }
 
-export const createMention = async (mention: Mention): Promise<Mention> => {
-  const response = await axiosInstance.post('/mentions', mention)
+export const createMention = async (payload: CreateMentionPayload): Promise<Mention> => {
+  const response = await axiosInstance.post('/mentions', payload)
   return response.data
 }
 
 export const updateMention = async (
-  mentionId: string,
+  mentionId: number,
   updatedMention: Mention
 ): Promise<Mention> => {
   const response = await axiosInstance.patch(
@@ -24,19 +25,19 @@ export const updateMention = async (
   return response.data
 }
 
-export const deleteMention = async (mentionId: string): Promise<void> => {
+export const deleteMention = async (mentionId: number): Promise<void> => {
   await axiosInstance.delete(`/mentions/${mentionId}`)
 }
 
 export const acceptMentionSuggestion = async (
-  mentionId: string
+  mentionId: number
 ): Promise<Mention> => {
   const response = await axiosInstance.post(`/mentions/${mentionId}/accept`)
   return response.data
 }
 
 export const rejectMentionSuggestion = async (
-  mentionId: string
+  mentionId: number
 ): Promise<void> => {
   await axiosInstance.post(`/mentions/${mentionId}/reject`)
 }
