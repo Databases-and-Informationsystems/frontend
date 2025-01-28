@@ -5,7 +5,7 @@ import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchema } from '../hooks/useSchema';
-import { Token } from '../types';
+import { CreateMentionPayload, Mention, Token, UpdateMentionPayload } from '../types';
 
 export const AnnotationControlBox = () => {
   const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
@@ -13,29 +13,28 @@ export const AnnotationControlBox = () => {
   const { handleCreateRelation } = useRelationContext();
   const { schema } = useSchema();
 
-  const createMention = (tokens: Token[], tag: string) => {
-    handleCreateMention({
-      tag: tag,
-      isShownRecommendation: false,
-      token_ids: tokens
-    })
+  const createMention = (tokens: Token[], schemaId: number) => {
+    const payload: CreateMentionPayload = {
+      schema_mention_id: schemaId,
+      document_edit_id: 0, // Access document_edit_id from context
+      token_ids: tokens.map(token => token.id),
+    };
+    handleCreateMention(payload);
     resetTokens()
   }
 
 
-  const getMentionById = (id: string) => {
+  const getMentionById = (id: number) => {
     return mentions.find(mention => mention.id === id)
   }
 
-
-  const updateMention = (mentionId: string, tag: string) => {
-    let mentionToUpdate = getMentionById(mentionId)
-    if (!mentionToUpdate) return
-    mentionToUpdate = {
-      ...mentionToUpdate,
-      tag: tag
+  const updateMention = (mention: Mention, schemaId: number) => {
+    const payload: UpdateMentionPayload = {
+      schmea_mention_id: schemaId,
+      token_ids: mention.tokens.map(token => token.id),
+      entity_id: mention.entity_id,
     }
-    handleUpdateMention(mentionToUpdate.id, mentionToUpdate)
+    handleUpdateMention(mention.id, payload);
     resetMentions()
   }
 
@@ -62,13 +61,13 @@ export const AnnotationControlBox = () => {
           </CardTitle>
           <CardContent>
             <div>
-              {schema?.mentions.map((mention) => (
+              {schema?.schema_mentions.map((schemaMention) => (
                 <Button
-                  onClick={() => createMention(selectedTokens, mention.tag)}
-                  key={mention.id}
+                  onClick={() => createMention(selectedTokens, schemaMention.id)}
+                  key={schemaMention.id}
                   className='mr-2'
-                  style={{ backgroundColor: mention.color }}>
-                  {mention.tag}
+                  style={{ backgroundColor: schemaMention.color }}>
+                  {schemaMention.tag}
                 </Button>
               ))}
             </div>
@@ -87,13 +86,13 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           <div>
-            {schema?.mentions.map((mention) => (
+            {schema?.schema_mentions.map((schemaMention) => (
               <Button
-                onClick={() => updateMention(selectedMentions[0], mention.tag)}
-                key={mention.id}
+                onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
+                key={schemaMention.id}
                 className='mr-2'
-                style={{ backgroundColor: mention.color }}>
-                {mention.tag}
+                style={{ backgroundColor: schemaMention.color }}>
+                {schemaMention.tag}
               </Button>
             ))}
           </div>

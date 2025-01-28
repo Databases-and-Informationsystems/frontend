@@ -2,12 +2,12 @@ import React, { createContext, useEffect } from "react";
 import { useMentions } from "../hooks/useMention";
 import { Mention as MentionType } from "../types";
 import { fetchMentions } from "../api/mention";
-import { CreateMentionPayload, Mention } from "../types/mention";
+import { CreateMentionPayload, Mention, UpdateMentionPayload } from "../types/mention";
 
 interface MentionContextType {
-  handleCreateMention: (mention: CreateMentionPayload) => void;
+  handleCreateMention: (payload: CreateMentionPayload) => void;
   handleDeleteMention: (mention: Mention) => void;
-  handleUpdateMention: (mentionId: string, newMention: MentionType) => void;
+  handleUpdateMention: (mentionId: number, mention: UpdateMentionPayload) => void;
   mentions: MentionType[];
   loading: boolean;
 }

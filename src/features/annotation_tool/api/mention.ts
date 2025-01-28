@@ -1,6 +1,6 @@
 import axiosInstance from '@/lib/axios'
 import { Mention } from '../types'
-import { CreateMentionPayload } from '../types/mention'
+import { CreateMentionPayload, UpdateMentionPayload } from '../types/mention'
 
 export const fetchMentions = async (
   documentEditId: string
@@ -16,11 +16,11 @@ export const createMention = async (payload: CreateMentionPayload): Promise<Ment
 
 export const updateMention = async (
   mentionId: number,
-  updatedMention: Mention
+  payload: UpdateMentionPayload
 ): Promise<Mention> => {
   const response = await axiosInstance.patch(
     `/mentions/${mentionId}`,
-    updatedMention
+    payload
   )
   return response.data
 }

@@ -1,19 +1,13 @@
 import { useState } from 'react'
-import { CreateMentionPayload, Mention } from '../types'
+import { CreateMentionPayload, Mention, UpdateMentionPayload } from '../types'
 import { createMention, deleteMention, updateMention } from '../api/mention'
 
 export const useMentions = () => {
   const [mentions, setMentions] = useState<Mention[]>([])
   const [loading, setLoading] = useState(true)
 
-  const handleCreateMention = async (newMention: Mention) => {
+  const handleCreateMention = async (payload: CreateMentionPayload) => {
     try {
-      const payload: CreateMentionPayload = {
-        schmea_mention_id: newMention.schema_mention.id,
-        document_edit_id: newMention.document_edit_id,
-        token_ids: newMention.tokens.map((token) => token.id),
-      }
-
       const createdMention = await createMention(payload)
       setMentions((prev) => [...prev, createdMention])
     } catch (err) {
@@ -22,11 +16,12 @@ export const useMentions = () => {
   }
 
   const handleUpdateMention = async (
-    mentionId: string,
-    updatedMention: Mention
+    mentionId: number,
+    payload: UpdateMentionPayload
   ) => {
     try {
-      const updatedMention = await updateMention(mentionId, updatedMention)
+
+      const updatedMention = await updateMention(mentionId, payload)
       setMentions((prev) =>
         prev.map((mention) =>
           mention.id === updatedMention.id ? updatedMention : mention

@@ -17,10 +17,6 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
   const { schema } = useSchema();
 
   const content = () => {
-    const getMentionColor = (tag: string) => {
-      const mentionSchema = schema!.mentions.find((mention) => mention.tag === tag);
-      return mentionSchema!.color;
-    }
     return (
       <div className="flex items-center gap-4">
         <Button
@@ -33,13 +29,13 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
               }
             )}>Accept</Button>
         <Select value={selectedTag} onValueChange={(value: string) => setSelectedTag(value)}>
-          <SelectTrigger style={{ color: getMentionColor(mention.tag) }}>
+          <SelectTrigger style={{ color: mention.schema_mention.color }}>
             <SelectValue>{selectedTag}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Mention Tags</SelectLabel>
-              {schema!.mentions.map((mentionSchema) => {
+              {schema?.schema_mentions.map((mentionSchema) => {
                 return (
                   <SelectItem
                     key={mentionSchema.id}
@@ -53,7 +49,7 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button onClick={() => handleDeleteMention(mention.id)}>Reject</Button>
+        <Button onClick={() => handleDeleteMention(mention)}>Reject</Button>
       </div>
     )
   }

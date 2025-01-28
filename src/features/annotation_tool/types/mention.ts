@@ -9,10 +9,11 @@ export type Mention = {
   document_recommendation_id: number;
   tokens: Token[];
   schema_mention: SchemaMention;
+  entity_id: number;
 }
 
 export type CreateMentionPayload = {
-  schmea_mention_id: number;
+  schema_mention_id: number;
   document_edit_id: number;
   token_ids: number[];
 }

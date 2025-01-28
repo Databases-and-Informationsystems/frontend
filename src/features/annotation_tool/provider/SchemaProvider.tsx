@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { Schema } from "../types";
 import { fetchSchema } from "../api/schema";
+import { Schema } from "@/features/schema/types/types";
 
 interface SchemaContextType {
   schema: Schema | null;

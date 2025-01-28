@@ -6,11 +6,10 @@ interface TokenProps {
     token: TokenType;
 }
 
-
 export const Token = ({ token }: TokenProps) => {
   const { selectedTokens, handleTokenClick } = useSelection();
 
-  const isSelected = selectedTokens.includes(token.id);
+  const isSelected = selectedTokens.some((selectedToken) => selectedToken.id === token.id);
 
   return (
     <span className={`select-none text-xl font-semibold cursor-pointer ${isSelected ? 'border rounded-lg border-gray-300 p-1' : ''}`}
