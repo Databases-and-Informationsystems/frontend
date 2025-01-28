@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getSchema } from '../api/schemas'
-import { RecommendationModel, Schema } from '../types/types'
+import { Schema } from '@/types/schema'
+import { RecommendationModel } from '@/types/recommendation'
 
 interface StepWithModels {
   stepName: string
@@ -22,7 +23,7 @@ const SchemaPage = () => {
         const fetchedSchema = await getSchema(Number(id))
         setSchema(fetchedSchema)
         const groupedByStep = fetchedSchema.models.reduce(
-          (acc: Record<number, StepWithModels>, model) => {
+          (acc: Record<number, StepWithModels>, model: RecommendationModel) => {
             const stepId = model.step.id
             if (!acc[stepId]) {
               acc[stepId] = {

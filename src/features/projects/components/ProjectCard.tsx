@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Project } from '../types/types'
+import { Project } from '@/types/project'
 import { Link } from 'react-router'
 
 interface ProjectCardProps {

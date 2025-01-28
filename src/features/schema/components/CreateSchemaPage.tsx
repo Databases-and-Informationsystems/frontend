@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { NewConstraint, SchemaMention, SchemaRelation } from '../types/types'
+import { NewConstraint, SchemaMention, SchemaRelation } from '@/types/schema'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { createSchema } from '../api/schemas'
 import { useNavigate } from 'react-router'
-import { Team } from '@/features/dashboard/types/types'
+import { Team } from '@/types/user'
 import { getTeams } from '@/features/projects/api/projects'
 import { Input } from '@/components/ui/input'
 import {

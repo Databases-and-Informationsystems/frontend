@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router'
-import { STATUS_STYLES } from '../types/types'
-import { Project } from '../types/types'
+import { STATUS_STYLES } from '@/types/document'
+import { Project } from '@/types/project'
 
 interface ProjectCardProps {
   project: Project
@@ -36,7 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       </p>
       <p className="text-sm text-gray-600">Team: {project.team?.name}</p>
       <p className="text-sm text-gray-800 font-medium">
-        Total Documents: {project.documents.length}
+        Total Documents: {project.documents?.length}
       </p>
       <div className="mt-4">
         <button
@@ -45,7 +45,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         >
           <span className={`font-semibold ${STATUS_STYLES.NEW}`}>
             Ongoing (
-            {project.documents.filter((d) => d.state.type === 'NEW').length})
+            {project.documents?.filter((d) => d.state.type === 'NEW').length})
           </span>
           <FontAwesomeIcon
             icon={faChevronDown}
@@ -55,7 +55,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {showOngoing && (
           <div className="mt-2">
             {project.documents
-              .filter((d) => d.state.type === 'NEW')
+              ?.filter((d) => d.state.type === 'NEW')
               .map((doc, index) => (
                 <div
                   key={index}
@@ -90,7 +90,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <span className={`font-semibold ${STATUS_STYLES.IN_PROGRESS}`}>
             Open (
             {
-              project.documents.filter((d) => d.state.type === 'IN_PROGRESS')
+              project.documents?.filter((d) => d.state.type === 'IN_PROGRESS')
                 .length
             }
             )
@@ -103,7 +103,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {showOpen && (
           <div className="mt-2">
             {project.documents
-              .filter((d) => d.state.type === 'IN_PROGRESS')
+              ?.filter((d) => d.state.type === 'IN_PROGRESS')
               .map((doc, index) => (
                 <div
                   key={index}
@@ -138,7 +138,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <span className={`font-semibold ${STATUS_STYLES.FINISHED}`}>
             Completed (
             {
-              project.documents.filter((d) => d.state.type === 'FINISHED')
+              project.documents?.filter((d) => d.state.type === 'FINISHED')
                 .length
             }
             )
@@ -151,7 +151,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {showCompleted && (
           <div className="mt-2">
             {project.documents
-              .filter((d) => d.state.type === 'FINISHED')
+              ?.filter((d) => d.state.type === 'FINISHED')
               .map((doc, index) => (
                 <div
                   key={index}

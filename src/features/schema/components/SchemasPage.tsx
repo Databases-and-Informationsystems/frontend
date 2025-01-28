@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { Schema } from '../types/types'
+import { Schema } from '@/types/schema'
 import { getSchemas } from '../api/schemas'
 import { Button } from '@/components/ui/button'
 

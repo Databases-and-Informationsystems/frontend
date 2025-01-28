@@ -5,7 +5,7 @@ import {
   SchemaMention,
   SchemaRelation,
   SchemaWrapper
-} from '../types/types'
+} from '@/types/schema'
 import { Team } from '@/features/dashboard/types/types'
 
 export const getSchema = async (id: number): Promise<Schema> => {

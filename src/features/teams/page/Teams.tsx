@@ -5,7 +5,7 @@ import {
   deleteMemberFromTeam,
   getTeams,
 } from '../api/teams'
-import { Team } from '../types/types'
+import { Team } from '@/types/user'
 
 const Teams = () => {
   const [teams, setTeams] = useState<Team[]>([])

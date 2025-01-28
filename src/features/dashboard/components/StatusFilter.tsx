@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { STATUS_STYLES } from '../types/types'
-import { Document } from '../types/types'
+import { STATUS_STYLES } from '@/types/document'
+import { Document } from '@/types/document'
 import { Link } from 'react-router'
 
 interface StatusFilterProps {

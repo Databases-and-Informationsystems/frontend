@@ -1,6 +1,7 @@
 import React from 'react'
-import { Schema, Team } from '../types/types'
+import { Schema } from '@/types/schema'
 import { Link } from 'react-router'
+import { Team } from '@/types/user'
 
 interface ModalPropsCreate {
   isOpen: boolean

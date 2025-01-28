@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import ProjectCard from '../components/ProjectCard'
 import StatusFilter from '../components/StatusFilter'
 import { getProjects, getDocumentsByProject } from '../api/dashboard'
-import { Project, Document } from '../types/types'
+import { Document } from '@/types/document'
+import { Project } from '@/types/project'
 
 const Dashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
@@ -41,7 +42,7 @@ const Dashboard: React.FC = () => {
           })
         )
         setProjects(projectsWithDocuments)
-        setDocuments(projectsWithDocuments.flatMap((p) => p.documents))
+        setDocuments(projectsWithDocuments.flatMap((p) => p.documents ?? []))
       } catch (error) {
         console.error('Data not found', error)
       } finally {
