@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnnotationEntity } from '../types'
-import { createEntity, deleteEntity, updateEntity } from '../api/annotationEntityHelper'
-import axios from 'axios'
+import { createEntity, deleteEntity, updateEntity, fetchEntities as getEntities } from '../api/annotationEntityHelper'
 import { updateMention } from '@/features/annotation_tool/api/mention.ts'
 import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
 
@@ -10,6 +9,8 @@ export const useEntity = () => {
   const [loading, setLoading] = useState(false)
   const { mentions } = useMentionContext();
 
+  const doc_edit_id = 1; //TODO get correct value
+
   useEffect(() => {
     fetchEntities()
   }, [])
@@ -17,8 +18,8 @@ export const useEntity = () => {
   const fetchEntities = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://localhost:3000/entities')
-      setEntities(response.data)
+      const response = await getEntities(doc_edit_id) //get the Entities for a document
+      setEntities(response)
     } catch (e) {
       console.log(e)
     } finally {
