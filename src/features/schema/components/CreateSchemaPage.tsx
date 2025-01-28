@@ -607,9 +607,14 @@ const CreateSchemaPage = () => {
               </Button>
             </div>
           </TooltipTrigger>
-          <TooltipContent side="top">
-            Required fields are missing
-          </TooltipContent>
+          {(!team ||
+            !name ||
+            mentions.filter((m) => m.tag).length === 0 ||
+            relations.filter((r) => r.tag).length === 0) && (
+            <TooltipContent side="top">
+              Required fields are missing
+            </TooltipContent>
+          )}
         </Tooltip>
       </TooltipProvider>
     </div>
