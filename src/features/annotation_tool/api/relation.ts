@@ -1,42 +1,42 @@
 import axiosInstance from '@/lib/axios'
-import { Relation } from '../types'
+import { CreateRelationPayload, Relation, UpdateRelationPayload } from '../types'
 
 export const fetchRelations = async (
-  documentEditId: string
+  documentEditId: number
 ): Promise<Relation[]> => {
   const response = await axiosInstance.get(`/relations/${documentEditId}`)
   return response.data.relations
 }
 
-export const createRelation = async (relation: Relation): Promise<Relation> => {
-  const response = await axiosInstance.post('/relations', relation)
+export const createRelation = async (payload: CreateRelationPayload): Promise<Relation> => {
+  const response = await axiosInstance.post('/relations', payload)
   return response.data
 }
 
 export const updateRelation = async (
-  relationId: string,
-  updatedRelation: Relation
+  relationId: number,
+  payload: UpdateRelationPayload
 ): Promise<Relation> => {
   const response = await axiosInstance.patch(
     `/relations/${relationId}`,
-    updatedRelation
+    payload
   )
   return response.data
 }
 
-export const deleteRelation = async (relationId: string): Promise<void> => {
+export const deleteRelation = async (relationId: number): Promise<void> => {
   await axiosInstance.patch(`/relations/${relationId}`)
 }
 
 export const acceptRelationSuggestion = async (
-  relationId: string
+  relationId: number
 ): Promise<Relation> => {
   const response = await axiosInstance.post(`/relations/${relationId}/accept`)
   return response.data
 }
 
 export const rejectRelationSuggestion = async (
-  relationId: string
+  relationId: number
 ): Promise<void> => {
   await axiosInstance.post(`/relations/${relationId}/reject`)
 }

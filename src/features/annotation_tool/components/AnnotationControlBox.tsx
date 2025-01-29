@@ -5,7 +5,7 @@ import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchema } from '../hooks/useSchema';
-import { CreateMentionPayload, Mention, Token, UpdateMentionPayload } from '../types';
+import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
 
 export const AnnotationControlBox = () => {
   const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
@@ -39,15 +39,15 @@ export const AnnotationControlBox = () => {
   }
 
 
-  const createRelation = (mentionIds: string[], tag: string) => {
-    handleCreateRelation({
-      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
-      tag,
-      isDirected: false,
-      isShownRecommendation: false,
-      mention_head_id: mentionIds[0],
-      mention_tail_id: mentionIds[1],
-    });
+  const createRelation = (mentions: Mention[], schemaId: number) => {
+    const payload: CreateRelationPayload = {
+      schema_relation_id: schemaId,
+      document_edit_id: 0, // Access document_edit_id from context
+      isDirected: false, // Access isDirected from context
+      mention_head_id: mentions[0].id,
+      mention_tail_id: mentions[1].id,
+    }
+    handleCreateRelation(payload);
     resetMentions();
   }
 
@@ -139,13 +139,13 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           {matchingConstraints.map((constraint) => {
-            const relation = schema?.relations.find(
-              (relation) => relation.id === constraint.schema_relation_id
+            const relation = schema?.schema_relations.find(
+              (schemaRelation) => schemaRelation.id === constraint.schema_relation_id
             );
             return (
               <Button
                 key={constraint.id}
-                onClick={() => createRelation(selectedMentions, relation?.tag || '')}
+                onClick={() => createRelation(selectedMentions, relation?.id || '')}
                 className='mr-2'>
                 {relation?.tag || ''}
               </Button>

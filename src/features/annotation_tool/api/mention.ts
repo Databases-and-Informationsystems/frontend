@@ -3,7 +3,7 @@ import { Mention } from '../types'
 import { CreateMentionPayload, UpdateMentionPayload } from '../types/mention'
 
 export const fetchMentions = async (
-  documentEditId: string
+  documentEditId: number
 ): Promise<Mention[]> => {
   const response = await axiosInstance.get(`/mentions/${documentEditId}`)
   return response.data.mentions

@@ -1,11 +1,11 @@
 import { createContext } from "react";
-import { Relation as RelationType } from "../types";
+import { CreateRelationPayload, Relation as RelationType } from "../types";
 import { useRelation } from "../hooks/useRelation";
 
 interface RelationContextType {
-  handleCreateRelation: (relation: RelationType) => void;
-  handleDeleteRelation: (relationId: string) => void;
-  handleUpdateRelation: (relationId: string, newRelation: RelationType) => void;
+  handleCreateRelation: (payload: CreateRelationPayload) => void;
+  handleDeleteRelation: (relationId: number) => void;
+  handleUpdateRelation: (relationId: number, newRelation: RelationType) => void;
   relations: RelationType[];
   loading: boolean;
 }

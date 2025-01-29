@@ -1,5 +1,4 @@
 import { Relation as RelationType } from '../types'
-import { useMentionContext } from '../context/useMentionContext';
 import { Mention } from './Mention';
 import { useRelationContext } from '../context/useRelationContext';
 import { Button } from '@/components/ui/button';
@@ -10,13 +9,10 @@ interface RelationProps {
 }
 
 export const Relation = ({ relation }: RelationProps) => {
-  const { mentions } = useMentionContext();
   const { handleDeleteRelation } = useRelationContext(); 
 
-  console.log('Relation', relation);
-
-  const headMention = mentions.find(mention => mention.id === relation.mention_head_id);
-  const tailMention = mentions.find(mention => mention.id === relation.mention_tail_id);
+  const headMention = relation.head_mention;
+  const tailMention = relation.tail_mention;
 
   if (!headMention || !tailMention) {
     return <p>Relation mentions not found</p>; 
@@ -33,7 +29,7 @@ export const Relation = ({ relation }: RelationProps) => {
       <Button className="h-auto w-auto p-1"
         onClick={(e) => {
           e.stopPropagation();
-          handleDeleteRelation(relation.id);
+          handleDeleteRelation(relation);
         }}>
         <Trash2 />
       </Button>
