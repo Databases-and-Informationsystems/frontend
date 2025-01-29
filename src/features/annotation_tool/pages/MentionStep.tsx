@@ -6,8 +6,7 @@ export const MentionStep = () => {
 
   return (
     <>
-      <div>Second Step</div>
-      <AnnotatedText tokens={tokens} />
+      <AnnotatedText tokens={tokens} showDeleteButton={true}/>
     </>
   )
 }

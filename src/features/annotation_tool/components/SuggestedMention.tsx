@@ -61,7 +61,10 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
           <Mention mention={mention} showDeleteButton={false} />
         </span>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        align="center"
+        side="bottom"
+        className="w-fit">
         {content()}
       </PopoverContent>
     </Popover>

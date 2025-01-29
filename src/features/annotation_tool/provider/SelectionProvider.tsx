@@ -2,12 +2,11 @@ import React, { createContext, useState } from "react";
 import { useTokens } from "../hooks/useTokens";
 import { Mention, Token } from "../types";
 import { useMentionContext } from "../context/useMentionContext";
+import { useStepNavigation } from "../hooks/useStepNavigation";
 
 interface SelectionContextType {
   selectedTokens: Token[];
   selectedMentions: Mention[];
-  setCurrentStep: (step: number) => void;
-  currentStep: number;
 
   handleTokenClick: (tokenId: number, sentenceIndex: number) => void;
   handleMentionClick: (mentionId: number) => void;
@@ -25,7 +24,7 @@ const SelectionContext = createContext<SelectionContextType | undefined>(undefin
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
   const { tokens: allTokens } = useTokens();
   const { mentions: allMentions } = useMentionContext();
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const { step } = useStepNavigation();
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<Mention[]>([]);
 
@@ -75,18 +74,18 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
     }
 
     // Mention step
-    if (currentStep === 2) {
-      setSelectedMentions([mention]);
+    if (step === 'mentionEditing') {
+      setSelectedMentions([mentionId]);
       return;
     }
 
     // Entity step
-    if (currentStep === 5) {
-      setSelectedMentions([...selectedMentions, mention]);
+    if (step === 'entitySelection') {
+      setSelectedMentions([...selectedMentions, mentionId]);
     }
 
     // Relation step
-    if (currentStep === 4) {
+    if (step === 'relationEditing') {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mention]);
       }
@@ -107,8 +106,6 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
       value={{
         selectedTokens,
         selectedMentions,
-        setCurrentStep,
-        currentStep,
         handleTokenClick,
         handleMentionClick,
         resetTokens,

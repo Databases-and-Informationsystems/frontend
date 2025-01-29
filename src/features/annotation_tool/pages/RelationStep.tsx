@@ -1,5 +1,4 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import React from 'react'
 import { AnnotatedText } from '../components/AnnotatedText';
 import { RelationContainer } from '../components/RelationContainer';
 import { useTokens } from '../hooks/useTokens';
@@ -12,7 +11,7 @@ export const RelationStep = () => {
       <ResizablePanel>
         <AnnotatedText tokens={tokens}/>
       </ResizablePanel>
-      <ResizableHandle withHandle />
+      <ResizableHandle withHandle className='bg-transparent'/>
       <ResizablePanel>
         <RelationContainer />
       </ResizablePanel>

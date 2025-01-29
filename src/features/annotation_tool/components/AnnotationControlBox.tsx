@@ -5,11 +5,13 @@ import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchema } from '../hooks/useSchema';
+import { useStepNavigation } from '../hooks/useStepNavigation';
 import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
 
 export const AnnotationControlBox = () => {
-  const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
+  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
   const { mentions, handleCreateMention, handleUpdateMention } = useMentionContext();
+  const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
   const { schema } = useSchema();
 
@@ -52,7 +54,7 @@ export const AnnotationControlBox = () => {
   }
 
 
-  if (currentStep === 2 && selectedTokens.length > 0) {
+  if (step === 'mentionEditing' && selectedTokens.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -76,7 +78,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (currentStep === 2 && selectedMentions.length > 0) {
+  if (step === 'mentionEditing' && selectedMentions.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -100,7 +102,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (currentStep === 4 && selectedMentions.length === 2) {
+  if (step === 'relationEditing' && selectedMentions.length === 2) {
     const mentionHead = getMentionById(selectedMentions[0]);
     const mentionTail = getMentionById(selectedMentions[1]);
 

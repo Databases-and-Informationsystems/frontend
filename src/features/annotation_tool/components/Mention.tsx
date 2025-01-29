@@ -18,7 +18,7 @@ export const Mention = ({ mention, showDeleteButton = true, isInRelation = false
   const isSelected = selectedMentions.some((selectedMention) => selectedMention.id === mention.id);
 
   return (
-    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'}`}
+    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'} ${mention.isShownRecommendation ? 'opacity-50' : ''}`}
       onClick={() => handleMentionClick(mention.id)}
       style={{ backgroundColor: mention.schema_mention.color }}
     >

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRelationContext } from "../context/useRelationContext"
-import { useSelection } from "../hooks/useSelection";
 import { RelationSuggestionContainer } from "../components/RelationSuggestionContainer";
+import { useStepNavigation } from "../hooks/useStepNavigation";
 
 export const RelationSuggestionStep = () => {
   const { relations, loading } = useRelationContext();
-  const { currentStep, setCurrentStep } = useSelection();
+  const { step, handleStepChange } = useStepNavigation();
 
   const hasSuggestions = relations.some(relation => relation.isShownRecommendation === true);
 
@@ -13,10 +13,10 @@ export const RelationSuggestionStep = () => {
   console.log(loading);
 
   useEffect(() => {
-    if (!loading && !hasSuggestions) {
-      setCurrentStep(currentStep + 1);
+    if (!loading && !hasSuggestions && step === 'relationSuggestion') {
+      handleStepChange('relationEditing');
     }
-  }, [hasSuggestions, setCurrentStep, currentStep, loading]);
+  }, [hasSuggestions, loading, step, handleStepChange]);
 
   if (loading || !hasSuggestions) {
     return <p>Loading suggestions or no suggestions available...</p>;

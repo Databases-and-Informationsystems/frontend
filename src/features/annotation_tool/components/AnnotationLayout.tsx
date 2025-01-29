@@ -4,17 +4,16 @@ import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
 import { AnnotationControlBox } from './AnnotationControlBox';
 import { RelationProvider } from '../provider/RelationProvider';
-import { useSelection } from '../hooks/useSelection';
 import { MentionStep } from '../pages/MentionStep';
 import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
 import { SchemaProvider } from '../provider/SchemaProvider';
 import { MentionSuggestionStep } from '../pages/MentionSuggestionStep';
 import { RelationSuggestionStep } from '../pages/RelationSuggestionStep';
+import { NavigationHeader } from './NavigationHeader';
+import { useStepNavigation } from '../hooks/useStepNavigation';
 
 export const AnnotationLayout = () => {
-  //const { currentStep, handleStepChange } = useStepNavigation();
-
   return (
     <TokenProvider>
       <SchemaProvider>
@@ -25,10 +24,7 @@ export const AnnotationLayout = () => {
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                   Annotation Document
                 </h1>
-                <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                  I will be the navbar
-                </h2>
-                {/* Add Navigation here*/}
+                <NavigationHeader project_name='Test'/>
                 <AnnotationControlBox />
                 <CurrentStepRender />
                 <ModeToggle />
@@ -42,17 +38,17 @@ export const AnnotationLayout = () => {
 }
 
 const CurrentStepRender = () => {
-  const { currentStep } = useSelection();
-  console.log(currentStep)
-
-  switch (currentStep) {
-    case 1:
+  const { step } = useStepNavigation();
+  switch (step) {
+    case 'mentionSuggestion':
       return <MentionSuggestionStep />
-    case 2:
+    case 'mentionEditing':
       return <MentionStep />
-    case 3: 
+    case 'entitySelection': 
+      return <div>Entity Selection</div>
+    case 'relationSuggestion':
       return <RelationSuggestionStep />
-    case 4:
+    case 'relationEditing':
       return <RelationStep />
   }
 }
