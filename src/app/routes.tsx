@@ -8,6 +8,7 @@ import Login from '@/features/login/pages/Login'
 import Teams from '@/features/teams/page/Teams'
 import Settings from '@/features/settings/Settings'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+import CreateSchemaPage from '@/features/schema/components/CreateSchemaPage'
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
           <Route path="teams" element={<Teams />} />
 
           <Route path="projects" element={<ProjectPage />} />
+          <Route path="schemas/create" element={<CreateSchemaPage />} />
           <Route path="schemas/:id" element={<SchemaPage />} />
           <Route path="schemas" element={<SchemasPage />} />
           <Route path="settings" element={<Settings />} />

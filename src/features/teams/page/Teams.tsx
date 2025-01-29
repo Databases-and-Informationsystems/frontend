@@ -1,107 +1,97 @@
-import { useEffect, useState } from "react";
-import { addMemberToTeam, createTeam, deleteMemberFromTeam, getTeams } from "../api/teams";
-
-interface Team {
-  id: number;
-  name: string;
-  members: {
-    email: string;
-    username: string;
-  }[];
-}
+import { useEffect, useState } from 'react'
+import {
+  addMemberToTeam,
+  createTeam,
+  deleteMemberFromTeam,
+  getTeams,
+} from '../api/teams'
+import { Team } from '@/types/user'
 
 const Teams = () => {
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [newTeamName, setNewTeamName] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
-  const [newMemberEmail, setNewMemberEmail] = useState("");
+  const [teams, setTeams] = useState<Team[]>([])
+  const [newTeamName, setNewTeamName] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [editingTeamId, setEditingTeamId] = useState<number | null>(null)
+  const [newMemberEmail, setNewMemberEmail] = useState('')
 
   // Fetch Teams
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const data = await getTeams();
-        setTeams(data.teams);
+        const data = await getTeams()
+        setTeams(data.teams)
       } catch (err: any) {
-        setError(err.message || "Failed to fetch teams.");
+        setError(err.message || 'Failed to fetch teams.')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchTeams();
-  }, []);
+    fetchTeams()
+  }, [])
 
   // Create a new team
   const handleCreateTeam = async () => {
     if (!newTeamName.trim()) {
-      alert("Please enter a team name.");
-      return;
+      alert('Please enter a team name.')
+      return
     }
 
     try {
-      const data = await createTeam(newTeamName);
-      console.log('API response:', data);
-      setTeams((prev) => [...prev, data]);
-      setNewTeamName("");
+      const data = await createTeam(newTeamName)
+      console.log('API response:', data)
+      setTeams((prev) => [...prev, data])
+      setNewTeamName('')
     } catch (err: any) {
-      alert(err.message || "Failed to create team.");
+      alert(err.message || 'Failed to create team.')
     }
-  };
+  }
 
   // Add a member to the team
   const handleAddMember = async (teamId: number) => {
     if (!newMemberEmail.trim()) {
-      alert("Please enter an email.");
-      return;
+      alert('Please enter an email.')
+      return
     }
 
     try {
-      const data = await addMemberToTeam(teamId, newMemberEmail);
+      const data = await addMemberToTeam(teamId, newMemberEmail)
 
-      setTeams((prev) =>
-        prev.map((team) =>
-          team.id === teamId
-            ? {
-              ...team,
-              members: [...team.members, { email: data.email, username: data.username }],
-            }
-            : team
-        )
-      );
+      setTeams((prev) => prev.map((team) => (team.id === teamId ? data : team)))
 
-      setNewMemberEmail("");
+      setNewMemberEmail('')
     } catch (err: any) {
-      alert(err.message || "Failed to add member.");
+      alert(err.message || 'Failed to add member.')
     }
-  };
+  }
 
   // Delete a member from the team
   const handleDeleteMember = async (teamId: number, userMail: string) => {
     try {
-      await deleteMemberFromTeam(teamId, userMail);
+      await deleteMemberFromTeam(teamId, userMail)
       setTeams((prev) =>
         prev.map((team) =>
           team.id === teamId
             ? {
-              ...team,
-              members: team.members.filter((member) => member.email !== userMail),
-            }
+                ...team,
+                members: team.members.filter(
+                  (member) => member.email !== userMail
+                ),
+              }
             : team
         )
-      );
+      )
     } catch (err: any) {
-      alert(err.message || "Failed to delete member.");
+      alert(err.message || 'Failed to delete member.')
     }
-  };
+  }
 
-  if (loading) return <p>Loading teams...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p>Loading teams...</p>
+  if (error) return <p>Error: {error}</p>
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6">
       <h1 className="text-4xl font-bold">Teams</h1>
 
       {/* Input for creating a new team */}
@@ -131,14 +121,25 @@ const Teams = () => {
               <>
                 <ul>
                   {team.members.map((member) => (
-                    <li key={member.email} className="flex justify-between items-center">
-                      <span>{member.username} ({member.email})</span>
-                      <button
-                        onClick={() => handleDeleteMember(team.id, member.email)}
-                        className="text-red-500"
-                      >
-                        Remove
-                      </button>
+                    <li
+                      key={member.email}
+                      className="flex justify-between items-center"
+                    >
+                      <span>
+                        {member.username} ({member.email})
+                      </span>
+                      {member.id !== team.creator.id ? (
+                        <button
+                          onClick={() =>
+                            handleDeleteMember(team.id, member.email)
+                          }
+                          className="text-red-500"
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        <span className="text-gray-500">Creator</span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -188,7 +189,7 @@ const Teams = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Teams;
+export default Teams

@@ -4,7 +4,10 @@ export const loginUser = async (
   email: string,
   password: string
 ): Promise<{ token: string }> => {
-  const response = await axiosInstance.post('/auth/login', { email, password })
+  const response = await axiosInstance.post<{ token: string }>('/auth/login', {
+    email,
+    password,
+  })
   return response.data
 }
 

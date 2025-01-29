@@ -13,7 +13,10 @@ import {
   getTeams,
   getSchemas,
 } from '../api/projects'
-import { Document, Project, Schema, Team } from '../types/types'
+import { Document, DocumentStateType } from '@/types/document'
+import { Schema } from '@/types/schema'
+import { Team } from '@/types/user'
+import { Project } from '@/types/project'
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
@@ -33,13 +36,13 @@ const ProjectPage: React.FC = () => {
     try {
       const documents = await getDocumentsByProject(projectId)
       const ongoing = documents.filter(
-        (doc: Document) => doc.status.type === 'NEW'
+        (doc: Document) => doc.state.type === DocumentStateType.NEW
       )
       const open = documents.filter(
-        (doc: Document) => doc.status.type === 'IN_PROGRESS'
+        (doc: Document) => doc.state.type === DocumentStateType.IN_PROGRESS
       )
       const completed = documents.filter(
-        (doc: Document) => doc.status.type === 'FINISHED'
+        (doc: Document) => doc.state.type === DocumentStateType.FINISHED
       )
 
       setOngoingDocs(ongoing)
@@ -129,12 +132,12 @@ const ProjectPage: React.FC = () => {
             className="fixed top-6 right-6 bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0]"
             onClick={() => setIsProjectModalOpen(true)}
           >
-            Create Project :
+            Create Project
           </button>
 
           <h1 className="text-3xl font-bold mb-6">Projects</h1>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}

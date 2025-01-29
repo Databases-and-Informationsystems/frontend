@@ -1,7 +1,10 @@
 import axiosInstance from '@/lib/axios'
-import { Team, TeamsWrapper, Schema, SchemaWrapper, Document, DocumentWrapper, Project, ProjectWrapper } from '../types/types'
+import { Document, DocumentWrapper } from '@/types/document'
+import { Project, ProjectWrapper } from '@/types/project'
+import { Schema, SchemaWrapper } from '@/types/schema'
+import { Team, TeamsWrapper } from '@/types/user'
 
-export const getProjects = async () : Promise<Project[]> => {
+export const getProjects = async (): Promise<Project[]> => {
   const response = await axiosInstance.get<ProjectWrapper>('/projects')
   return response.data.projects
 }
@@ -19,8 +22,12 @@ export const createProject = async (
   return response.data
 }
 
-export const getDocumentsByProject = async (projectId: number): Promise<Document[]> => {
-  const response = await axiosInstance.get<DocumentWrapper>(`/projects/${projectId}/documents`)
+export const getDocumentsByProject = async (
+  projectId: number
+): Promise<Document[]> => {
+  const response = await axiosInstance.get<DocumentWrapper>(
+    `/projects/${projectId}/documents`
+  )
   return response.data.documents
 }
 
@@ -45,7 +52,7 @@ export const getTeams = async (): Promise<Team[]> => {
   return response.data.teams
 }
 
-export const getSchemas = async () : Promise<Schema[]> => {
+export const getSchemas = async (): Promise<Schema[]> => {
   const response = await axiosInstance.get<SchemaWrapper>('/schemas')
   return response.data.schemas
 }
