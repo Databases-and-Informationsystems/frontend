@@ -9,6 +9,7 @@ import Teams from '@/features/teams/page/Teams'
 import Settings from '@/features/settings/Settings'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import CreateSchemaPage from '@/features/schema/components/CreateSchemaPage'
+import Heatmap from '@/features/heatmap/pages/Heatmap'
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
           <Route path="schemas/:id" element={<SchemaPage />} />
           <Route path="schemas" element={<SchemasPage />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="heatmap/:id" element={<Heatmap />} />
         </Route>
         <Route path="/annotation" element={<div>Annotation</div>} />
       </Route>
