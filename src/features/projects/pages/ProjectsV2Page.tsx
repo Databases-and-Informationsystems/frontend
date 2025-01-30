@@ -19,7 +19,7 @@ const ProjectV2Page: React.FC = () => {
     <Page>
       <PageHeader title="Projects" />
       <div className="flex flex-row-reverse">
-        <Button>Create Project</Button>
+        <Button>Create Project</Button> {/* TODO Not implemented yet */}
       </div>
       <div className="flex flex-wrap">
         {projects.map((p) => (

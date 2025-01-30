@@ -132,7 +132,7 @@ const ProjectV2Page: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-row-reverse">
-        <Button>Add Document</Button>
+        <Button>Add Document</Button> {/* TODO Not Implemented yet */}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-3 items-start">
         {Object.keys(documentsByState).map((state) => (

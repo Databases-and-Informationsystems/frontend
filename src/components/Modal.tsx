@@ -1,3 +1,10 @@
+/**
+ * TODO this modal component does not yet work as expected.
+ * The Modal is for example not scrollabe, but the background behind is...
+ * If it is possible to use the ShadCn Dialog instead in a very generic way,
+ * this would be a better way to go
+ */
+
 import { ReactNode, useEffect, useRef } from 'react'
 
 interface ModalProps {

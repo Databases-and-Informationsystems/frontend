@@ -28,7 +28,7 @@ const ProjectV2Card: React.FC<ProjectV2CardProps> = ({ project }) => {
             variant="link"
             className="absolute top-2 right-2 text-red-500 hover:text-red-700"
           >
-            Delete
+            Delete {/* TODO Not implemented yet */}
           </Button>
         </CardTitle>
         <CardDescription>
