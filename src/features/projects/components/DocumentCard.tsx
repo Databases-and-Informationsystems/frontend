@@ -28,6 +28,7 @@ import UserIcon from '@/components/UserIcon'
 import StartAnnotatingModal from './StartAnnotationModal'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import StyledLink from '@/components/StyledLink'
 
 interface DocumentCardProps {
   document: Document
@@ -114,6 +115,11 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
             </div>
           ))}
         </div>
+        {document.document_edits.length > 1 && (
+          <StyledLink to={`/dashboard/heatmap/${document.id}`}>
+            Compare Annotations
+          </StyledLink>
+        )}
         <div className="flex flex-row-reverse mt-2">
           {document.document_edit?.id ? (
             <Button>

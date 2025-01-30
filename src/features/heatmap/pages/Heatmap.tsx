@@ -6,6 +6,8 @@ import { getInterpolatedColor } from '../util/heatmapUtils'
 import { Document, DocumentEdit } from '@/types/document'
 import { Card, CardContent } from '@/components/ui/card'
 import UserIcon from '@/components/UserIcon'
+import Page from '@/components/Page'
+import PageHeader from '@/components/PageHeader'
 
 const SchemaPage = () => {
   const { id } = useParams()
@@ -65,13 +67,8 @@ const SchemaPage = () => {
   }
 
   return (
-    <div className="p-6 container space-y-6">
-      {/* Schema Name as Header */}
-      <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow">
-        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
-          Heatmap of Document <strong>{document?.name}</strong>
-        </h1>
-      </div>
+    <Page>
+      <PageHeader title={`Heatmap of Document ${document?.name}`} />
 
       <Card>
         <CardContent className="p-4 space-y-2">
@@ -85,14 +82,14 @@ const SchemaPage = () => {
         </CardContent>
       </Card>
 
-      <Card className="container">
+      <Card>
         <CardContent className="p-4">
           {Object.entries(heatmapTokensBySentence).map(([index, sentence]) => (
-            <div className="my-4">
+            <div className="my-3 flex flex-wrap">
               {sentence.map((token) => (
                 <span
                   key={index}
-                  className="me-2 px-1 rounded"
+                  className="me-2 px-1 rounded mb-3"
                   style={{
                     backgroundColor: getInterpolatedColor(token.score ?? 0),
                   }}
@@ -104,7 +101,7 @@ const SchemaPage = () => {
           ))}
         </CardContent>
       </Card>
-    </div>
+    </Page>
   )
 }
 
