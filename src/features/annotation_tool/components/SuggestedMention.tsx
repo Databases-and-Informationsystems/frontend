@@ -12,23 +12,18 @@ interface SuggestedMentionProps {
 }
 
 export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
-  const [selectedTag, setSelectedTag] = useState<string>(mention.tag);
-  const { handleDeleteMention, handleUpdateMention } = useMentionContext();
-  const { schema } = useSchema();
+  //const [selectedTag, setSelectedTag] = useState<string>(mention.tag);
+  const { handleAcceptMention, handleRejectMention } = useMentionContext();
+  //const { schema } = useSchema();
 
   const content = () => {
     return (
       <div className="flex items-center gap-4">
         <Button
           onClick={() =>
-            handleUpdateMention(mention.id,
-              {
-                ...mention,
-                tag: selectedTag,
-                isShownRecommendation: false,
-              }
-            )}>Accept</Button>
-        <Select value={selectedTag} onValueChange={(value: string) => setSelectedTag(value)}>
+            handleAcceptMention(mention.id)}>Accept</Button>
+          {/* We don't allow updates during suggestion step atm */}
+        {/* <Select value={selectedTag} onValueChange={(value: string) => setSelectedTag(value)}>
           <SelectTrigger style={{ color: mention.schema_mention.color }}>
             <SelectValue>{selectedTag}</SelectValue>
           </SelectTrigger>
@@ -48,8 +43,8 @@ export const SuggestedMention = ({ mention }: SuggestedMentionProps) => {
               })}
             </SelectGroup>
           </SelectContent>
-        </Select>
-        <Button onClick={() => handleDeleteMention(mention)}>Reject</Button>
+        </Select> */}
+        <Button onClick={() => handleRejectMention(mention.id)}>Reject</Button>
       </div>
     )
   }

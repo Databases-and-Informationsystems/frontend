@@ -40,7 +40,7 @@ export const Mention = ({ mention, showDeleteButton = true, isInRelation = false
           className="h-auto w-auto p-1"
           onClick={(e) => {
             e.stopPropagation();
-            handleDeleteMention(mention);
+            handleDeleteMention(mention.id);
           }}
         >
           <Trash2 />

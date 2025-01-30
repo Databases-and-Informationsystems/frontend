@@ -13,7 +13,15 @@ export const AnnotationControlBox = () => {
   const { handleCreateMention, handleUpdateMention } = useMentionContext();
   const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
-  const { schema } = useSchema();
+  const { schema, loading, error } = useSchema();
+
+  if (loading) {
+    return <div>Loading schema...</div>;
+  }
+
+  if (error) {
+    return <div>Error Schema: {error}</div>;
+  }
 
   const createMention = (tokens: Token[], schemaId: number) => {
     const payload: CreateMentionPayload = {
@@ -108,6 +116,7 @@ export const AnnotationControlBox = () => {
     const matchingConstraints = getMatchingConstraints(
       mentionHead,
       mentionTail,
+      schema!.schema_constraints
     );
 
     if (matchingConstraints.length === 0) {
@@ -135,12 +144,12 @@ export const AnnotationControlBox = () => {
         <CardContent>
           {matchingConstraints.map((constraint) => {
             const relation = schema?.schema_relations.find(
-              (schemaRelation) => schemaRelation.id === constraint.schema_relation_id
+              (schemaRelation) => schemaRelation.id === constraint.schema_relation.id
             );
             return (
               <Button
                 key={constraint.id}
-                onClick={() => createRelation(selectedMentions, relation?.id || '')}
+                onClick={() => createRelation(selectedMentions, constraint.schema_relation.id)}
                 className='mr-2'>
                 {relation?.tag || ''}
               </Button>

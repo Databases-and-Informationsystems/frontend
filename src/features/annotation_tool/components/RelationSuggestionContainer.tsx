@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 
 export const RelationSuggestionContainer = () => {
   const { schema } = useSchema()
-  const { relations, handleUpdateRelation, handleDeleteRelation } = useRelationContext()
+  const { relations, handleAcceptRelation, handleRejectRelation } = useRelationContext()
   const [relationTag, setRelationTag] = useState<string | undefined>(undefined)
 
   const currentRelation = relations.find((relation) => relation.isShownRecommendation === true)
@@ -19,17 +19,11 @@ export const RelationSuggestionContainer = () => {
   }, [currentRelation]);
 
   const handleAccept = () => {
-    handleUpdateRelation(
-      currentRelation!.id,
-      {
-        ...currentRelation!,
-        isShownRecommendation: false,
-        tag: relationTag || currentRelation!.tag
-      })
+    handleAcceptRelation(currentRelation!.id)
   }
 
   const handleReject = () => {
-    handleDeleteRelation(currentRelation!.id)
+    handleRejectRelation(currentRelation!.id)
   }
 
   return (
@@ -39,14 +33,15 @@ export const RelationSuggestionContainer = () => {
           onClick={() =>
             handleAccept()
           }>Accept</Button>
-        <Select value={relationTag} onValueChange={(value: string) => setRelationTag(value)}>
+          {/* We don't allow updates during suggestion step atm */}
+        {/* <Select value={relationTag} onValueChange={(value: string) => setRelationTag(value)}>
           <SelectTrigger>
             <SelectValue>{relationTag}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Relation Types</SelectLabel>
-              {schema!.relations.map((relationSchema) => {
+              {schema!.schema_relations.map((relationSchema) => {
                 return (
                   <SelectItem
                     key={relationSchema.id}
@@ -58,7 +53,7 @@ export const RelationSuggestionContainer = () => {
               })}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
         <Button onClick={() => handleReject()}>Reject</Button>
       </div>
       <div>
