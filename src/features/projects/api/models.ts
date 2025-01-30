@@ -1,11 +1,11 @@
 import axiosInstance from '@/lib/axios'
-import { ModelByStepEnum, ModelStepEnum } from '../types/models'
+import { ModelsByModelStep, ModelStepEnum } from '../types/models'
 import { DocumentEdit } from '@/types/document'
 
 export const getModelsBySchema = async (
   schemaId: number
-): Promise<ModelByStepEnum> => {
-  const response = await axiosInstance.get<ModelByStepEnum>(
+): Promise<ModelsByModelStep> => {
+  const response = await axiosInstance.get<ModelsByModelStep>(
     `/schemas/${schemaId}/recommendation`
   )
   return response.data
@@ -13,7 +13,7 @@ export const getModelsBySchema = async (
 
 export const createDocumentEdit = async (
   documentId: number,
-  modelsByStepEnum: ModelByStepEnum,
+  modelsByStepEnum: ModelsByModelStep,
   modelByStepType: Record<ModelStepEnum, string | undefined>,
   settingsByModel: Record<ModelStepEnum, Record<string, string>>
 ): Promise<DocumentEdit> => {

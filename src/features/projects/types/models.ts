@@ -6,7 +6,7 @@
 
 import { Settings } from '@/types/recommendation'
 
-export type ModelByStepEnum = Record<ModelStepEnum, ModelWithSetting[]>
+export type ModelsByModelStep = Record<ModelStepEnum, ModelWithSetting[]>
 
 export enum ModelStepEnum {
   mention = 'mention',

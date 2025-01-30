@@ -9,7 +9,7 @@ import {
 import { Document } from '@/types/document'
 import { ReactNode, useEffect, useState } from 'react'
 import {
-  ModelByStepEnum,
+  ModelsByModelStep,
   ModelStepEnum,
   ModelWithSetting,
 } from '../types/models'
@@ -40,8 +40,9 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   document,
 }) => {
   const navigate = useNavigate()
-  const [modelsByStepType, setModelsByStepType] = useState<ModelByStepEnum>()
-  const [selectedModelByModelType, setSelectedModelByModelType] = useState<
+  const [modelsByModelStep, setModelsByModelStep] =
+    useState<ModelsByModelStep>()
+  const [selectedModelByModelStep, setSelectedModelByModelStep] = useState<
     Record<ModelStepEnum, string | undefined>
   >({
     mention: undefined,
@@ -49,7 +50,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
     entity: undefined,
   })
 
-  const [selectedSettingsByModelType, setSelectedSettingsByModelType] =
+  const [selectedSettingsByModelStep, setSelectedSettingsByModelStepo] =
     useState<Record<ModelStepEnum, Record<string, string>>>({
       mention: {},
       relation: {},
@@ -62,10 +63,10 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
     const fetchData = async () => {
       if (isOpen) {
         try {
-          const res: ModelByStepEnum = await getModelsBySchema(
+          const res: ModelsByModelStep = await getModelsBySchema(
             document.schema.id
           )
-          setModelsByStepType(res)
+          setModelsByModelStep(res)
 
           /**
            * The implementation of useState does not allow to set the selectedModel and selectedSettings
@@ -96,8 +97,8 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
               }
             }
           }
-          setSelectedModelByModelType(defaultSelectedModelByModelType)
-          setSelectedSettingsByModelType(defaultSelectedSettingsByModelType)
+          setSelectedModelByModelStep(defaultSelectedModelByModelType)
+          setSelectedSettingsByModelStepo(defaultSelectedSettingsByModelType)
         } catch (err: any) {
           console.log('Error: ', err)
         }
@@ -112,9 +113,9 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
       setLoading(true)
       const documentEdit = await createDocumentEdit(
         document.id,
-        modelsByStepType!,
-        selectedModelByModelType,
-        selectedSettingsByModelType
+        modelsByModelStep!,
+        selectedModelByModelStep,
+        selectedSettingsByModelStep
       )
       navigate(`/annotation/${documentEdit.id}`)
     } catch (err: any) {
@@ -126,13 +127,13 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   }
 
   const getSettingsByStepTypeAndModel = (
-    modelsByStepType: ModelByStepEnum,
-    modelStepEnum: ModelStepEnum,
+    modelsByModelStep: ModelsByModelStep,
+    modelStep: ModelStepEnum,
     selectedModel: string
   ): Settings | undefined => {
-    console.log('ModelsByStepType: ', modelsByStepType)
-    if (modelsByStepType) {
-      const modelWithSetting = modelsByStepType[modelStepEnum].find(
+    console.log('ModelsByStepType: ', modelsByModelStep)
+    if (modelsByModelStep) {
+      const modelWithSetting = modelsByModelStep[modelStep].find(
         (m) => m.model_type === selectedModel
       )
       if (modelWithSetting) {
@@ -143,13 +144,13 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   }
 
   const getDefaultSettings = (
-    modelsByStepType: ModelByStepEnum,
-    modelStepEnum: ModelStepEnum,
+    modelsByModelStep: ModelsByModelStep,
+    modelStep: ModelStepEnum,
     selectedModel: string
   ): Record<string, string> => {
     const settings = getSettingsByStepTypeAndModel(
-      modelsByStepType,
-      modelStepEnum,
+      modelsByModelStep,
+      modelStep,
       selectedModel
     )
 
@@ -164,19 +165,19 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   }
 
   const handleSelectedModelByStepTypeChanged = (
-    modelsByStepType: ModelByStepEnum,
-    modelStepEnum: ModelStepEnum,
+    modelsByModelStep: ModelsByModelStep,
+    modelStep: ModelStepEnum,
     selectedModel: string
   ) => {
-    setSelectedModelByModelType({
-      ...selectedModelByModelType,
-      [modelStepEnum]: selectedModel,
+    setSelectedModelByModelStep({
+      ...selectedModelByModelStep,
+      [modelStep]: selectedModel,
     })
-    setSelectedSettingsByModelType({
-      ...selectedSettingsByModelType,
-      [modelStepEnum]: getDefaultSettings(
-        modelsByStepType,
-        modelStepEnum,
+    setSelectedSettingsByModelStepo({
+      ...selectedSettingsByModelStep,
+      [modelStep]: getDefaultSettings(
+        modelsByModelStep,
+        modelStep,
         selectedModel
       ),
     })
@@ -184,18 +185,23 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
 
   if (!isOpen) return null
 
-  const renderSettings = (modelStepEnum: ModelStepEnum): ReactNode => {
-    if (!modelStepEnum || !selectedModelByModelType) {
+  /**
+   * Render Settings for am modelStep in respect to the currently selected model for this step
+   * Settings can be any key value pairs
+   * The values can be given in a list or by its type
+   * There is a default value for each value of each key value pair that is preseleced
+   */
+  const renderSettings = (modelStep: ModelStepEnum): ReactNode => {
+    if (!modelStep || !selectedModelByModelStep) {
       return <></>
     }
-    const selectedModel =
-      selectedModelByModelType[modelStepEnum as ModelStepEnum]
+    const selectedModel = selectedModelByModelStep[modelStep as ModelStepEnum]
     if (!selectedModel) {
       return <></>
     }
     const settings = getSettingsByStepTypeAndModel(
-      modelsByStepType!,
-      modelStepEnum,
+      modelsByModelStep!,
+      modelStep,
       selectedModel
     )
     if (!settings) {
@@ -209,21 +215,23 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
           const values = settings[key]?.values
           console.log(key, values)
           if (Array.isArray(values)) {
+            {
+              /* value can by any of the given values in the array. These are provided in a Select form*/
+            }
             return (
               <Select
                 key={index}
-                value={selectedSettingsByModelType[modelStepEnum][key]}
+                value={selectedSettingsByModelStep[modelStep][key]}
                 onValueChange={(v) =>
-                  setSelectedSettingsByModelType({
-                    ...selectedSettingsByModelType,
-                    [modelStepEnum]: {
-                      ...selectedSettingsByModelType[modelStepEnum],
+                  setSelectedSettingsByModelStepo({
+                    ...selectedSettingsByModelStep,
+                    [modelStep]: {
+                      ...selectedSettingsByModelStep[modelStep],
                       [key]: v,
                     },
                   })
                 }
               >
-                {/* TODO on Change */}
                 <SelectTrigger label={key}>
                   <SelectValue placeholder="Select value" />
                 </SelectTrigger>
@@ -237,7 +245,26 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
               </Select>
             )
           } else {
-            return <Input key={index} type={values}></Input>
+            {
+              /* value is of type values. Because values is 'number' or 'string', the input type can just be the value */
+            }
+            return (
+              <Input
+                label={key}
+                key={index}
+                type={values}
+                value={selectedSettingsByModelStep[modelStep][key]}
+                onChange={(e) =>
+                  setSelectedSettingsByModelStepo({
+                    ...selectedSettingsByModelStep,
+                    [modelStep]: {
+                      ...selectedSettingsByModelStep[modelStep],
+                      [key]: e.target.value,
+                    },
+                  })
+                }
+              ></Input>
+            )
           }
         })}
       </div>
@@ -256,7 +283,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
       </CardHeader>
 
       <CardContent>
-        {modelsByStepType &&
+        {modelsByModelStep &&
           Object.values(ModelStepEnum).map((modelStep) => {
             return (
               <div key={modelStep} className="border rounded p-4 mb-3">
@@ -265,10 +292,10 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
                 </h2>
                 <div className="form-group">
                   <Select
-                    value={selectedModelByModelType[modelStep]}
+                    value={selectedModelByModelStep[modelStep]}
                     onValueChange={(v) =>
                       handleSelectedModelByStepTypeChanged(
-                        modelsByStepType!,
+                        modelsByModelStep!,
                         modelStep,
                         v
                       )
@@ -278,7 +305,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
                       <SelectValue placeholder="Model Placeholder" />
                     </SelectTrigger>
                     <SelectContent>
-                      {modelsByStepType[modelStep].map((model, idx) => (
+                      {modelsByModelStep[modelStep].map((model, idx) => (
                         <SelectItem key={idx} value={model.model_type}>
                           {model.name}
                         </SelectItem>
@@ -286,7 +313,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-                {selectedModelByModelType[modelStep] &&
+                {selectedModelByModelStep[modelStep] &&
                   renderSettings(modelStep)}
               </div>
             )
