@@ -87,10 +87,6 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
                 ...defaultSelectedModelByModelType,
                 [step]: model_type,
               }
-              console.log(
-                'default Settings: ',
-                defaultSelectedSettingsByModelType
-              )
               defaultSelectedSettingsByModelType = {
                 ...defaultSelectedSettingsByModelType,
                 [step]: getDefaultSettings(res, step, model_type),
@@ -101,6 +97,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
           setSelectedSettingsByModelStepo(defaultSelectedSettingsByModelType)
         } catch (err: any) {
           console.log('Error: ', err)
+          setError(err.message as string)
         }
       }
     }
@@ -108,7 +105,6 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   }, [isOpen])
 
   const handleStartAnnotation = async () => {
-    console.log('Handle Start Annotation')
     try {
       setLoading(true)
       const documentEdit = await createDocumentEdit(
@@ -131,7 +127,6 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
     modelStep: ModelStepEnum,
     selectedModel: string
   ): Settings | undefined => {
-    console.log('ModelsByStepType: ', modelsByModelStep)
     if (modelsByModelStep) {
       const modelWithSetting = modelsByModelStep[modelStep].find(
         (m) => m.model_type === selectedModel
@@ -213,7 +208,6 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
         <h3 className="text-xl mt-3">Additional optional settings</h3>
         {Object.keys(settings).map((key, index) => {
           const values = settings[key]?.values
-          console.log(key, values)
           if (Array.isArray(values)) {
             {
               /* value can by any of the given values in the array. These are provided in a Select form*/

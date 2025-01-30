@@ -25,8 +25,6 @@ const initialGroupedDocuments: Record<DocumentStateType, Document[]> = {
 const ProjectV2Page: React.FC = () => {
   const { id } = useParams()
 
-  console.log(id)
-
   const [project, setProject] = useState<Project>()
   const [documentsByState, setDocumentsByState] = useState<
     Record<DocumentStateType, Document[]>
@@ -57,8 +55,6 @@ const ProjectV2Page: React.FC = () => {
             [DocumentStateType.FINISHED]: [],
           }
         )
-        console.log(projectData)
-
         setDocumentsByState(groupedDocuments)
 
         setProject(projectData)
