@@ -24,9 +24,10 @@ export const TokenProvider = ({ children }: TokenProviderProps) => {
       try {
         const data = await fetchTokens();
         setTokens(data);
-        setLoading(false);
       } catch (err) {
         setError('Failed to fetch tokens: ' + err);
+      }
+      finally {
         setLoading(false);
       }
     };
