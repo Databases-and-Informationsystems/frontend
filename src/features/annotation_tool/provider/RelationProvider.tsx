@@ -1,11 +1,13 @@
 import { createContext } from "react";
-import { CreateRelationPayload, Relation as RelationType } from "../types";
+import { CreateRelationPayload, Relation as RelationType, UpdateRelationPayload } from "../types";
 import { useRelation } from "../hooks/useRelation";
 
 interface RelationContextType {
   handleCreateRelation: (payload: CreateRelationPayload) => void;
   handleDeleteRelation: (relationId: number) => void;
-  handleUpdateRelation: (relationId: number, newRelation: RelationType) => void;
+  handleUpdateRelation: (relationId: number, payload: UpdateRelationPayload) => void;
+  handleAcceptRelation: (relationId: number) => void;
+  handleRejectRelation: (relationId: number) => void;
   relations: RelationType[];
   loading: boolean;
 }
@@ -22,7 +24,9 @@ export const RelationProvider = ({ children }: RelationProviderProps) => {
     loading,
     handleCreateRelation,
     handleDeleteRelation,
-    handleUpdateRelation
+    handleUpdateRelation,
+    handleAcceptRelation,
+    handleRejectRelation,
   } = useRelation();
 
   return (
@@ -32,6 +36,8 @@ export const RelationProvider = ({ children }: RelationProviderProps) => {
       handleCreateRelation,
       handleDeleteRelation,
       handleUpdateRelation,
+      handleAcceptRelation,
+      handleRejectRelation,
     }}>
       {children}
     </RelationContext.Provider>

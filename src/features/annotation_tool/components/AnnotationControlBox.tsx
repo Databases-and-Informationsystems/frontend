@@ -10,7 +10,7 @@ import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMent
 
 export const AnnotationControlBox = () => {
   const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
-  const { mentions, handleCreateMention, handleUpdateMention } = useMentionContext();
+  const { handleCreateMention, handleUpdateMention } = useMentionContext();
   const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
   const { schema } = useSchema();
@@ -23,11 +23,6 @@ export const AnnotationControlBox = () => {
     };
     handleCreateMention(payload);
     resetTokens()
-  }
-
-
-  const getMentionById = (id: number) => {
-    return mentions.find(mention => mention.id === id)
   }
 
   const updateMention = (mention: Mention, schemaId: number) => {
@@ -103,8 +98,8 @@ export const AnnotationControlBox = () => {
     )
   }
   if (step === 'relationEditing' && selectedMentions.length === 2) {
-    const mentionHead = getMentionById(selectedMentions[0]);
-    const mentionTail = getMentionById(selectedMentions[1]);
+    const mentionHead = selectedMentions[0];
+    const mentionTail = selectedMentions[1];
 
     if (!mentionHead || !mentionTail) {
       return;
@@ -113,8 +108,6 @@ export const AnnotationControlBox = () => {
     const matchingConstraints = getMatchingConstraints(
       mentionHead,
       mentionTail,
-      schema!.dependencies,
-      schema!.mentions
     );
 
     if (matchingConstraints.length === 0) {

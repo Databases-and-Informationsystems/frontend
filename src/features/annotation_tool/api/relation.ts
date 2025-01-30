@@ -1,5 +1,9 @@
 import axiosInstance from '@/lib/axios'
-import { CreateRelationPayload, Relation, UpdateRelationPayload } from '../types'
+import {
+  CreateRelationPayload,
+  Relation,
+  UpdateRelationPayload,
+} from '../types'
 
 export const fetchRelations = async (
   documentEditId: number
@@ -8,7 +12,9 @@ export const fetchRelations = async (
   return response.data.relations
 }
 
-export const createRelation = async (payload: CreateRelationPayload): Promise<Relation> => {
+export const createRelation = async (
+  payload: CreateRelationPayload
+): Promise<Relation> => {
   const response = await axiosInstance.post('/relations', payload)
   return response.data
 }

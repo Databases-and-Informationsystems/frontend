@@ -29,7 +29,7 @@ export const Relation = ({ relation }: RelationProps) => {
       <Button className="h-auto w-auto p-1"
         onClick={(e) => {
           e.stopPropagation();
-          handleDeleteRelation(relation);
+          handleDeleteRelation(relation.id);
         }}>
         <Trash2 />
       </Button>

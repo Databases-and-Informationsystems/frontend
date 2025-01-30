@@ -2,12 +2,14 @@ import React, { createContext, useEffect } from "react";
 import { useMentions } from "../hooks/useMention";
 import { Mention as MentionType } from "../types";
 import { fetchMentions } from "../api/mention";
-import { CreateMentionPayload, Mention, UpdateMentionPayload } from "../types/mention";
+import { CreateMentionPayload, UpdateMentionPayload } from "../types/mention";
 
 interface MentionContextType {
   handleCreateMention: (payload: CreateMentionPayload) => void;
-  handleDeleteMention: (mention: Mention) => void;
+  handleDeleteMention: (mentionId: number) => void;
   handleUpdateMention: (mentionId: number, mention: UpdateMentionPayload) => void;
+  handleAcceptMention: (mentionId: number) => void;
+  handleRejectMention: (mentionId: number) => void;
   mentions: MentionType[];
   loading: boolean;
 }
@@ -27,6 +29,8 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
     handleCreateMention,
     handleUpdateMention,
     handleDeleteMention,
+    handleAcceptMention,
+    handleRejectMention,
   } = useMentions();
 
   useEffect(() => {
@@ -51,6 +55,8 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
       handleCreateMention,
       handleUpdateMention,
       handleDeleteMention,
+      handleAcceptMention,
+      handleRejectMention,
     }}>
       {children}
     </MentionContext.Provider>

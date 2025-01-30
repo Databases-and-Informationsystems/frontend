@@ -75,13 +75,13 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
 
     // Mention step
     if (step === 'mentionEditing') {
-      setSelectedMentions([mentionId]);
+      setSelectedMentions([mention]);
       return;
     }
 
     // Entity step
     if (step === 'entitySelection') {
-      setSelectedMentions([...selectedMentions, mentionId]);
+      setSelectedMentions([...selectedMentions, mention]);
     }
 
     // Relation step
