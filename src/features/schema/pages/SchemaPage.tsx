@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { getSchema } from '../api/schemas'
 import { Schema } from '@/types/schema'
 import { RecommendationModel } from '@/types/recommendation'
+import Page from '@/components/Page'
+import PageHeader from '@/components/PageHeader'
 
 interface StepWithModels {
   stepName: string
@@ -77,13 +79,9 @@ const SchemaPage = () => {
   )
 
   return (
-    <div className="p-6 container space-y-6">
+    <Page>
       {/* Schema Name as Header */}
-      <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow">
-        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
-          {schema.name}
-        </h1>
-      </div>
+      <PageHeader title={schema.name} />
 
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
         {Object.keys(modelsByStep).map((stepId) => (
@@ -218,7 +216,7 @@ const SchemaPage = () => {
             ))}
         </div>
       </div>
-    </div>
+    </Page>
   )
 }
 

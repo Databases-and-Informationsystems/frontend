@@ -18,6 +18,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onAddDocument,
   onPreview,
   onDeleteDocument,
+  onOpenProject,
 }: ProjectCardProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [showOngoing, setShowOngoing] = useState(false)
@@ -169,7 +170,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="mt-4">
             <button
               className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                setIsOpen(true)
+                onOpenProject()
+              }}
             >
               Open Project
             </button>

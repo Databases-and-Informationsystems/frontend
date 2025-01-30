@@ -9,6 +9,18 @@ export const getProjects = async (): Promise<Project[]> => {
   return response.data.projects
 }
 
+/**
+ * dump projects/:id endpoint for testing
+ */
+export const getProjectById = async (id: number): Promise<Project> => {
+  const response = await axiosInstance.get<ProjectWrapper>(`/projects`)
+  const project = response.data.projects.find((p) => p.id === id)
+  if (!project) {
+    return Promise.reject()
+  }
+  return project
+}
+
 export const createProject = async (
   name: string,
   teamId: number,
@@ -26,7 +38,7 @@ export const getDocumentsByProject = async (
   projectId: number
 ): Promise<Document[]> => {
   const response = await axiosInstance.get<DocumentWrapper>(
-    `/projects/${projectId}/documents`
+    `/documents/project/${projectId}`
   )
   return response.data.documents
 }
@@ -35,7 +47,7 @@ export const createDocument = async (
   projectId: number,
   fileName: string,
   fileContent: string
-) => {
+): Promise<Document> => {
   const response = await axiosInstance.post(
     `/projects/${projectId}/documents`,
     { name: fileName, content: fileContent }
