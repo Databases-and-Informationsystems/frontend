@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
-const EmailLink: React.FC<{ email: string; label?: string }> = ({
+const MailLink: React.FC<{ email: string; label?: string }> = ({
   email,
   label,
 }) => {
@@ -13,4 +13,4 @@ const EmailLink: React.FC<{ email: string; label?: string }> = ({
   )
 }
 
-export default EmailLink
+export default MailLink
