@@ -11,10 +11,11 @@ interface SchemaContextType {
 const SchemaContext = createContext<SchemaContextType | undefined>(undefined);
 
 interface SchemaProviderProps {
+  schemaId: number;
   children: React.ReactNode;
 }
 
-export const SchemaProvider = ({ children }: SchemaProviderProps) => {
+export const SchemaProvider = ({ children, schemaId }: SchemaProviderProps) => {
   const [schema, setSchema] = useState<Schema | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export const SchemaProvider = ({ children }: SchemaProviderProps) => {
   useEffect(() => {
     const loadSchema = async () => {
       try {
-        const data = await fetchSchema();
+        const data = await fetchSchema(schemaId);
         setSchema(data);
       } catch (err) {
         setError("Failed to fetch schema: " + err);
@@ -32,7 +33,7 @@ export const SchemaProvider = ({ children }: SchemaProviderProps) => {
     };
 
     loadSchema();
-  }, []);
+  }, [schemaId]);
 
   return (
     <SchemaContext.Provider value={{ schema, loading, error }}>

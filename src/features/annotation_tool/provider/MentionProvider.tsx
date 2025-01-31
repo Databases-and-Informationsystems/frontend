@@ -16,11 +16,12 @@ interface MentionContextType {
 const MentionContext = createContext<MentionContextType | undefined>(undefined);
 
 interface MentionProviderProps {
+  initialMentions: MentionType[];
   children: React.ReactNode;
 }
 
-export const MentionProvider = ({ children }: MentionProviderProps) => {
-  const [mentions, setMentions] = useState<Mention[]>([])
+export const MentionProvider = ({ children, initialMentions = [] }: MentionProviderProps) => {
+  const [mentions, setMentions] = useState<Mention[]>(initialMentions)
   const [loading, setLoading] = useState(true)
 
   const handleCreateMention = async (payload: CreateMentionPayload) => {

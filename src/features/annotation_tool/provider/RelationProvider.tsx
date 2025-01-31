@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { CreateRelationPayload, Relation, Relation as RelationType, UpdateRelationPayload } from "../types";
 import { useStepNavigation } from "../hooks/useStepNavigation";
-import { createRelation, deleteRelation, updateRelation, acceptRelationSuggestion, rejectRelationSuggestion } from "../api/relation";
+import { createRelation, deleteRelation, updateRelation, acceptRelationSuggestion, rejectRelationSuggestion, fetchRelations } from "../api/relation";
 
 interface RelationContextType {
   handleCreateRelation: (payload: CreateRelationPayload) => void;
@@ -16,11 +16,13 @@ interface RelationContextType {
 const RelationContext = createContext<RelationContextType | undefined>(undefined);
 
 interface RelationProviderProps {
+  initialRelations: RelationType[];
+  documentEditId: number;
   children: React.ReactNode;
 }
 
-export const RelationProvider = ({ children }: RelationProviderProps) => {
-  const [relations, setRelations] = useState<Relation[]>([])
+export const RelationProvider = ({ children, initialRelations = [], documentEditId }: RelationProviderProps) => {
+  const [relations, setRelations] = useState<Relation[]>(initialRelations)
   const { step } = useStepNavigation()
   const [loading, setLoading] = useState(true)
   const relationsFetched = useRef<boolean>(false)
@@ -29,7 +31,7 @@ export const RelationProvider = ({ children }: RelationProviderProps) => {
     const loadRelations = async () => {
       setLoading(true)
       try {
-        const data = await fetchRelations()
+        const data = await fetchRelations(documentEditId)
         setRelations(data)
         relationsFetched.current = true
         console.log('Relations', data)
@@ -42,7 +44,7 @@ export const RelationProvider = ({ children }: RelationProviderProps) => {
     if (step === 'relationSuggestion' && !relationsFetched.current) {
       loadRelations()
     }
-  }, [step])
+  }, [documentEditId, step])
 
   const handleCreateRelation = async (payload: CreateRelationPayload) => {
     try {

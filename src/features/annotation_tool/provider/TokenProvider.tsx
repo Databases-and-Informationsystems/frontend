@@ -11,10 +11,11 @@ interface TokenContextType {
 const TokenContext = createContext<TokenContextType | undefined>(undefined);
 
 interface TokenProviderProps {
+  documentId: number;
   children: React.ReactNode;
 }
 
-export const TokenProvider = ({ children }: TokenProviderProps) => {
+export const TokenProvider = ({ children, documentId }: TokenProviderProps) => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export const TokenProvider = ({ children }: TokenProviderProps) => {
   useEffect(() => {
     const loadTokens = async () => {
       try {
-        const data = await fetchTokens();
+        const data = await fetchTokens(documentId);
         setTokens(data);
       } catch (err) {
         setError('Failed to fetch tokens: ' + err);
@@ -32,7 +33,7 @@ export const TokenProvider = ({ children }: TokenProviderProps) => {
       }
     };
     loadTokens();
-  }, []);
+  }, [documentId]);
 
   return (
     <TokenContext.Provider value={{ tokens, loading, error }}>
