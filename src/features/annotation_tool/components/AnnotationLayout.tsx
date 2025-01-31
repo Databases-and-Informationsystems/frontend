@@ -14,6 +14,7 @@ import { NavigationHeader } from './NavigationHeader';
 import { useStepNavigation } from '../hooks/useStepNavigation';
 
 export const AnnotationLayout = () => {
+
   return (
     <TokenProvider>
       <SchemaProvider>

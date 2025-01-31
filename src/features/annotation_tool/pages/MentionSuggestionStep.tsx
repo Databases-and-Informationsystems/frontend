@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { AnnotatedText } from '../components/AnnotatedText';
 import { useMentionContext } from '../context/useMentionContext';
-import { useTokens } from '../hooks/useTokens';
+import { useTokens } from '../context/useTokens';
 import { useStepNavigation } from '../hooks/useStepNavigation';
 
 export const MentionSuggestionStep = () => {

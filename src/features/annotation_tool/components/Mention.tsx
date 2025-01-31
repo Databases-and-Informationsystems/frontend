@@ -1,6 +1,6 @@
 import { Mention as MentionType } from '../types/mention'
 import { Badge } from '@/components/ui/badge';
-import { useSelection } from '../hooks/useSelection';
+import { useSelection } from '../context/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Check, Clock, Trash2 } from 'lucide-react';

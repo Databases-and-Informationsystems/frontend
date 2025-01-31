@@ -1,7 +1,7 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { AnnotatedText } from '../components/AnnotatedText';
 import { RelationContainer } from '../components/RelationContainer';
-import { useTokens } from '../hooks/useTokens';
+import { useTokens } from '../context/useTokens';
 
 export const RelationStep = () => {
   const { tokens } = useTokens();

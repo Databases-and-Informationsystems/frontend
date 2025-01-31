@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select'
 import { Relation } from './Relation'
-import { useSchema } from '../hooks/useSchema'
+import { useSchema } from '../context/useSchema'
 import { useRelationContext } from '../context/useRelationContext'
 import { useEffect, useState } from 'react'
 

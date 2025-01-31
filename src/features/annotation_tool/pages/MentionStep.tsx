@@ -1,5 +1,5 @@
 import { AnnotatedText } from '../components/AnnotatedText'
-import { useTokens } from '../hooks/useTokens';
+import { useTokens } from '../context/useTokens';
 
 export const MentionStep = () => {
   const { tokens } = useTokens();

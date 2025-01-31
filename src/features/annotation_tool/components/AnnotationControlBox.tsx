@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useSelection } from '../hooks/useSelection'
+import { useSelection } from '../context/useSelection'
 import { Button } from '@/components/ui/button';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
-import { useSchema } from '../hooks/useSchema';
+import { useSchema } from '../context/useSchema';
 import { useStepNavigation } from '../hooks/useStepNavigation';
 import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
 
