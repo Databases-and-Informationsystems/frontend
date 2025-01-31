@@ -1,9 +1,24 @@
 import axiosInstance from '@/lib/axios'
-import { Team, TeamsWrapper, Schema, SchemaWrapper, Document, DocumentWrapper, Project, ProjectWrapper } from '../types/types'
+import { Document, DocumentWrapper } from '@/types/document'
+import { Project, ProjectWrapper } from '@/types/project'
+import { Schema, SchemaWrapper } from '@/types/schema'
+import { Team, TeamsWrapper } from '@/types/user'
 
-export const getProjects = async () : Promise<Project[]> => {
+export const getProjects = async (): Promise<Project[]> => {
   const response = await axiosInstance.get<ProjectWrapper>('/projects')
   return response.data.projects
+}
+
+/**
+ * dump projects/:id endpoint for testing
+ */
+export const getProjectById = async (id: number): Promise<Project> => {
+  const response = await axiosInstance.get<ProjectWrapper>(`/projects`)
+  const project = response.data.projects.find((p) => p.id === id)
+  if (!project) {
+    return Promise.reject()
+  }
+  return project
 }
 
 export const createProject = async (
@@ -19,8 +34,12 @@ export const createProject = async (
   return response.data
 }
 
-export const getDocumentsByProject = async (projectId: number): Promise<Document[]> => {
-  const response = await axiosInstance.get<DocumentWrapper>(`/projects/${projectId}/documents`)
+export const getDocumentsByProject = async (
+  projectId: number
+): Promise<Document[]> => {
+  const response = await axiosInstance.get<DocumentWrapper>(
+    `/documents/project/${projectId}`
+  )
   return response.data.documents
 }
 
@@ -28,7 +47,7 @@ export const createDocument = async (
   projectId: number,
   fileName: string,
   fileContent: string
-) => {
+): Promise<Document> => {
   const response = await axiosInstance.post(
     `/projects/${projectId}/documents`,
     { name: fileName, content: fileContent }
@@ -45,7 +64,7 @@ export const getTeams = async (): Promise<Team[]> => {
   return response.data.teams
 }
 
-export const getSchemas = async () : Promise<Schema[]> => {
+export const getSchemas = async (): Promise<Schema[]> => {
   const response = await axiosInstance.get<SchemaWrapper>('/schemas')
   return response.data.schemas
 }

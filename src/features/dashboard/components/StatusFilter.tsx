@@ -6,8 +6,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { STATUS_STYLES } from '../types/types'
-import { Document } from '../types/types'
+import { STATUS_STYLES } from '@/types/document'
+import { Document } from '@/types/document'
+import { Link } from 'react-router'
 
 interface StatusFilterProps {
   documents: Document[]
@@ -51,7 +52,13 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <div className="flex items-center justify-between mt-3">
                     <div className="w-full h-2 bg-green-100 rounded-full mr-4">
@@ -85,7 +92,13 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <Button variant="outline">Start Working</Button>
                 </div>
@@ -114,7 +127,13 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                     Project: {doc.project.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Schema: {doc.schema.name}
+                    Schema:{' '}
+                    <Link
+                      to={`/dashboard/schemas/${doc.schema.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {doc.schema.name}
+                    </Link>
                   </p>
                   <Button variant="outline">Open Document</Button>
                 </div>

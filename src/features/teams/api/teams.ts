@@ -11,8 +11,7 @@ export const createTeam = async (name: string) => {
 }
 
 export const addMemberToTeam = async (teamId: number, userMail: string) => {
-  const response = await axiosInstance.post('/teams/members', {
-    team_id: teamId,
+  const response = await axiosInstance.post(`/teams/${teamId}/members`, {
     user_mail: userMail,
   })
   return response.data

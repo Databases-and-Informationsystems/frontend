@@ -1,5 +1,7 @@
 import React from 'react'
-import { Schema, Team } from '../types/types'
+import { Schema } from '@/types/schema'
+import { Link } from 'react-router'
+import { Team } from '@/types/user'
 
 interface ModalPropsCreate {
   isOpen: boolean
@@ -138,7 +140,15 @@ const Modal: React.FC<ModalProps> = (props) => {
 
         {'documents' in props && (
           <>
-            <p className="text-sm text-black">Schema: {props.schema?.name}</p>
+            <p className="text-sm text-black">
+              Schema:{' '}
+              <Link
+                to={`/dashboard/schemas/${props.schema?.id}`}
+                className="text-blue-600 hover:underline"
+              >
+                {props.schema?.name}
+              </Link>
+            </p>
             <p className="text-sm text-black">Team: {props.team?.name}</p>
             <div className="mt-4">
               <h3 className="font-semibold text-lg">Ongoing Projects</h3>
