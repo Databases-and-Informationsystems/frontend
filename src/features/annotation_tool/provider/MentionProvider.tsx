@@ -1,12 +1,14 @@
-import React, { createContext, useEffect } from "react";
-import { useMentions } from "../hooks/useMention";
+import React, { createContext, useState } from "react";
 import { Mention as MentionType } from "../types";
-import { fetchMentions } from "../api/mention";
+import { CreateMentionPayload, Mention, UpdateMentionPayload } from "../types/mention";
+import { createMention, updateMention, deleteMention, acceptMentionSuggestion, rejectMentionSuggestion } from "../api/mention";
 
 interface MentionContextType {
-  handleCreateMention: (mention: MentionType) => void;
-  handleDeleteMention: (mentionId: string) => void;
-  handleUpdateMention: (mentionId: string, newMention: MentionType) => void;
+  handleCreateMention: (payload: CreateMentionPayload) => void;
+  handleDeleteMention: (mentionId: number) => void;
+  handleUpdateMention: (mentionId: number, mention: UpdateMentionPayload) => void;
+  handleAcceptMention: (mentionId: number) => void;
+  handleRejectMention: (mentionId: number) => void;
   mentions: MentionType[];
   loading: boolean;
 }
@@ -14,40 +16,72 @@ interface MentionContextType {
 const MentionContext = createContext<MentionContextType | undefined>(undefined);
 
 interface MentionProviderProps {
+  initialMentions: MentionType[];
   children: React.ReactNode;
 }
 
-export const MentionProvider = ({ children }: MentionProviderProps) => {
-  const {
-    mentions,
-    setMentions,
-    loading,
-    setLoading,
-    handleCreateMention,
-    handleUpdateMention,
-    handleDeleteMention,
-  } = useMentions();
+export const MentionProvider = ({ children, initialMentions = [] }: MentionProviderProps) => {
+  const [mentions, setMentions] = useState<Mention[]>(initialMentions)
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const loadMentions = async () => {
-      setLoading(true);
-      try {
-        //TODO Remove conversion later on 
-        const data = await fetchMentions();
-        setMentions(data.map((mention) => ({
-          ...mention,
-          id: String(mention.id),
-          token_ids: mention.token_ids.map(String),
-          entity_id: String(mention.entity_id),
-        })));
-      } catch (err) {
-        console.error("Failed to fetch mentions:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadMentions();
-  }, [setMentions, setLoading]);
+  const handleCreateMention = async (payload: CreateMentionPayload) => {
+    try {
+      const createdMention = await createMention(payload)
+      setMentions((prev) => [...prev, createdMention])
+    } catch (err) {
+      console.error('Failed to create mention:', err)
+    }
+  }
+
+  const handleUpdateMention = async (
+    mentionId: number,
+    payload: UpdateMentionPayload
+  ) => {
+    try {
+      const updatedMention = await updateMention(mentionId, payload)
+      setMentions((prev) =>
+        prev.map((mention) =>
+          mention.id === updatedMention.id ? updatedMention : mention
+        )
+      )
+    } catch (err) {
+      console.error('Failed to update mention:', err)
+    }
+  }
+
+  const handleDeleteMention = async (mentionId: number) => {
+    try {
+      await deleteMention(mentionId)
+      setMentions((prev) => prev.filter((mention) => mention.id !== mentionId))
+    } catch (err) {
+      console.error('Failed to delete mention:', err)
+    }
+  }
+
+  const handleAcceptMention = async (mentionId: number) => {
+    try {
+      const acceptedMention = await acceptMentionSuggestion(mentionId)
+      // This should be fine, but can mix up the keys
+      // Reminder to myself, if there are performance issues: Create suggestions and mentions state
+      setMentions((prev) => {
+        const mentionsWithoutSuggestion = prev.filter(
+          (suggestion) => suggestion.id !== mentionId
+        )
+        return [...mentionsWithoutSuggestion, acceptedMention]
+      })
+    } catch (err) {
+      console.error('Failed to accept mention:', err)
+    }
+  }
+
+  const handleRejectMention = async (mentionId: number) => {
+    try {
+      await rejectMentionSuggestion(mentionId)
+      setMentions((prev) => prev.filter((mention) => mention.id !== mentionId))
+    } catch (err) {
+      console.error('Failed to reject mention:', err)
+    }
+  }
 
   return (
     <MentionContext.Provider value={{
@@ -56,6 +90,8 @@ export const MentionProvider = ({ children }: MentionProviderProps) => {
       handleCreateMention,
       handleUpdateMention,
       handleDeleteMention,
+      handleAcceptMention,
+      handleRejectMention,
     }}>
       {children}
     </MentionContext.Provider>

@@ -1,30 +1,41 @@
 import { useEffect } from 'react';
 import { AnnotatedText } from '../components/AnnotatedText';
 import { useMentionContext } from '../context/useMentionContext';
-import { useSelection } from '../hooks/useSelection';
-import { useTokens } from '../hooks/useTokens';
+import { useTokens } from '../context/useTokens';
+import { useStepNavigation } from '../hooks/useStepNavigation';
 
 export const MentionSuggestionStep = () => {
-  const { tokens } = useTokens();
+  const { tokens, loading: tokenLoading, error } = useTokens();
   const { mentions, loading } = useMentionContext();
-  const { currentStep, setCurrentStep } = useSelection();
+  const { step, handleStepChange } = useStepNavigation();
 
   const hasSuggestions = mentions.some(mention => mention.isShownRecommendation === true);
 
   useEffect(() => {
-    if(!loading && !hasSuggestions) {
-      setCurrentStep(currentStep + 1);
+    if (!loading && !hasSuggestions && step === 'mentionSuggestion') {
+      handleStepChange('mentionEditing');
     }
-  }, [hasSuggestions, setCurrentStep, currentStep, loading]);
+  }, [handleStepChange, hasSuggestions, loading, step]);
 
   if (loading) {
-    return <p>Loading suggestions...</p>; // Ladeanzeige
+    return <p>Loading suggestions...</p>;
+  }
+
+  if (tokenLoading) {
+    return <p>Loading tokens...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!hasSuggestions) {
+    return <p>No suggestions available. This step is complete.</p>;
   }
 
   return (
     <>
-      <div>First Step</div>
-      <AnnotatedText tokens={tokens} />
+      <AnnotatedText tokens={tokens} showDeleteButton={false} />
     </>
   )
 }

@@ -1,11 +1,9 @@
 import { Mention as MentionType } from '../types/mention'
 import { Badge } from '@/components/ui/badge';
-import { useSelection } from '../hooks/useSelection';
+import { useSelection } from '../context/useSelection';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Check, Clock, Trash2 } from 'lucide-react';
-import { useTokens } from '../hooks/useTokens';
-import { useSchema } from '../hooks/useSchema';
 
 interface MentionProps {
   mention: MentionType;
@@ -16,30 +14,16 @@ interface MentionProps {
 export const Mention = ({ mention, showDeleteButton = true, isInRelation = false }: MentionProps) => {
   const { selectedMentions, handleMentionClick } = useSelection();
   const { handleDeleteMention } = useMentionContext();
-  const { tokens } = useTokens();
-  const { schema } = useSchema();
 
-
-  const isSelected = selectedMentions.includes(mention.id);
-
-  const getMentionColor = (tag: string) => {
-    const mention = schema!.mentions.find(mention => mention.tag === tag)
-    return mention ? mention.color : '#000'
-  }
-
-
-  const mentionTokens = tokens.filter((token) => (
-    mention.token_ids.includes(token.id)
-  ));
-
+  const isSelected = selectedMentions.some((selectedMention) => selectedMention.id === mention.id);
 
   return (
-    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'}`}
+    <span className={`select-none cursor-pointer inline-flex items-center p-1 text-xl font-semibold border rounded-lg ${isSelected ? 'border-gray-300 border-4' : 'border-gray-300'} ${mention.isShownRecommendation ? 'opacity-50' : ''}`}
       onClick={() => handleMentionClick(mention.id)}
-      style={{ backgroundColor: getMentionColor(mention.tag) }}
+      style={{ backgroundColor: mention.schema_mention.color }}
     >
       <span>
-        {mentionTokens.map((token) => (
+        {mention.tokens.map((token) => (
           <span key={token.id}>
             {token.text}
             &nbsp;

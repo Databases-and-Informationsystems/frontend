@@ -24,7 +24,7 @@ const AppRoutes = () => {
           <Route path="schemas" element={<SchemasPage />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-        <Route path="/annotation" element={<AnnotationLayout/>} />
+        <Route path="/annotation/:docEditId" element={<AnnotationLayout/>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />
