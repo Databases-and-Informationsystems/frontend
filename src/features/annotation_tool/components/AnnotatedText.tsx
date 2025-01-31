@@ -1,0 +1,87 @@
+import React from 'react'
+import { Mention as MentionType, Token as TokenType } from '../types'
+import { Token } from './Token';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMentionContext } from '../context/useMentionContext';
+import { EnhancedMention } from './EnhancedMention';
+
+interface AnnotatedTextProps {
+  tokens: TokenType[];
+  showDeleteButton?: boolean;
+}
+
+export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) => {
+  const { mentions, loading } = useMentionContext();
+
+  if (loading) {
+    return <p>Loading mentions...</p>;
+  }
+
+  const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
+    mentions.find(mention => mention.tokens.some(token => token.id === tokenId)));
+
+
+  // Group tokens by sentence index
+  const groupedTokensBySentence = tokens.reduce((acc, token) => {
+    if (!acc[token.sentence_index]) {
+      acc[token.sentence_index] = [];
+    }
+    acc[token.sentence_index].push(token);
+    return acc;
+  }, {} as Record<number, TokenType[]>);
+
+
+  // Render each sentence with its tokens and mentions
+  const renderAnnotatedSentence = (sentenceTokens: TokenType[]) => {
+    const renderedTokenIds = new Set<number>();
+
+    return sentenceTokens.map((token) => {
+      if (renderedTokenIds.has(token.id)) {
+        return null;
+      }
+
+      const mention = getMentionByTokenId(token.id);
+
+      if (mention) {
+        const mentionTokens = sentenceTokens.filter((token) => (
+          mention.tokens.some(mentionToken => mentionToken.id === token.id)
+        ));
+
+        mentionTokens.forEach((token) => renderedTokenIds.add(token.id));
+
+        return (
+          <React.Fragment key={`mention-fragment-${token.id}`}>
+            <EnhancedMention
+              key={`mention-${mention.id}`}
+              mention={mention} 
+              showDeleteButton={showDeleteButton}
+              />
+            &nbsp;
+          </React.Fragment>
+        );
+      }
+      renderedTokenIds.add(token.id);
+      return (
+        <React.Fragment key={`token-fragment-${token.id}`}>
+          <Token key={token.id} token={token} />
+          &nbsp;
+        </React.Fragment>
+      );
+    })
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Annotated Text</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {Object.entries(groupedTokensBySentence).map(([index, sentenceTokens]) => (
+          <div key={`sentence-${index}`}>
+            {renderAnnotatedSentence(sentenceTokens)}
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}

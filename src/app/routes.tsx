@@ -1,3 +1,4 @@
+import { AnnotationLayout } from '@/features/annotation_tool/components/AnnotationLayout'
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
 import { Routes, Route, Navigate } from 'react-router'
 import Dashboard from '@/features/dashboard/pages/Dashboard'
