@@ -49,8 +49,8 @@ export const createDocument = async (
   fileContent: string
 ): Promise<Document> => {
   const response = await axiosInstance.post(
-    `/projects/${projectId}/documents`,
-    { name: fileName, content: fileContent }
+    `/documents`,
+    { file_name: fileName, file_content: fileContent, project_id: projectId },
   )
   return response.data
 }

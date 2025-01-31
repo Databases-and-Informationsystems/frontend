@@ -19,13 +19,13 @@ import { DocumentEdit } from '../types/documentEdit';
 import { fetchDocumentEdit } from '../api/documentEdit';
 
 export const AnnotationLayout = () => {
-  const { docEditId } = useParams();
+  const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [annotationData, setAnnotationData] = useState<DocumentEdit>();
 
   useEffect(() => {
-    if (!docEditId) {
+    if (!id) {
       setError('Document edit id is missing');
       setLoading(false);
       return;
@@ -33,7 +33,7 @@ export const AnnotationLayout = () => {
 
     const fetchAnnotationData = async () => {
       try {
-        const data = await fetchDocumentEdit(Number(docEditId));
+        const data = await fetchDocumentEdit(Number(id));
         setAnnotationData(data);
       } catch (err) {
         setError('Failed to fetch annotation data: ' + err);
@@ -44,7 +44,7 @@ export const AnnotationLayout = () => {
     };
 
     fetchAnnotationData();
-  }, [docEditId]);
+  }, [id]);
 
   if (loading) {
     return <div>Loading Document Details...</div>;
@@ -62,9 +62,9 @@ export const AnnotationLayout = () => {
   return (
     <TokenProvider documentId={annotationData.document.id}>
       <SchemaProvider schemaId={annotationData.schema_id}>
+      <MentionProvider initialMentions={annotationData.mentions}>
         <SelectionProvider>
-          <MentionProvider initialMentions={annotationData.mentions}>
-            <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(docEditId)}>
+            <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
               <div className='p-6'>
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                   Annotation Document
@@ -75,8 +75,9 @@ export const AnnotationLayout = () => {
                 <ModeToggle />
               </div>
             </RelationProvider>
-          </MentionProvider>
+          
         </SelectionProvider>
+        </MentionProvider>
       </SchemaProvider>
     </TokenProvider>
   )

@@ -1,7 +1,7 @@
-import { Schema } from "@/features/schema/types/types";
 import axiosInstance from "@/lib/axios";
+import { Schema } from "@/types/schema";
 
 export const fetchSchema = async (schemaId: number): Promise<Schema> => {
-  const response = await axiosInstance.get(`/schema/${schemaId}`);
-  return response.data.schema;
+  const response = await axiosInstance.get(`/schemas/${schemaId}`);
+  return response.data;
 }

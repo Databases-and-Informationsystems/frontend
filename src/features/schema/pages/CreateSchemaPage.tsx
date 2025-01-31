@@ -291,7 +291,7 @@ const CreateSchemaPage = () => {
                     onCheckedChange={(checked) => {
                       handleMentionChange(index, 'entityPossible', checked)
                     }}
-                    label="Entity Possible"
+                    //label="Entity Possible"
                   />
                 </div>
               </div>
@@ -550,7 +550,7 @@ const CreateSchemaPage = () => {
                     onCheckedChange={(checked) =>
                       handleConstraintChange(index, 'is_directed', checked)
                     }
-                    label="Is Directed"
+                    //label="Is Directed"
                   />
                 </div>
               </div>

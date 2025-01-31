@@ -3,9 +3,11 @@ import { AnnotatedText } from '../components/AnnotatedText';
 import { useMentionContext } from '../context/useMentionContext';
 import { useTokens } from '../context/useTokens';
 import { useStepNavigation } from '../hooks/useStepNavigation';
+import { useSchema } from '../context/useSchema';
 
 export const MentionSuggestionStep = () => {
   const { tokens, loading: tokenLoading, error } = useTokens();
+  const { loading: schemaLoading } = useSchema();
   const { mentions, loading } = useMentionContext();
   const { step, handleStepChange } = useStepNavigation();
 
@@ -19,6 +21,10 @@ export const MentionSuggestionStep = () => {
 
   if (loading) {
     return <p>Loading suggestions...</p>;
+  }
+
+  if (schemaLoading) {
+    return <p>Loading schema...</p>;
   }
 
   if (tokenLoading) {
