@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { fetchSchema } from "../api/schema";
-import { Schema } from "@/features/schema/types/types";
+import { Schema } from "@/types/schema";
 
 interface SchemaContextType {
   schema: Schema | null;
@@ -23,7 +23,9 @@ export const SchemaProvider = ({ children, schemaId }: SchemaProviderProps) => {
   useEffect(() => {
     const loadSchema = async () => {
       try {
+        console.log(schemaId);
         const data = await fetchSchema(schemaId);
+        console.log(data);
         setSchema(data);
       } catch (err) {
         setError("Failed to fetch schema: " + err);

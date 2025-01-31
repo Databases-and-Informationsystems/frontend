@@ -6,7 +6,7 @@ import {
   SchemaRelation,
   SchemaWrapper
 } from '@/types/schema'
-import { Team } from '@/features/dashboard/types/types'
+import { Team } from '@/types/user'
 
 export const getSchema = async (id: number): Promise<Schema> => {
   const response = await axiosInstance.get<Schema>(`/schemas/${id}`)
@@ -15,6 +15,7 @@ export const getSchema = async (id: number): Promise<Schema> => {
 
 export const getSchemas = async () : Promise<Schema[]> => {
   const response = await axiosInstance.get<SchemaWrapper>(`schemas`)
+  console.log(response.data.schemas)
   return response.data.schemas
 }
 

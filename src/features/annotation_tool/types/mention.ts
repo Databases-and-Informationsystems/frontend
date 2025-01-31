@@ -1,4 +1,5 @@
-import { SchemaMention } from "@/features/schema/types/types";
+
+import { SchemaMention } from "@/types/schema";
 import { Token } from "./token";
 
 export type Mention = {

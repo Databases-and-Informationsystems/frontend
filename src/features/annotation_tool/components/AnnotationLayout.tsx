@@ -61,8 +61,8 @@ export const AnnotationLayout = () => {
   return (
     <TokenProvider documentId={annotationData.document.id}>
       <SchemaProvider schemaId={annotationData.schema_id}>
+      <MentionProvider initialMentions={annotationData.mentions}>
         <SelectionProvider>
-          <MentionProvider initialMentions={annotationData.mentions}>
             <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
               <div className='p-6'>
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -74,8 +74,9 @@ export const AnnotationLayout = () => {
                 <ModeToggle />
               </div>
             </RelationProvider>
-          </MentionProvider>
+          
         </SelectionProvider>
+        </MentionProvider>
       </SchemaProvider>
     </TokenProvider>
   )
