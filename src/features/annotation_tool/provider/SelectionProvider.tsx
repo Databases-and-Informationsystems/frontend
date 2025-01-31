@@ -33,10 +33,10 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
     resetMentions();
 
     const currentToken = allTokens.find((token) => token.id === tokenId);
-    if(!currentToken) return;
+    if (!currentToken) return;
 
     const alreadySelected = selectedTokens.some((token) => token.id === tokenId);
-    if(alreadySelected) {
+    if (alreadySelected) {
       setSelectedTokens(selectedTokens.filter((token) => token.id !== tokenId));
       return;
     }

@@ -22,7 +22,7 @@ interface MentionProviderProps {
 
 export const MentionProvider = ({ children, initialMentions = [] }: MentionProviderProps) => {
   const [mentions, setMentions] = useState<Mention[]>(initialMentions)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const handleCreateMention = async (payload: CreateMentionPayload) => {
     try {
