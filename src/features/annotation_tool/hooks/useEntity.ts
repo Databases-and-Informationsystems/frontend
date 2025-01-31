@@ -9,7 +9,7 @@ export const useEntity = () => {
   const [loading, setLoading] = useState(false)
   const { mentions } = useMentionContext();
 
-  const doc_edit_id = 1; //TODO get correct value
+  const doc_edit_id = 2; //TODO get correct value
 
   useEffect(() => {
     fetchEntities()
@@ -19,7 +19,7 @@ export const useEntity = () => {
     setLoading(true)
     try {
       const response = await getEntities(doc_edit_id) //get the Entities for a document
-      setEntities(response)
+      setEntities(response.entities)
     } catch (e) {
       console.log(e)
     } finally {

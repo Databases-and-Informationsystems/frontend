@@ -10,7 +10,7 @@ import { Mention as MentionType } from '@/features/annotation_tool/types'
 
 const EntitySelection = () => {
 
-  const hasRun = useRef(false);
+  /*const hasRun = useRef(false);
   const renderCount = useRef(0);
   useEffect(() => {
     renderCount.current++;
@@ -18,11 +18,17 @@ const EntitySelection = () => {
       hasRun.current = true;
     }
     hasRun.current = !hasRun.current;
-  })
+  })*/
 
   const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
   const { mentions, loading, handleUpdateMention } = useMentionContext();
-  const entityIds = entities?.map((entity) => entity.id) || [];
+
+  /*if (eLoading) {
+    return (<p>Loading Entities...</p>)
+  }*/
+
+  console.log("%c Before mapping: ", "color: orange", entities);
+  const entityIds = Array.isArray(entities) ? entities?.map((entity) => entity.id) : [];
 
   /*const createSingleMentionEntities = () => {
     /**
@@ -123,6 +129,8 @@ const EntitySelection = () => {
     return (<p>Loading Mentions...</p>)
   }
 
+  console.log("Mentions: ",JSON.stringify(mentions));
+
   /*entities.map((entity) => {
     if(entity.mention_ids.length === 0) {
       handleDeleteEntity(entity.id.toString());
@@ -155,6 +163,8 @@ const EntitySelection = () => {
     >
       <div className={css_left}>
         <p className={"text-orange-600"}>/* TODO: left scroll */</p>
+        {/*<p>Current Entity array: {JSON.stringify(entities)}</p>*/}
+        <p>Current eIds array: {JSON.stringify(entityIds)}</p>
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           {/*<TokenProvider>*/}
           <MultipleDroppables
