@@ -1,14 +1,7 @@
-import axios from "axios";
-import { Schema } from "../types";
+import { Schema } from "@/features/schema/types/types";
+import axiosInstance from "@/lib/axios";
 
-const BASE_URL = 'http://localhost:3000/schema'
-
-export const fetchSchema = async (): Promise<Schema> => {
-  try {
-    const response = await axios.get(BASE_URL)
-    return response.data
-  } catch (error) {
-    console.error('Failed to fetch schema:', error)
-    throw error
-  }
+export const fetchSchema = async (schemaId: number): Promise<Schema> => {
+  const response = await axiosInstance.get(`/schema/${schemaId}`);
+  return response.data.schema;
 }

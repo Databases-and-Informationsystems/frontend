@@ -1,13 +1,16 @@
 import React, { createContext, useState } from "react";
-import { useTokens } from "../hooks/useTokens";
+import { useTokens } from "../context/useTokens";
+import { Mention, Token } from "../types";
+import { useMentionContext } from "../context/useMentionContext";
+import { useStepNavigation } from "../hooks/useStepNavigation";
 
 interface SelectionContextType {
-  selectedTokens: string[];
-  selectedMentions: string[];
-  setCurrentStep: (step: number) => void;
-  currentStep: number;
-  handleTokenClick: (tokenId: string, sentenceIndex: number) => void;
-  handleMentionClick: (mentionId: string) => void;
+  selectedTokens: Token[];
+  selectedMentions: Mention[];
+
+  handleTokenClick: (tokenId: number, sentenceIndex: number) => void;
+  handleMentionClick: (mentionId: number) => void;
+
   resetTokens: () => void;
   resetMentions: () => void;
 }
@@ -19,71 +22,72 @@ interface SelectionProviderProps {
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
-  const { tokens: initialTokens } = useTokens();
-  const [currentStep, setCurrentStep] = useState<number>(3);
-  const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
-  const [selectedMentions, setSelectedMentions] = useState<string[]>([]);
+  const { tokens: allTokens } = useTokens();
+  const { mentions: allMentions } = useMentionContext();
+  const { step } = useStepNavigation();
+  const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
+  const [selectedMentions, setSelectedMentions] = useState<Mention[]>([]);
 
   // Select Tokens and reset selected Mentions
-  const handleTokenClick = (tokenId: string, sentenceIndex: number) => {
-    setSelectedMentions([]);
+  const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
+    resetMentions();
 
-    if (selectedTokens.includes(tokenId)) {
-      setSelectedTokens(selectedTokens.filter((id) => id !== tokenId));
+    const currentToken = allTokens.find((token) => token.id === tokenId);
+    if (!currentToken) return;
+
+    const alreadySelected = selectedTokens.some((token) => token.id === tokenId);
+    if (alreadySelected) {
+      setSelectedTokens(selectedTokens.filter((token) => token.id !== tokenId));
       return;
     }
 
-    const currentToken = initialTokens.find((token) => token.id === tokenId);
-    if (!currentToken) return;
-
     if (selectedTokens.length === 0) {
-      setSelectedTokens([currentToken.id]);
+      setSelectedTokens([currentToken]);
       return;
     }
 
     // Check if current token is adjacent to the selected tokens
-    const isAdjacent = selectedTokens.some((selectedId) => {
-      const selectedToken = initialTokens.find((token) => token.id === selectedId);
+    const isAdjacent = selectedTokens.some((selectTok) => {
       return (
-        selectedToken &&
-        Math.abs(selectedToken.index_in_document - currentToken.index_in_document) === 1 &&
-        selectedToken.sentence_index === sentenceIndex
+        Math.abs(selectTok.document_index - currentToken.document_index) === 1 &&
+        selectTok.sentence_index === sentenceIndex
       );
     });
 
     if (isAdjacent) {
-      setSelectedTokens([...selectedTokens, currentToken.id]);
+      setSelectedTokens([...selectedTokens, currentToken]);
     } else {
-      setSelectedTokens([currentToken.id]);
+      setSelectedTokens([currentToken]);
     }
   };
 
-  const handleMentionClick = (mentionId: string) => {
-    setSelectedTokens([]);
+  const handleMentionClick = (mentionId: number) => {
+    resetTokens();
 
-    // Deselect mention if it is already selected
-    if (selectedMentions.includes(mentionId)) {
-      setSelectedMentions(
-        selectedMentions.filter((id) => id !== mentionId)
-      );
+    const mention = allMentions.find((mention) => mention.id === mentionId);
+    if (!mention) return;
+
+    const alreadySelected = selectedMentions.some((mention) => mention.id === mentionId);
+    if (alreadySelected) {
+      setSelectedMentions(selectedMentions.filter((mention) => mention.id !== mentionId));
       return;
     }
 
     // Mention step
-    if (currentStep === 2) {
-      setSelectedMentions([mentionId]);
+    if (step === 'mentionEditing') {
+      setSelectedMentions([mention]);
       return;
     }
 
     // Entity step
-    if (currentStep === 5) {
-      setSelectedMentions([...selectedMentions, mentionId]);
+    if (step === 'entitySelection') {
+      setSelectedMentions([...selectedMentions, mention]);
     }
 
     // Relation step
-    if (currentStep === 4) {
+    if (step === 'relationEditing') {
       if (selectedMentions.length < 2) {
-        setSelectedMentions([...selectedMentions, mentionId]);
+        setSelectedMentions([...selectedMentions, mention]);
       }
       return;
     }
@@ -102,8 +106,6 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
       value={{
         selectedTokens,
         selectedMentions,
-        setCurrentStep,
-        currentStep,
         handleTokenClick,
         handleMentionClick,
         resetTokens,

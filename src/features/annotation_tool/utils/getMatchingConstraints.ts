@@ -1,21 +1,15 @@
+import { SchemaConstraint } from "@/features/schema/types/types"
 import { Mention } from "../types"
-import { DependenciesSchema, MentionSchema } from "../types/schema"
+
 
 
 export const getMatchingConstraints = (
   mentionHead: Mention,
   mentionTail: Mention,
-  schemaContraints: DependenciesSchema[] ,
-  schemaMentions: MentionSchema[]
+  schemaContraints: SchemaConstraint[] ,
 ) => {
-  // Workaround for now, until we have the option to compare the ids
-  const mentionHeadSchemaId = schemaMentions.find(
-    (schemaMention) => schemaMention.tag === mentionHead.tag
-  )?.id
-
-  const mentionTailSchemaId = schemaMentions.find(
-    (schemaMention) => schemaMention.tag === mentionTail.tag
-  )?.id
+  const mentionHeadSchemaId = mentionHead.schema_mention.id
+  const mentionTailSchemaId = mentionTail.schema_mention.id
 
   if (!mentionHeadSchemaId || !mentionTailSchemaId) {
     return []
@@ -23,16 +17,16 @@ export const getMatchingConstraints = (
 
   return schemaContraints.filter((constraint) => {
     const directMatch =
-      constraint.isDirected &&
-      constraint.schema_mention_head_id === mentionHeadSchemaId &&
-      constraint.schema_mention_tail_id === mentionTailSchemaId
+      constraint.is_directed &&
+      constraint.schema_mention_head.id === mentionHeadSchemaId &&
+      constraint.schema_mention_tail.id === mentionTailSchemaId
 
     const reverseMatch =
-      !constraint.isDirected &&
-      ((constraint.schema_mention_head_id === mentionHeadSchemaId &&
-        constraint.schema_mention_tail_id === mentionTailSchemaId) ||
-        (constraint.schema_mention_head_id === mentionTailSchemaId &&
-          constraint.schema_mention_tail_id === mentionHeadSchemaId))
+      !constraint.is_directed &&
+      ((constraint.schema_mention_head.id === mentionHeadSchemaId &&
+        constraint.schema_mention_tail.id === mentionTailSchemaId) ||
+        (constraint.schema_mention_head.id === mentionTailSchemaId &&
+          constraint.schema_mention_tail.id === mentionHeadSchemaId))
 
     return directMatch || reverseMatch
   })

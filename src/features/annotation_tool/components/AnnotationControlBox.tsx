@@ -1,59 +1,63 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useSelection } from '../hooks/useSelection'
+import { useSelection } from '../context/useSelection'
 import { Button } from '@/components/ui/button';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
-import { useSchema } from '../hooks/useSchema';
+import { useSchema } from '../context/useSchema';
+import { useStepNavigation } from '../hooks/useStepNavigation';
+import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
 
 export const AnnotationControlBox = () => {
-  const { currentStep, selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
-  const { mentions, handleCreateMention, handleUpdateMention } = useMentionContext();
+  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
+  const { handleCreateMention, handleUpdateMention } = useMentionContext();
+  const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
-  const { schema } = useSchema();
+  const { schema, loading, error } = useSchema();
 
-  const createMention = (tokens: string[], tag: string) => {
-    handleCreateMention({
-      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
-      tag: tag,
-      isShownRecommendation: false,
-      token_ids: tokens
-    })
+  if (loading) {
+    return <div>Loading schema...</div>;
+  }
+
+  if (error) {
+    return <div>Error Schema: {error}</div>;
+  }
+
+  const createMention = (tokens: Token[], schemaId: number) => {
+    const payload: CreateMentionPayload = {
+      schema_mention_id: schemaId,
+      document_edit_id: 0, // Access document_edit_id from context
+      token_ids: tokens.map(token => token.id),
+    };
+    handleCreateMention(payload);
     resetTokens()
   }
 
-
-  const getMentionById = (id: string) => {
-    return mentions.find(mention => mention.id === id)
-  }
-
-
-  const updateMention = (mentionId: string, tag: string) => {
-    let mentionToUpdate = getMentionById(mentionId)
-    if (!mentionToUpdate) return
-    mentionToUpdate = {
-      ...mentionToUpdate,
-      tag: tag
+  const updateMention = (mention: Mention, schemaId: number) => {
+    const payload: UpdateMentionPayload = {
+      schmea_mention_id: schemaId,
+      token_ids: mention.tokens.map(token => token.id),
+      entity_id: mention.entity_id,
     }
-    handleUpdateMention(mentionToUpdate.id, mentionToUpdate)
+    handleUpdateMention(mention.id, payload);
     resetMentions()
   }
 
 
-  const createRelation = (mentionIds: string[], tag: string) => {
-    handleCreateRelation({
-      id: String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
-      tag,
-      isDirected: false,
-      isShownRecommendation: false,
-      mention_head_id: mentionIds[0],
-      mention_tail_id: mentionIds[1],
-    });
+  const createRelation = (mentions: Mention[], schemaId: number) => {
+    const payload: CreateRelationPayload = {
+      schema_relation_id: schemaId,
+      document_edit_id: 0, // Access document_edit_id from context
+      isDirected: false, // Access isDirected from context
+      mention_head_id: mentions[0].id,
+      mention_tail_id: mentions[1].id,
+    }
+    handleCreateRelation(payload);
     resetMentions();
   }
 
 
-  if (currentStep === 2 && selectedTokens.length > 0) {
+  if (step === 'mentionEditing' && selectedTokens.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -62,13 +66,13 @@ export const AnnotationControlBox = () => {
           </CardTitle>
           <CardContent>
             <div>
-              {schema?.mentions.map((mention) => (
+              {schema?.schema_mentions.map((schemaMention) => (
                 <Button
-                  onClick={() => createMention(selectedTokens, mention.tag)}
-                  key={mention.id}
+                  onClick={() => createMention(selectedTokens, schemaMention.id)}
+                  key={schemaMention.id}
                   className='mr-2'
-                  style={{ backgroundColor: mention.color }}>
-                  {mention.tag}
+                  style={{ backgroundColor: schemaMention.color }}>
+                  {schemaMention.tag}
                 </Button>
               ))}
             </div>
@@ -77,7 +81,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (currentStep === 2 && selectedMentions.length > 0) {
+  if (step === 'mentionEditing' && selectedMentions.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -87,13 +91,13 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           <div>
-            {schema?.mentions.map((mention) => (
+            {schema?.schema_mentions.map((schemaMention) => (
               <Button
-                onClick={() => updateMention(selectedMentions[0], mention.tag)}
-                key={mention.id}
+                onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
+                key={schemaMention.id}
                 className='mr-2'
-                style={{ backgroundColor: mention.color }}>
-                {mention.tag}
+                style={{ backgroundColor: schemaMention.color }}>
+                {schemaMention.tag}
               </Button>
             ))}
           </div>
@@ -101,9 +105,9 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (currentStep === 4 && selectedMentions.length === 2) {
-    const mentionHead = getMentionById(selectedMentions[0]);
-    const mentionTail = getMentionById(selectedMentions[1]);
+  if (step === 'relationEditing' && selectedMentions.length === 2) {
+    const mentionHead = selectedMentions[0];
+    const mentionTail = selectedMentions[1];
 
     if (!mentionHead || !mentionTail) {
       return;
@@ -112,8 +116,7 @@ export const AnnotationControlBox = () => {
     const matchingConstraints = getMatchingConstraints(
       mentionHead,
       mentionTail,
-      schema!.dependencies,
-      schema!.mentions
+      schema!.schema_constraints
     );
 
     if (matchingConstraints.length === 0) {
@@ -140,13 +143,13 @@ export const AnnotationControlBox = () => {
         </CardHeader>
         <CardContent>
           {matchingConstraints.map((constraint) => {
-            const relation = schema?.relations.find(
-              (relation) => relation.id === constraint.schema_relation_id
+            const relation = schema?.schema_relations.find(
+              (schemaRelation) => schemaRelation.id === constraint.schema_relation.id
             );
             return (
               <Button
                 key={constraint.id}
-                onClick={() => createRelation(selectedMentions, relation?.tag || '')}
+                onClick={() => createRelation(selectedMentions, constraint.schema_relation.id)}
                 className='mr-2'>
                 {relation?.tag || ''}
               </Button>
