@@ -33,8 +33,12 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
 
   //get all mention ids for the current entity id
   const getMentionIdsById = (id) => {
-    const entity = allEntities.find((item) => item.id === id);
-    return entity ? entity.mention_ids : [];
+    const entity = allEntities.find((item) => item.id == id);
+    //console.log('%cgetMentionIdsById found: ',"color: #921e96", JSON.stringify(entity), "for id", id);
+    if (entity && entity.mentions) {
+      return entity.mentions.map((mention) => mention.id);
+    }
+    return [];
   };
 
   let css_border = "border-2 border-solid border-gray-400 mb-1 min-h-20 flex flexEins"

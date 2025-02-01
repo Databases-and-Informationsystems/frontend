@@ -32,7 +32,7 @@ const AppRoutes = () => {
           <Route path="settings" element={<Settings />} />
           <Route path="heatmap/:id" element={<Heatmap />} />
         </Route>
-        <Route path="/annotation/:docEditId" element={<AnnotationLayout/>} />
+        <Route path="/annotation/:id" element={<AnnotationLayout/>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />

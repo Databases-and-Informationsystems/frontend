@@ -129,7 +129,7 @@ const EntitySelection = () => {
     return (<p>Loading Mentions...</p>)
   }
 
-  console.log("Mentions: ",JSON.stringify(mentions));
+  //console.log("Entities: ",JSON.stringify(entities));
 
   /*entities.map((entity) => {
     if(entity.mention_ids.length === 0) {
