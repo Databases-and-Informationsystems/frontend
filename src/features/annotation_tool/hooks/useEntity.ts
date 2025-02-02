@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
-import { AnnotationEntity } from '../types'
-import { createEntity, deleteEntity, updateEntity, fetchEntities as getEntities } from '../api/annotationEntityHelper'
+import { AnnotationEntity, Mention, UpdateMentionPayload } from '../types'
+import {
+  createEntity,
+  deleteEntity,
+  fetchEntities as getEntities,
+  updateEntity,
+} from '../api/annotationEntityHelper'
 import { updateMention } from '@/features/annotation_tool/api/mention.ts'
 import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
 
 export const useEntity = () => {
   const [entities, setEntities] = useState<AnnotationEntity[]>([])
   const [loading, setLoading] = useState(false)
-  const { mentions } = useMentionContext();
+  const { mentions } = useMentionContext()
 
-  const doc_edit_id = 2; //TODO get correct value
+  const doc_edit_id = 2 //TODO get correct value
 
   useEffect(() => {
     fetchEntities()
@@ -43,9 +48,9 @@ export const useEntity = () => {
   const handleCreateEntityViaElements = (eId: any, mIds: number[]) => {
     const newEntity: AnnotationEntity = {
       id: eId,
-      mention_ids: mIds
+      mention_ids: mIds,
     }
-    handleCreateEntity(newEntity);
+    handleCreateEntity(newEntity)
   }
 
   const handleCreateEntity = async (newEntity: AnnotationEntity) => {
@@ -65,30 +70,39 @@ export const useEntity = () => {
   //   //EntityState is possibly not updated - TOCHECK
   // }
 
+  const getTokenIds = (mentionId: number) => {
+    const mention = mentions.find((ment) => ment.id == mentionId);
+    if (mention) {
+      return mention.tokens.map((token) => token.id);
+    }
+    return [];
+  };
+
   const handleAddToEntity = async (entityId: any, mentionId: any) => {
     setEntities((prevEntities) => {
       return prevEntities.map((ent) => {
         if (ent.id == entityId) {
-          const newMentionIds = ent.mention_ids.includes(mentionId)
-            ? ent.mention_ids
-            : [...ent.mention_ids, mentionId]
-          let mToChange = {
+          const mToChange: Mention = {
             ...mentions.find((ment) => ment.id == mentionId),
-            entity_id: entityId.toString(),
+            entity_id: entityId,
           }
-          const eChanged = ent;
-          eChanged.mention_ids = newMentionIds;
-          console.log("Changed Entity: ", JSON.stringify(eChanged));
-          updateMention(mentionId.toString(), mToChange)
+          const eChanged = ent
+          eChanged.mentions = [...ent.mentions, mToChange]
+          console.log('Changed Entity: ', JSON.stringify(eChanged))
+          const mPayload: UpdateMentionPayload = {
+            token_ids: getTokenIds(mentionId),
+            schmea_mention_id: mToChange.schema_mention.id,
+            entity_id: entityId
+          }
+          updateMention(mentionId, mPayload)
           updateEntity(entityId.toString(), eChanged)
           console.log('Add Mention ${mentionId} to Entity id ${entityId}')
-          return { ...ent, mention_ids: newMentionIds }
+          return { ...ent, mentions: eChanged.mentions }
         }
         return ent
       })
     })
   }
-
 
   // const handleRemoveFromEntity = async (entityId: any, mentionId: any) => {
   //   const entity = getEntityById(entityId)
@@ -101,34 +115,38 @@ export const useEntity = () => {
     entityId: string | number,
     mentionId: string | number
   ) => {
-
     const newEntitiyPromises = await entities.map(async (ent) => {
       if (ent.id == entityId) {
         const newMentionIds = ent.mention_ids.filter((m) => m != mentionId)
 
-        let mToChange = mentions.find((ment) => ment.id == mentionId);
-        mToChange.entity_id = "";
-        ent.mention_ids = newMentionIds;
+        let mToChange = mentions.find((ment) => ment.id == mentionId)
+        mToChange.entity_id = ''
+        ent.mention_ids = newMentionIds
 
-        await updateMention(mentionId.toString(), mToChange);
-        await updateEntity(entityId.toString(), ent);
+        await updateMention(mentionId.toString(), mToChange)
+        //await updateEntity(entityId.toString(), ent); not needed anymore due to backend
         console.log(
           `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
         )
         return ent
       }
       return ent
-    });
-    const newEntities = await Promise.all(newEntitiyPromises); //Parallel waiting for all promises to arrive
+    })
+    const newEntities = await Promise.all(newEntitiyPromises) //Parallel waiting for all promises to arrive
 
     console.log('Updated Entities nach Remove:', newEntities)
 
-    const currEntity = getEntityById(entityId);
+    const currEntity = getEntityById(entityId)
     if (currEntity.mention_ids.length === 0) {
-      console.log("Entity with id: ", entityId, " now has these mentions: ", JSON.stringify(currEntity.mention_ids));
-      handleDeleteEntity(entityId);
-    }else {
-      setEntities(newEntities);
+      console.log(
+        'Entity with id: ',
+        entityId,
+        ' now has these mentions: ',
+        JSON.stringify(currEntity.mention_ids)
+      )
+      handleDeleteEntity(entityId)
+    } else {
+      setEntities(newEntities)
     }
   }
 

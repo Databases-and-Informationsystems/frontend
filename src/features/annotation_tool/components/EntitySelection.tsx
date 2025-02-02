@@ -92,8 +92,8 @@ const EntitySelection = () => {
     dr1: [],
   })
 
-  const getEntityByMentionId = (mId: string) => (
-    entities.find(ent => ent.mention_ids.includes(mId)));
+  const getEntityByMentionId = (mId: number) => (
+    entities.find(ent => ent.mentions.some(mention => mention.id === mId)));
 
   function handleDragStart(event) {
     setActiveId(event.active.id)
@@ -110,13 +110,12 @@ const EntitySelection = () => {
       let tempM = getMentionById(active.id);
       let tempE = getEntityById(over.id);
       console.log(`Has tag ${tempM.tag}`);
-      const entry = tempE.mention_ids[0];
+      const entry = tempE.mentions[0].id;
       const typeMInE = getMentionById(entry).tag;
       const fromEntity = getEntityByMentionId(active.id).id;
       if (typeMInE === tempM.tag && fromEntity != over.id) {
         console.log("Can be inserted");
         handleRemoveFromEntity(fromEntity, active.id);
-        while (eLoading) {}
         handleAddToEntity(over.id, active.id);
       }else {
         console.log("Can't be inserted");
