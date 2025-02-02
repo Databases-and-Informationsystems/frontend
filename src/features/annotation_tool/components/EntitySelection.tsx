@@ -145,7 +145,7 @@ const EntitySelection = () => {
   /**
    * Enables or disables a dev-mode to check the boundaries of some elements
    */
-  const dev_mode = true;
+  const dev_mode = false;
   let css_left = "overflow-auto text-black";
   let css_right = "overflow-auto text-black"
 

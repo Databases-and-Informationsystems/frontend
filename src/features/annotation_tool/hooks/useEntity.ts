@@ -112,23 +112,29 @@ export const useEntity = () => {
   // }
 
   const handleRemoveFromEntity = async (
-    entityId: string | number,
-    mentionId: string | number
+    entityId: number,
+    mentionId: number
   ) => {
     const newEntitiyPromises = await entities.map(async (ent) => {
       if (ent.id == entityId) {
-        const newMentionIds = ent.mention_ids.filter((m) => m != mentionId)
-
         let mToChange = mentions.find((ment) => ment.id == mentionId)
-        mToChange.entity_id = ''
-        ent.mention_ids = newMentionIds
+        mToChange.entity_id = null
+        const eChanged = {
+          ...ent,
+          mentions: ent.mentions.filter((mention) => mention.id !== mentionId)
+        }
 
-        await updateMention(mentionId.toString(), mToChange)
+        const mPayload: UpdateMentionPayload = {
+          token_ids: getTokenIds(mentionId),
+          schmea_mention_id: mToChange.schema_mention.id,
+          entity_id: 0
+        }
+        await updateMention(mentionId, mPayload)
         //await updateEntity(entityId.toString(), ent); not needed anymore due to backend
         console.log(
           `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
         )
-        return ent
+        return eChanged
       }
       return ent
     })
@@ -137,12 +143,12 @@ export const useEntity = () => {
     console.log('Updated Entities nach Remove:', newEntities)
 
     const currEntity = getEntityById(entityId)
-    if (currEntity.mention_ids.length === 0) {
+    if (currEntity.mentions.length === 0) {
       console.log(
         'Entity with id: ',
         entityId,
         ' now has these mentions: ',
-        JSON.stringify(currEntity.mention_ids)
+        JSON.stringify(currEntity.mentions)
       )
       handleDeleteEntity(entityId)
     } else {
