@@ -6,6 +6,7 @@ import { useMentionContext } from '../context/useMentionContext'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 import { Mention as MentionType } from '@/features/annotation_tool/types'
+import { Card } from '@/components/ui/card.tsx'
 
 
 const EntitySelection = () => {
@@ -156,9 +157,9 @@ const EntitySelection = () => {
 
   //HTML
   return (
-    <div
-      className="grid grid-cols-2 overflow-auto min-h-32 border-solid border-0"
-      style={{ border: 'solid', height: '70vh' }}
+    <Card
+      className="grid grid-cols-2 overflow-auto min-h-32 p-1"
+      style={{height: '70vh' }}
     >
       <div className={css_left}>
         {/*<p>Current Entity array: {JSON.stringify(entities)}</p>*/}
@@ -189,7 +190,7 @@ const EntitySelection = () => {
         }
         {/*</MentionProvider>*/}
       </div>
-    </div>
+    </Card>
   )
 }
 

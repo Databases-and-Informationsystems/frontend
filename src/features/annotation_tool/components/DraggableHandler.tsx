@@ -19,7 +19,7 @@ export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props)
     id: id,
   });
 
-  let css_outer = "flex ml-1 mr-1 mt-1 mb-1";
+  let css_outer = "flex ml-1 mr-1 my-3";
 
   if (dev_mode) {
     css_outer = "border-solid border-2 border-orange-600 flex ml-1 mr-1 mt-1 mb-1";
@@ -35,8 +35,8 @@ export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props)
         </SelectionProvider>
       </TokenProvider>*/}
       <Mention key={id} mention={m} showDeleteButton={false}></Mention>
-      <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 w-1/2 rounded-md">Drag me</div>
-      <Button onClick={() => onMentionRemoved(eid, id)}>remove</Button>
+      <Button {...listeners} {...attributes} className="ml-2 mr-1 p-0.5 mt-1 mb-1 grow float-right rounded-md">Drag me</Button>
+      <Button onClick={() => onMentionRemoved(eid, id)} className="mt-1">remove</Button>
     </div>
   );
 }

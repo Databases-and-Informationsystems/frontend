@@ -1,6 +1,7 @@
 import { useDroppable } from '@dnd-kit/core'
 import { DraggableHand } from '@/features/annotation_tool/components/DraggableHandler.tsx'
 import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
+import { Card } from '@/components/ui/card.tsx'
 
 function Droppable(props) {
   const { setNodeRef } = useDroppable({
@@ -52,9 +53,9 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
   return (
     <section className={css_bg}>
       {eIds.map((id) => (
-        <div key={id} className={css_border}>
+        <Card key={id} className={css_border}>
           <Droppable id={id} key={id}>
-            Droppable container id: {id}
+            {/*Droppable container id: {id}*/}
             {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
             {getMentionIdsById(id).map((i) => (
               <DraggableHand
@@ -71,7 +72,7 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
             {/*<Token token={t}></Token>*/}
             {/*<Mention mention={{id: 1, tag: "testing", isShownRecommendation: true, token_ids: [1]}} tokens={[t]}></Mention>*/}
           </Droppable>
-        </div>
+        </Card>
       ))}
       {/*mentions.length > 0 &&
         (Array.isArray(m_not_in_entity) ? m_not_in_entity : [m_not_in_entity]).map((mention) => (
