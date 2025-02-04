@@ -9,61 +9,109 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { DialogClose } from "@radix-ui/react-dialog"
 import { useState } from "react"
+import FadeLoader from "react-spinners/FadeLoader"
+
 
 interface CreateDocumentDialogProps {
-  handleCreateDocument: (name: string, content: string) => void
+  handleCreateDocument: (name: string, content: string) => Promise<void> | void;
 }
 
-export const CreateDocumentDialog = ({ handleCreateDocument }: CreateDocumentDialogProps) => {
-  const [name, setName] = useState('')
-  const [content, setContent] = useState('')
+export function CreateDocumentDialog({ handleCreateDocument }: CreateDocumentDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const resetFields = () => {
-    setName('')
-    setContent('')
-  }
-
-  const onSubmit = () => {
-    handleCreateDocument(name, content)
-    resetFields()
+  async function onSubmit(name: string, content: string) {
+    setIsSaving(true);
+    try {
+      await handleCreateDocument(name, content);
+      setOpen(false);
+    } catch {
+      setError("Something went wrong while creating the document. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Create Document</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Document</DialogTitle>
           <DialogDescription>
-            Provide a name and content for the new document.
+            Please provide a name and content for your new document.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Content
-            </Label>
-            <Textarea id="content" value={content} onChange={(e) => setContent(e.target.value)} className="col-span-3" />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="submit" onClick={onSubmit}>Create</Button>
-          </DialogClose>
-        </DialogFooter>
+
+        <CreateDocumentForm
+          isSaving={isSaving}
+          error={error}
+          onCancel={() => setOpen(false)}
+          onSubmit={onSubmit}
+        />
       </DialogContent>
     </Dialog>
-  )
+  );
+}
+
+interface CreateDocumentFormProps {
+  isSaving: boolean;
+  error: string | null;
+  onCancel: () => void;
+  onSubmit: (name: string, content: string) => void;
+}
+
+function CreateDocumentForm({ isSaving, error, onCancel, onSubmit }: CreateDocumentFormProps) {
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name') as string;
+    const content = formData.get('content') as string;
+    onSubmit(name, content);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="grid gap-4 py-4">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <label htmlFor="doc-name" className="text-right">
+            Name
+          </label>
+          <Input
+            id="doc-name"
+            name="name"
+            placeholder="Document name"
+            className="col-span-3"
+          />
+        </div>
+        <div className="grid grid-cols-4 items-center gap-4">
+          <label htmlFor="doc-content" className="text-right">
+            Content
+          </label>
+          <Textarea
+            id="doc-content"
+            name="content"
+            placeholder="Document content..."
+            className="col-span-3"
+          />
+        </div>
+      </div>
+      {error && <p className="text-red-500">{error}</p>}
+      <DialogFooter>
+        <Button variant="outline" onClick={onCancel} type="button">
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSaving}>
+          {isSaving ? <FadeLoader /> : 'Save changes'}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
 }

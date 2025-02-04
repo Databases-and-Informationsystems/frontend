@@ -12,9 +12,7 @@ import Page from '@/components/Page'
 import PageHeader from '@/components/PageHeader'
 import { Separator } from '@/components/ui/separator'
 import { translateDocumentState } from '../util/document_util'
-
 import DocumentCard from '../components/DocumentCard'
-import { Button } from '@/components/ui/button'
 import { CreateDocumentDialog } from '../components/CreateDocumentDialog'
 
 const initialGroupedDocuments: Record<DocumentStateType, Document[]> = {
@@ -67,7 +65,7 @@ const ProjectV2Page: React.FC = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [id])
 
   const handleAddDocument = async (name: string, content: string) => {
     try {
