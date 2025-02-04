@@ -36,7 +36,7 @@ export function CreateProjectDialog({ teams, schemas, handleCreateProject }: Cre
         <Button variant="outline">Create Project</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Create Project</DialogTitle>
           <DialogDescription>

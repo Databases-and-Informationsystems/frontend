@@ -36,7 +36,7 @@ const ProjectV2Page: React.FC = () => {
       <div className="flex flex-row-reverse">
        <CreateProjectDialog teams={teams} schemas={schemas} handleCreateProject={handleCreateProject} />
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap gap-4">
         {projects.map((p) => (
           <ProjectV2Card key={p.id} project={p} />
         ))}
