@@ -35,7 +35,7 @@ export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props)
         </SelectionProvider>
       </TokenProvider>*/}
       <Mention key={id} mention={m} showDeleteButton={false}></Mention>
-      <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 rounded-md">Drag handle</div>
+      <div {...listeners} {...attributes} className="ml-2 bg-gray-300 p-0.5 mt-1 mb-1 w-1/2 rounded-md">Drag me</div>
       <Button onClick={() => onMentionRemoved(eid, id)}>remove</Button>
     </div>
   );

@@ -13,9 +13,14 @@ export const fetchEntities = async (document_edit_id: number | string): Promise<
   }
 }
 
-export const createEntity = async (entity: AnnotationEntity) => {
+export type EntityCreationPayload = {
+  document_edit_id: number;
+  mention_ids: number[];
+}
+
+export const createEntity = async (entity: EntityCreationPayload) => {
   try {
-    const response = await axiosInstance.post("/entities/", entity)
+    const response = await axiosInstance.post('/entities', entity)
     return response.data
   } catch (error) {
     console.error('Failed to create entity:', error)
@@ -41,8 +46,9 @@ export const updateEntity = async (entityId: string, updatedEntity: AnnotationEn
 }
 
 
-export const deleteEntity = async (entityId: string) => {
+export const deleteEntity = async (entityId: number) => {
   try {
+    console.log("%cDelete 2 reached", "color: red")
     const response = await axiosInstance.delete(`/entities/${entityId}`)
     console.log("Deleted Entity: ", response.data);
     return response.data

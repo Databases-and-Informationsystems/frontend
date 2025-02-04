@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnnotationEntity, Mention, UpdateMentionPayload } from '../types'
 import {
   createEntity,
-  deleteEntity,
+  deleteEntity, EntityCreationPayload,
   fetchEntities as getEntities,
   updateEntity,
 } from '../api/annotationEntityHelper'
@@ -53,7 +53,7 @@ export const useEntity = () => {
     handleCreateEntity(newEntity)
   }
 
-  const handleCreateEntity = async (newEntity: AnnotationEntity) => {
+  const handleCreateEntity = async (newEntity: EntityCreationPayload) => {
     const createdEntity = await createEntity(newEntity)
     setEntities((prev) => {
       const entityExists = prev.some((entity) => entity.id == createdEntity.id)
@@ -61,7 +61,8 @@ export const useEntity = () => {
         return [...prev, createdEntity]
       }
       return prev
-    })
+    });
+    //await fetchEntities()
   }
 
   // const handleAddToEntity = async (entityId: any, mentionId: any) => {
@@ -95,8 +96,8 @@ export const useEntity = () => {
             entity_id: entityId
           }
           updateMention(mentionId, mPayload)
-          updateEntity(entityId.toString(), eChanged)
-          console.log('Add Mention ${mentionId} to Entity id ${entityId}')
+          //updateEntity(entityId.toString(), eChanged)
+          console.log('Add Mention ',mentionId.toString(),' to Entity id ',entityId.toString())
           return { ...ent, mentions: eChanged.mentions }
         }
         return ent
@@ -111,13 +112,28 @@ export const useEntity = () => {
   //   console.log(`Removed Mention with id ${mentionId} from Entity ${entityId}`)
   // }
 
-  const handleRemoveFromEntity = async (
+  const handleRemoveButton = (
     entityId: number,
     mentionId: number
   ) => {
+    const ent = getEntityById(entityId)
+    if (ent.mentions.length < 2) {
+      console.log("%cNo action", "color: lime")
+      return
+    }else {
+      handleRemoveFromEntity(entityId, mentionId)
+    }
+  }
+
+  const handleRemoveFromEntity = async (
+    entityId: number,
+    mentionId: number,
+    noNewEntity?: boolean
+  ) => {
     const newEntitiyPromises = await entities.map(async (ent) => {
       if (ent.id == entityId) {
-        if (ent.mentions.length < 2) {return ent}
+        console.log(`%cent mentions: ${ent.mentions.length}, noNewEntity: ${noNewEntity} type ${typeof noNewEntity}`, 'color: lime')
+
         let mToChange = mentions.find((ment) => ment.id == mentionId)
         mToChange.entity_id = null
         const eChanged = {
@@ -125,19 +141,28 @@ export const useEntity = () => {
           mentions: ent.mentions.filter((mention) => mention.id !== mentionId)
         }
 
+        if(noNewEntity === "undefined" || noNewEntity === undefined) {
+          noNewEntity = false
+        }
+
         const mPayload: UpdateMentionPayload = {
           token_ids: getTokenIds(mentionId),
           schmea_mention_id: mToChange.schema_mention.id,
           entity_id: 0
         }
-        await updateMention(mentionId, mPayload)
-        //await updateEntity(entityId.toString(), ent); not needed anymore due to backend
-        console.log(
-          `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
-        )
-        if (eChanged.mentions.length === 0) {
-          handleDeleteEntity(entityId)
+        const ePayload: EntityCreationPayload = {
+          document_edit_id: doc_edit_id,
+          mention_ids: [mentionId],
         }
+        console.log("Vor mention update")
+        await updateMention(mentionId, mPayload).then(() => {if(!noNewEntity) {handleCreateEntity(ePayload)}});
+        //await updateEntity(entityId.toString(), ent); not needed anymore due to backend
+        console.log(`%cEntferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`,'color: purple')
+        console.log('%cAktuell sind ','color: aquamarine',ent.mentions.length.toString(),' Mentions in ent und ',eChanged.mentions.length.toString(),' Mentions in eChanged')
+        /*if (ent.mentions.length === 1 || eChanged.mentions.length === 0) {
+          console.log("%cIn delete if","color: red")
+          await handleDeleteEntity(entityId)
+        }*/
         return eChanged
       }
       return ent
@@ -147,7 +172,8 @@ export const useEntity = () => {
     console.log('Updated Entities nach Remove:', newEntities)
 
     const currEntity = getEntityById(entityId)
-    if (currEntity.mentions.length === 0) {
+    console.log("%ccurrEntity has ","color: blue",currEntity.mentions.length.toString(),"mentions")
+    if (currEntity.mentions.length === 1) {
       console.log(
         'Entity with id: ',
         entityId,
@@ -177,6 +203,7 @@ export const useEntity = () => {
     handleCreateEntityViaElements,
     handleAddToEntity,
     handleRemoveFromEntity,
+    handleRemoveButton,
     handleDeleteEntity,
     getEntityById,
   }

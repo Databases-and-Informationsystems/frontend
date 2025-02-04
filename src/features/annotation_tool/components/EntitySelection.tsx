@@ -20,7 +20,7 @@ const EntitySelection = () => {
     hasRun.current = !hasRun.current;
   })*/
 
-  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
+  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleRemoveButton, handleCreateEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
   const { mentions, loading, handleUpdateMention } = useMentionContext();
 
   /*if (eLoading) {
@@ -115,9 +115,9 @@ const EntitySelection = () => {
       const fromEntity = getEntityByMentionId(active.id).id;
       if (typeMInE === tempM.tag && fromEntity != over.id) {
         console.log("Can be inserted");
-        handleRemoveFromEntity(fromEntity, active.id);
+        handleRemoveFromEntity(fromEntity, active.id, true);
         handleAddToEntity(over.id, active.id);
-      }else {
+      } else {
         console.log("Can't be inserted");
       }
     }
@@ -147,7 +147,7 @@ const EntitySelection = () => {
    */
   const dev_mode = false;
   let css_left = "overflow-auto";
-  let css_right = "overflow-auto"
+  let css_right = "overflow-auto m-1"
 
   if (dev_mode) {
     css_left = "bg-blue-300 overflow-auto text-black";
@@ -158,16 +158,15 @@ const EntitySelection = () => {
   return (
     <div
       className="grid grid-cols-2 overflow-auto min-h-32 border-solid border-0"
-      style={{ border: 'solid', height: '74vh' }}
+      style={{ border: 'solid', height: '70vh' }}
     >
       <div className={css_left}>
-        <p className={"text-orange-600"}>/* TODO: left scroll */</p>
         {/*<p>Current Entity array: {JSON.stringify(entities)}</p>*/}
-        <p>Current eIds array: {JSON.stringify(entityIds)}</p>
+        {/*<p>Current eIds array: {JSON.stringify(entityIds)}</p>*/}
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           {/*<TokenProvider>*/}
           <MultipleDroppables
-            onMentionRemoved={handleRemoveFromEntity}
+            onMentionRemoved={handleRemoveButton}
             eIds={entityIds}
             items={droppableItemLists}
             allEntities={entities}
@@ -184,7 +183,6 @@ const EntitySelection = () => {
         </DndContext>
       </div>
       <div className={css_right}>
-        <p className={"text-orange-600"}>/* TODO: text / mention view */</p>
           {/*<MentionProvider>*/}
         {
           mentions.map((mention) => (<Mention key={mention.id} mention={mention} showDeleteButton={false} ></Mention>))
