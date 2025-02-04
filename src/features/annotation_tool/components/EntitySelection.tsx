@@ -146,8 +146,8 @@ const EntitySelection = () => {
    * Enables or disables a dev-mode to check the boundaries of some elements
    */
   const dev_mode = false;
-  let css_left = "overflow-auto text-black";
-  let css_right = "overflow-auto text-black"
+  let css_left = "overflow-auto";
+  let css_right = "overflow-auto"
 
   if (dev_mode) {
     css_left = "bg-blue-300 overflow-auto text-black";
@@ -157,8 +157,8 @@ const EntitySelection = () => {
   //HTML
   return (
     <div
-      className="grid grid-cols-2 overflow-auto min-h-32 border-amber-500"
-      style={{ border: 'solid', height: '95vh' }}
+      className="grid grid-cols-2 overflow-auto min-h-32 border-solid border-0"
+      style={{ border: 'solid', height: '74vh' }}
     >
       <div className={css_left}>
         <p className={"text-orange-600"}>/* TODO: left scroll */</p>

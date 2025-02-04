@@ -117,6 +117,7 @@ export const useEntity = () => {
   ) => {
     const newEntitiyPromises = await entities.map(async (ent) => {
       if (ent.id == entityId) {
+        if (ent.mentions.length < 2) {return ent}
         let mToChange = mentions.find((ment) => ment.id == mentionId)
         mToChange.entity_id = null
         const eChanged = {
@@ -134,6 +135,9 @@ export const useEntity = () => {
         console.log(
           `Entferne Mention mit ID ${mentionId} aus Entity mit ID ${entityId}.`
         )
+        if (eChanged.mentions.length === 0) {
+          handleDeleteEntity(entityId)
+        }
         return eChanged
       }
       return ent
@@ -156,7 +160,8 @@ export const useEntity = () => {
     }
   }
 
-  const handleDeleteEntity = async (entityId: any) => {
+  const handleDeleteEntity = async (entityId: number) => {
+    console.log("%cDelete 1 reached!", "color: red")
     setEntities((prev) => prev.filter((entity) => entity.id !== entityId))
     await deleteEntity(entityId)
     await fetchEntities()
