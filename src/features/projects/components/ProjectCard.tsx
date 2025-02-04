@@ -18,7 +18,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onAddDocument,
   onPreview,
   onDeleteDocument,
-  onOpenProject,
 }: ProjectCardProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [showOngoing, setShowOngoing] = useState(false)
@@ -28,6 +27,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const schema = project.schema
   const team = project.team
   const documents = project.documents ?? []
+const ongoingDocs = documents.filter((doc) => doc.state.type === 'IN_PROGRESS');
+const openDocs = documents.filter((doc) => doc.state.type === 'NEW');
+const completedDocs = documents.filter((doc) => doc.state.type === 'FINISHED');
+  
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
       <h3 className="text-2xl font-bold text-gray-900">{title}</h3>
@@ -41,7 +44,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               onClick={() => setShowOngoing(!showOngoing)}
             >
               <span className="font-semibold text-green-600">
-                Ongoing ({documents.length})
+                Ongoing ({ongoingDocs.length})
               </span>
               <FontAwesomeIcon
                 icon={faChevronDown}
@@ -52,7 +55,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </button>
             {showOngoing && (
               <div className="mt-2">
-                {documents.map((doc, index) => (
+                {ongoingDocs.map((doc, index) => (
                   <div
                     key={index}
                     className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"
@@ -85,7 +88,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               onClick={() => setShowOpen(!showOpen)}
             >
               <span className="font-semibold text-blue-600">
-                Open ({documents.length})
+                Open ({openDocs.length})
               </span>
               <FontAwesomeIcon
                 icon={faChevronDown}
@@ -96,7 +99,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </button>
             {showOpen && (
               <div className="mt-2">
-                {documents.map((doc, index) => (
+                {openDocs.map((doc, index) => (
                   <div
                     key={index}
                     className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"
@@ -124,12 +127,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
 
           <div className="mt-4">
-            <button
+             <button
               className="w-full flex items-center justify-between bg-gray-100 py-2 px-4 rounded-lg text-left hover:bg-gray-200"
               onClick={() => setShowCompleted(!showCompleted)}
             >
               <span className="font-semibold text-gray-600">
-                Completed ({documents.length})
+                Completed ({completedDocs.length})
               </span>
               <FontAwesomeIcon
                 icon={faChevronDown}
@@ -140,7 +143,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </button>
             {showCompleted && (
               <div className="mt-2">
-                {documents.map((doc, index) => (
+                {completedDocs.map((doc, index) => (
                   <div
                     key={index}
                     className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"
@@ -170,10 +173,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="mt-4">
             <button
               className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
-              onClick={() => {
-                setIsOpen(true)
-                onOpenProject()
-              }}
+              onClick={() => setIsOpen(true)}
             >
               Open Project
             </button>
@@ -196,7 +196,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 onClick={() => setShowOngoing(!showOngoing)}
               >
                 <span className="font-semibold text-green-600">
-                  Ongoing ({documents.length})
+                  Ongoing ({ongoingDocs.length})
                 </span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
@@ -207,7 +207,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </button>
               {showOngoing && (
                 <div className="mt-2">
-                  {documents.map((doc, index) => (
+                  {ongoingDocs.map((doc, index) => (
                     <div
                       key={index}
                       className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"
@@ -255,7 +255,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 onClick={() => setShowOpen(!showOpen)}
               >
                 <span className="font-semibold text-blue-600">
-                  Open ({documents.length})
+                   Open ({openDocs.length})
                 </span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
@@ -266,9 +266,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </button>
               {showOpen && (
                 <div className="mt-2">
-                  {documents.map((doc) => (
+                  {openDocs.map((doc , index) => (
                     <div
-                      key={doc.id}
+                      key={index}
                       className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"
                     >
                       <p className="font-semibold">{doc.name}</p>
@@ -311,7 +311,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 onClick={() => setShowCompleted(!showCompleted)}
               >
                 <span className="font-semibold text-gray-600">
-                  Completed ({documents.length})
+                  Completed ({completedDocs.length})
                 </span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
@@ -322,7 +322,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </button>
               {showCompleted && (
                 <div className="mt-2">
-                  {documents.map((doc, index) => (
+                  {completedDocs.map((doc, index) => (
                     <div
                       key={index}
                       className="bg-white p-4 border border-gray-300 rounded-lg shadow-sm w-full mb-4"

@@ -8,8 +8,7 @@ import {
 } from '@/components/ui/accordion'
 import { STATUS_STYLES } from '@/types/document'
 import { Document } from '@/types/document'
-import { Link } from 'react-router'
-
+import { Link} from 'react-router'
 interface StatusFilterProps {
   documents: Document[]
 }
@@ -28,19 +27,21 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
   const completed_docs: Document[] = documents.filter(
     (d) => d.state.type === 'FINISHED'
   )
+  
+
   return (
     <div className="p-6 bg-gray-50 rounded-lg shadow-lg">
       <Accordion type="single" collapsible>
         <AccordionItem value="ongoing">
           <AccordionTrigger
-            className={`text-xl font-bold ${STATUS_STYLES.NEW}`}
-            disabled={!new_documents.length}
+            className={`text-xl font-bold ${STATUS_STYLES.IN_PROGRESS}`}
+            disabled={!ongoing_documents.length}
           >
-            New Documents ({new_documents.length})
+            Ongoing Documents ({ongoing_documents.length})
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {new_documents.map((doc, index) => (
+              {ongoing_documents.map((doc, index) => (
                 <div
                   key={index}
                   className="bg-white border border-gray-300 rounded-lg shadow-md p-4"
@@ -73,14 +74,14 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
         </AccordionItem>
         <AccordionItem value="open">
           <AccordionTrigger
-            className={`text-xl font-bold ${STATUS_STYLES.IN_PROGRESS}`}
-            disabled={!ongoing_documents.length}
+            className={`text-xl font-bold ${STATUS_STYLES.NEW}`}
+            disabled={!new_documents.length}
           >
-            Ongoing Documents ({ongoing_documents.length})
+            new Documents ({new_documents.length})
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {ongoing_documents.map((doc, index) => (
+              {new_documents.map((doc, index) => (
                 <div
                   key={index}
                   className="bg-white border border-gray-300 rounded-lg shadow-md p-4"

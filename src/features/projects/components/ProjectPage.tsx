@@ -1,7 +1,3 @@
-/**
- * TODO: Move this to ProjectPage
- */
-
 import React, { useState, useEffect } from 'react'
 import Modal from './Modal'
 import DocumentForm from './DocumentForm'
@@ -40,10 +36,10 @@ const ProjectPage: React.FC = () => {
     try {
       const documents = await getDocumentsByProject(projectId)
       const ongoing = documents.filter(
-        (doc: Document) => doc.state.type === DocumentStateType.NEW
+        (doc: Document) => doc.state.type === DocumentStateType.IN_PROGRESS
       )
       const open = documents.filter(
-        (doc: Document) => doc.state.type === DocumentStateType.IN_PROGRESS
+        (doc: Document) => doc.state.type === DocumentStateType.NEW
       )
       const completed = documents.filter(
         (doc: Document) => doc.state.type === DocumentStateType.FINISHED
