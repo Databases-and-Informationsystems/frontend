@@ -35,7 +35,7 @@ const AppRoutes = () => {
         <Route path="/annotation/:id" element={<AnnotationLayout/>} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
     </Routes>
   )
 }

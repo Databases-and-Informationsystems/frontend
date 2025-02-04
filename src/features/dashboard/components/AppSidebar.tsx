@@ -27,7 +27,7 @@ const sideBarItems = [
   },
   {
     title: 'Projects',
-    url: '/dashboard/projects-v2',
+    url: '/dashboard/projects',
     icon: FolderKanban,
   },
   {

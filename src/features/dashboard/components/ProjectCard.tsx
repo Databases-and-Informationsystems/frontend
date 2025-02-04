@@ -26,7 +26,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   const handleStartWorking = (docId: number) => {
-    navigate(`/annotation/start/${docId}`);
+    navigate(`/annotation/${docId}`);
   };
   return (
     <div className="project-card bg-white p-8 rounded-lg shadow-lg w-full">
