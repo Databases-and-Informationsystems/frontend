@@ -25,7 +25,7 @@ export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props)
   }
 
   return (
-    <div ref={setNodeRef} className={css_outer}>
+    <div key={id} ref={setNodeRef} className={css_outer}>
       {/*Mention id: {id}
       m: {JSON.stringify(m)}*/}
       <Mention key={id} mention={m} showDeleteButton={false}></Mention>
