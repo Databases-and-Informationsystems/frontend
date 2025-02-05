@@ -8,13 +8,15 @@ import {
 } from '../api/annotationEntityHelper'
 import { updateMention } from '@/features/annotation_tool/api/mention.ts'
 import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
+import { useParams } from 'react-router-dom'
 
 export const useEntity = () => {
   const [entities, setEntities] = useState<AnnotationEntity[]>([])
   const [loading, setLoading] = useState(false)
   const { mentions } = useMentionContext()
 
-  const doc_edit_id = 2 //TODO get correct value
+  const {id:doc_id} = useParams()
+  const doc_edit_id = Number(doc_id)
 
   useEffect(() => {
     fetchEntities()
