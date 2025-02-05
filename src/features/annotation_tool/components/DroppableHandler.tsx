@@ -11,10 +11,6 @@ function Droppable(props) {
   return <div ref={setNodeRef}>{props.children}</div>
 }
 
-// function getTokenTypeObject(tokenObj): TokenType {
-//   return { id: tokenObj.id, text: tokenObj.text, index_in_document: tokenObj.index_in_document, pos_tag: tokenObj.pos_tag, bio_tag: tokenObj.bio_tag, sentence_index: tokenObj.sentence_index };
-// }
-
 interface MultipleDroppablesProps {
   eIds: number[]
   items: Record<string, { id: string }[]>
@@ -68,29 +64,9 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
                 allEntities={allEntities}
               ></DraggableHand>
             ))}{' '}
-            {/*loads the corresponding mentions*/}
-            {/*<Token token={t}></Token>*/}
-            {/*<Mention mention={{id: 1, tag: "testing", isShownRecommendation: true, token_ids: [1]}} tokens={[t]}></Mention>*/}
           </Droppable>
         </Card>
       ))}
-      {/*mentions.length > 0 &&
-        (Array.isArray(m_not_in_entity) ? m_not_in_entity : [m_not_in_entity]).map((mention) => (
-          <div key={++max_eId} className={css_border}>
-            <Droppable id={++max_eId} key={++max_eId}>
-              Droppable container id: {max_eId}
-              <DraggableHand
-                key={mention.id}
-                eid={max_eId}
-                id={mention.id}
-                m={mention}
-                dev_mode={dev_mode}
-                allEntities={allEntities}
-              />
-            </Droppable>
-          </div>
-        ))*/
-      }
       <style>
         {`
         .flexEins div {

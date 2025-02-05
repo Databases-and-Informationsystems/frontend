@@ -2,7 +2,6 @@ import { useDraggable } from '@dnd-kit/core';
 import { Button } from '@/components/ui/button.tsx'
 import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { Mention as MentionType } from '../types/mention'
-import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 
 interface props {
   id: number
@@ -29,11 +28,6 @@ export function DraggableHand({ id, eid, onMentionRemoved, m, dev_mode }: props)
     <div ref={setNodeRef} className={css_outer}>
       {/*Mention id: {id}
       m: {JSON.stringify(m)}*/}
-      {/*<TokenProvider>
-        <SelectionProvider>
-          <Mention key={id} mention={m}></Mention>
-        </SelectionProvider>
-      </TokenProvider>*/}
       <Mention key={id} mention={m} showDeleteButton={false}></Mention>
       <Button {...listeners} {...attributes} className="ml-2 mr-1 p-0.5 mt-1 mb-1 grow float-right rounded-md">Drag me</Button>
       <Button onClick={() => onMentionRemoved(eid, id)} className="mt-1">remove</Button>

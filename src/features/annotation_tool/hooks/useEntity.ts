@@ -4,7 +4,6 @@ import {
   createEntity,
   deleteEntity, EntityCreationPayload,
   fetchEntities as getEntities,
-  updateEntity,
 } from '../api/annotationEntityHelper'
 import { updateMention } from '@/features/annotation_tool/api/mention.ts'
 import { useMentionContext } from '@/features/annotation_tool/context/useMentionContext.ts'
@@ -64,14 +63,7 @@ export const useEntity = () => {
       }
       return prev
     });
-    //await fetchEntities()
   }
-
-  // const handleAddToEntity = async (entityId: any, mentionId: any) => {
-  //   const entity = getEntityById(entityId)
-  //   entity.mention_ids.push(mentionId)
-  //   //EntityState is possibly not updated - TOCHECK
-  // }
 
   const getTokenIds = (mentionId: number) => {
     const mention = mentions.find((ment) => ment.id == mentionId);
@@ -106,13 +98,6 @@ export const useEntity = () => {
       })
     })
   }
-
-  // const handleRemoveFromEntity = async (entityId: any, mentionId: any) => {
-  //   const entity = getEntityById(entityId)
-  //   console.log("Searched for entity ", entityId)
-  //   entity.mention_ids = entity.mention_ids.filter((elem, idx) => elem != mentionId)
-  //   console.log(`Removed Mention with id ${mentionId} from Entity ${entityId}`)
-  // }
 
   const handleRemoveButton = (
     entityId: number,

@@ -1,8 +1,6 @@
 import { AnnotationEntity } from '../types'
 import axiosInstance from '@/lib/axios.ts'
 
-//const BASE_URL = 'http://localhost:3000/entities'
-
 export const fetchEntities = async (document_edit_id: number | string): Promise<AnnotationEntity[]> => {
   try {
     const response = await axiosInstance.get(`/entities/${document_edit_id}`)
@@ -27,24 +25,6 @@ export const createEntity = async (entity: EntityCreationPayload) => {
     throw error
   }
 }
-
-export const updateEntity = async (entityId: string, updatedEntity: AnnotationEntity) => {
-  try {
-
-    const entityToUpdate = {
-      ...updatedEntity,
-      mention_ids: Array.isArray(updatedEntity.mention_ids) ? updatedEntity.mention_ids : Object.values(updatedEntity.mention_ids)
-    };
-
-    const response = await axiosInstance.put(`/entities/${entityId}`, entityToUpdate);
-    console.log("Updated Entity: ", response.data);
-    return response.data;
-  } catch (error) {
-    console.error(`Failed to update entity with ID ${entityId}:`, error);
-    throw error;
-  }
-}
-
 
 export const deleteEntity = async (entityId: number) => {
   try {
