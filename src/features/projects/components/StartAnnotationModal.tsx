@@ -3,8 +3,6 @@ import { Button } from '@/components/ui/button'
 import {
   CardContent,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card'
 import { Document } from '@/types/document'
 import { ReactNode, useEffect, useState } from 'react'
@@ -80,7 +78,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
             ModelStepEnum,
             Record<string, string>
           > = { mention: {}, relation: {}, entity: {} }
-          for (let step of Object.values(ModelStepEnum)) {
+          for (const step of Object.values(ModelStepEnum)) {
             if ((res[step] as ModelWithSetting[]).length === 1) {
               const model_type = res[step][0].model_type
               defaultSelectedModelByModelType = {
@@ -266,16 +264,13 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsModalOpen(false)} size="xl">
-      <CardHeader>
-        <CardTitle>
-          <h3 className="text-xl">
-            Select the prediction models with optional settings for the
-            annotation process.
-          </h3>
-        </CardTitle>
-      </CardHeader>
-
+    <Modal
+      title="Start annotating"
+      description="Select the prediction models with optional settings for the annotation process."
+      isOpen={isOpen}
+      onClose={() => setIsModalOpen(false)}
+      size="xl"
+    >
       <CardContent>
         {modelsByModelStep &&
           Object.values(ModelStepEnum).map((modelStep) => {

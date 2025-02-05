@@ -76,7 +76,7 @@ const SchemaPage = () => {
           The heatmap was created from the annotations of the following users.
           <div className="flex flex-wrap gap-x-4">
             {documentEdits.map((de) => (
-              <UserIcon user={de.user}></UserIcon>
+              <UserIcon key={de.user.id} user={de.user}></UserIcon>
             ))}
           </div>
         </CardContent>
@@ -85,13 +85,15 @@ const SchemaPage = () => {
       <Card>
         <CardContent className="p-4">
           {Object.entries(heatmapTokensBySentence).map(([index, sentence]) => (
-            <div className="my-3 flex flex-wrap">
+            <div key={index} className="my-3 flex flex-wrap">
               {sentence.map((token) => (
                 <span
-                  key={index}
+                  key={token.id}
                   className="me-2 px-1 rounded mb-3"
                   style={{
-                    backgroundColor: getInterpolatedColor(token.score ?? 0),
+                    ...(token.score != null && {
+                      backgroundColor: getInterpolatedColor(token.score),
+                    }),
                   }}
                 >
                   {token.text}
