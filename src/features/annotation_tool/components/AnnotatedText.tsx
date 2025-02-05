@@ -13,6 +13,8 @@ interface AnnotatedTextProps {
 export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) => {
   const { mentions, loading } = useMentionContext();
 
+  console.log(mentions);
+
   if (loading) {
     return <p>Loading mentions...</p>;
   }
@@ -41,6 +43,7 @@ export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) 
       }
 
       const mention = getMentionByTokenId(token.id);
+
 
       if (mention) {
         const mentionTokens = sentenceTokens.filter((token) => (

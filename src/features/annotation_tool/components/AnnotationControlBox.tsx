@@ -7,6 +7,7 @@ import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchema } from '../context/useSchema';
 import { useStepNavigation } from '../hooks/useStepNavigation';
 import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
+import { useParams } from 'react-router-dom';
 
 export const AnnotationControlBox = () => {
   const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
@@ -14,6 +15,7 @@ export const AnnotationControlBox = () => {
   const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
   const { schema, loading, error } = useSchema();
+  const { id } = useParams();
 
   if (loading) {
     return <div>Loading schema...</div>;
@@ -26,7 +28,7 @@ export const AnnotationControlBox = () => {
   const createMention = (tokens: Token[], schemaId: number) => {
     const payload: CreateMentionPayload = {
       schema_mention_id: schemaId,
-      document_edit_id: 0, // Access document_edit_id from context
+      document_edit_id: Number(id),
       token_ids: tokens.map(token => token.id),
     };
     handleCreateMention(payload);
@@ -35,9 +37,8 @@ export const AnnotationControlBox = () => {
 
   const updateMention = (mention: Mention, schemaId: number) => {
     const payload: UpdateMentionPayload = {
-      schmea_mention_id: schemaId,
+      schema_mention_id: schemaId,
       token_ids: mention.tokens.map(token => token.id),
-      entity_id: mention.entity_id,
     }
     handleUpdateMention(mention.id, payload);
     resetMentions()
