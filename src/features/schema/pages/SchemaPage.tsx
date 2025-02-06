@@ -96,7 +96,7 @@ const SchemaPage = () => {
         {Object.keys(modelsByStep).map((stepId) => (
           <div
             key={stepId}
-            className="w-full p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md"
+            className="w-full p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md flex flex-col"
           >
             <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-4">
               {modelsByStep[stepId].stepName}
@@ -116,9 +116,9 @@ const SchemaPage = () => {
                 </div>
               ))}
             </div>
-            <div className="flex mt-4">
+            <div className="flex mt-auto">
               <Button
-                className="mx-auto"
+                className="mx-auto mt-4"
                 onClick={() => {
                   setModelStepToTrain(
                     modelsByStep[stepId].stepName as ModelStepType
