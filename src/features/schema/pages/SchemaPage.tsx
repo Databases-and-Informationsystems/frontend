@@ -5,6 +5,9 @@ import { Schema } from '@/types/schema'
 import { RecommendationModel } from '@/types/recommendation'
 import Page from '@/components/Page'
 import PageHeader from '@/components/PageHeader'
+import { Button } from '@/components/ui/button'
+import { ModelStepType } from '../types/model'
+import TrainModelModal from '../components/TrainModelModal'
 
 interface StepWithModels {
   stepName: string
@@ -15,6 +18,11 @@ const SchemaPage = () => {
   const [schema, setSchema] = useState<Schema | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | undefined>(undefined)
+
+  const [modelStepToTrain, setModelStepToTrain] = useState<ModelStepType>(
+    ModelStepType.mentions
+  )
+  const [trainModelModalOpen, setTrainModelModalOpen] = useState<boolean>(false)
 
   const [modelsByStep, setModelsByStep] = useState<any>([])
 
@@ -39,6 +47,7 @@ const SchemaPage = () => {
           {} as Record<number, StepWithModels>
         )
         setModelsByStep(groupedByStep)
+        console.log('groupedByStep: ', groupedByStep)
       }
     } catch (err: any) {
       console.log('Error: ', err)
@@ -107,9 +116,28 @@ const SchemaPage = () => {
                 </div>
               ))}
             </div>
+            <div className="flex mt-4">
+              <Button
+                className="mx-auto"
+                onClick={() => {
+                  setModelStepToTrain(
+                    modelsByStep[stepId].stepName as ModelStepType
+                  )
+                  setTrainModelModalOpen(true)
+                }}
+              >
+                Train Model
+              </Button>
+            </div>
           </div>
         ))}
       </div>
+      <TrainModelModal
+        isOpen={trainModelModalOpen}
+        setIsModalOpen={setTrainModelModalOpen}
+        schema={schema}
+        modelStepType={modelStepToTrain}
+      ></TrainModelModal>
 
       {/* Schema Mentions */}
       <div className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
