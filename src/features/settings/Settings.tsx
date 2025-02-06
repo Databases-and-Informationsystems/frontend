@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useState({
@@ -24,53 +25,98 @@ const Settings = () => {
     setPasswords({ ...passwords, [name]: value })
   }
 
-  const handleUpdateInfo = () => {
-    const updatedFields = []
-    const noUpdates = Object.keys(userInfo).every((key) => !userInfo[key])
-
-    if (noUpdates) {
-      setUpdateMessage('No updates were made.')
-      return
+  const handleUpdateInfo = async () => {
+    const { email, username } = userInfo;
+  
+    // Check if there's actually any data to update
+    if (!email && !username) {
+      setUpdateMessage("No updates were made.");
+      return;
     }
-
-    if (userInfo.email) updatedFields.push('Email')
-    if (userInfo.username) updatedFields.push('Username')
-
-    if (updatedFields.length > 0) {
-      setUpdateMessage(`${updatedFields.join(', ')} updated successfully.`)
+  
+    try {
+      const token = localStorage.getItem("token");
+  
+      const response = await fetch("http://localhost:5001/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, username }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update profile.");
+      }
+  
+      setUpdateMessage("Profile updated successfully.");
+      setError("");
+  
+      // Clear input fields after successful update
+      setUserInfo({ email: "", username: "" });
+    } catch (error: any) {
+      console.error("Error updating profile:", error.message);
+      setError(error.message);
     }
-  }
-
-  const handleChangePassword = () => {
-    const { oldPassword, newPassword, confirmNewPassword } = passwords
-
+  };
+  
+  const handleChangePassword = async () => {
+    const { oldPassword, newPassword, confirmNewPassword } = passwords;
+  
     if (newPassword !== confirmNewPassword) {
-      setError('New password and confirmation do not match.')
-      return
+      setError("New password and confirmation do not match.");
+      return;
     }
-
+  
     if (!oldPassword || !newPassword) {
-      setError('All password fields are required.')
-      return
+      setError("All password fields are required.");
+      return;
     }
+  
+    try {
+      const token = localStorage.getItem("token");
+  
 
-    console.log('Changing password:', { oldPassword, newPassword })
-    setSuccessMessage('Password changed successfully.')
-    setError('')
-    setPasswords({ oldPassword: '', newPassword: '', confirmNewPassword: '' })
-  }
-
+  
+      const response = await fetch("http://localhost:5001/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          oldPassword,
+          password: newPassword,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update password.");
+      }
+  
+  
+      setSuccessMessage("Password changed successfully.");
+      setError("");
+      setPasswords({ oldPassword: "", newPassword: "", confirmNewPassword: "" });
+    } catch (error: any) {
+      console.error("Error updating password:", error.message);
+      setError(error.message);
+    }
+  };
+  
+  
   return (
     <div className="container mx-auto p-6 space-y-6">
       <h2 className="text-4xl font-bold mb-6">Settings</h2>
 
-      {/* Container for sections */}
       <div className="w-full flex flex-col lg:flex-row lg:gap-16 gap-10 items-stretch">
-        {/* Update User Info */}
         <div className="flex-1 flex flex-col bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">
-            Update Your Information
-          </h3>
+          <h3 className="text-xl font-semibold mb-4">Update Your Information</h3>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
               <label className="block text-sm font-semibold">Email:</label>
@@ -79,7 +125,7 @@ const Settings = () => {
                 name="email"
                 value={userInfo.email}
                 onChange={handleInputChange}
-                placeholder={userInfo.email}
+                placeholder="Enter new email"
                 className="border p-2 rounded"
               />
             </div>
@@ -90,7 +136,7 @@ const Settings = () => {
                 name="username"
                 value={userInfo.username}
                 onChange={handleInputChange}
-                placeholder={userInfo.username}
+                placeholder="Enter new username"
                 className="border p-2 rounded"
               />
             </div>
@@ -101,12 +147,9 @@ const Settings = () => {
               Update Information
             </button>
           </div>
-          {updateMessage && (
-            <p className="text-yellow-500 mt-4">{updateMessage}</p>
-          )}
+          {updateMessage && <p className="text-yellow-500 mt-4">{updateMessage}</p>}
         </div>
 
-        {/* Change Password */}
         <div className="flex-1 flex flex-col bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-4">Change Password</h3>
           <div className="flex flex-col gap-4">
@@ -142,9 +185,7 @@ const Settings = () => {
             </button>
           </div>
           {error && <p className="text-red-500 mt-4">{error}</p>}
-          {successMessage && (
-            <p className="text-green-500 mt-4">{successMessage}</p>
-          )}
+          {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
         </div>
       </div>
     </div>
