@@ -7,6 +7,10 @@ import { Toaster } from '@/components/ui/sonner'
 function App() {
   return (
     <AppProvider>
+      <div style={{height:"42px"}}></div>
+      {/*<MentionProvider>
+        <EntitySelection></EntitySelection>
+      </MentionProvider>*/}
       <AppRoutes/>
       <Toaster position="top-center" richColors/>
     </AppProvider>

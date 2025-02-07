@@ -6,6 +6,7 @@ import { RelationProvider } from '../provider/RelationProvider';
 import { MentionStep } from '../pages/MentionStep';
 import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
+import EntitySelection from '@/features/annotation_tool/components/EntitySelection.tsx'
 import { SchemaProvider } from '../provider/SchemaProvider';
 import { MentionSuggestionStep } from '../pages/MentionSuggestionStep';
 import { RelationSuggestionStep } from '../pages/RelationSuggestionStep';
@@ -93,7 +94,7 @@ const CurrentStepRender = () => {
     case 'MENTIONS':
       return <MentionStep />
     case 'ENTITIES':
-      return <div>Entity Selection</div>
+      return <EntitySelection />
     case 'RELATION_SUGGESTION':
       return <RelationSuggestionStep />
     case 'RELATIONS':
