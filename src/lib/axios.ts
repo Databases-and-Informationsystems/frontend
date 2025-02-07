@@ -18,8 +18,8 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401 || error.response.status === 403) {
-      //localStorage.removeItem('token')
-      //window.location.href = '/login' // react router not accessible here
+      localStorage.removeItem('token')
+      window.location.href = '/login' // react router not accessible here
     }
     return Promise.reject(error)
   }

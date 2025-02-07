@@ -125,7 +125,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <div className="flex flex-row-reverse mt-2">
           {document.document_edit?.id ? (
             <Button>
-              <Link to={`/annotation/${document.document_edit?.id}?step=${document.document_edit?.state}`}>
+              <Link to={`/project/${document.project.id}/annotation/${document.document_edit?.id}?step=${document.document_edit?.state}`}>
                 Continue
               </Link>
             </Button>

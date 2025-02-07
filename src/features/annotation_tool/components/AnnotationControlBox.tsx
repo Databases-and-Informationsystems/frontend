@@ -5,9 +5,12 @@ import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
 import { useSchemaContext } from '../context/useSchemaContext';
-import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
+
 import { useParams } from 'react-router-dom';
 import { useWorkflowContext } from '../context/useWorkflowContext';
+import { Token } from '../types';
+import { CreateMentionPayload, Mention, UpdateMentionPayload } from '../types/mention';
+import { CreateRelationPayload } from '../types/relation';
 
 export const AnnotationControlBox = () => {
   const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelectionContext();
@@ -48,8 +51,7 @@ export const AnnotationControlBox = () => {
   const createRelation = (mentions: Mention[], schemaId: number) => {
     const payload: CreateRelationPayload = {
       schema_relation_id: schemaId,
-      document_edit_id: 0, // Access document_edit_id from context
-      isDirected: false, // Access isDirected from context
+      document_edit_id: Number(id),
       mention_head_id: mentions[0].id,
       mention_tail_id: mentions[1].id,
     }

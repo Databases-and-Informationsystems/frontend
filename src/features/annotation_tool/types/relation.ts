@@ -16,14 +16,12 @@ export type Relation = {
 export type CreateRelationPayload = {
     schema_relation_id: number;
     document_edit_id: number;
-    isDirected: boolean;
     mention_head_id: number;
     mention_tail_id: number;
 }
 
 export type UpdateRelationPayload = {
     schema_relation_id: number;
-    isDirected: boolean;
     mention_head_id: number;
     mention_tail_id: number;
 }

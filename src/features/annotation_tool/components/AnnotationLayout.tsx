@@ -1,4 +1,4 @@
-import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
+import { ModeToggle } from '@/components/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
 import { AnnotationControlBox } from './AnnotationControlBox';
@@ -6,7 +6,7 @@ import { RelationProvider } from '../provider/RelationProvider';
 import { MentionStep } from '../pages/MentionStep';
 import { RelationStep } from '../pages/RelationStep';
 import { TokenProvider } from '../provider/TokenProvider';
-import EntitySelection from '@/features/annotation_tool/components/EntitySelection.tsx'
+import EntitySelection from '@/features/annotation_tool/pages/EntitySelection'
 import { SchemaProvider } from '../provider/SchemaProvider';
 import { MentionSuggestionStep } from '../pages/MentionSuggestionStep';
 import { RelationSuggestionStep } from '../pages/RelationSuggestionStep';
@@ -18,6 +18,7 @@ import { fetchDocumentEdit } from '../api/documentEdit';
 import { useWorkflowContext } from '../context/useWorkflowContext';
 import { WorkflowStep } from '../types/workflow';
 import { WorkflowProvider } from '../provider/WorkflowProvider';
+import { LoadingWrapper } from './LoadingWrapper';
 
 export const AnnotationLayout = () => {
   const { id } = useParams();
@@ -65,21 +66,23 @@ export const AnnotationLayout = () => {
     <WorkflowProvider initialStep={annotationData.state.type as WorkflowStep}>
       <TokenProvider documentId={annotationData.document.id}>
         <SchemaProvider schemaId={annotationData.schema_id}>
-          <MentionProvider initialMentions={annotationData.mentions}>
-            <SelectionProvider>
-              <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
-                <div className='p-6'>
-                  <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    Annotation Document
-                  </h1>
-                  <NavigationHeader documentName={annotationData.document.name} />
-                  <AnnotationControlBox />
-                  <CurrentStepRender />
-                  <ModeToggle />
-                </div>
-              </RelationProvider>
-            </SelectionProvider>
-          </MentionProvider>
+            <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
+              <MentionProvider initialMentions={annotationData.mentions}>
+                <SelectionProvider>
+                <LoadingWrapper>
+                  <div className='p-6'>
+                    <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                      Annotation Document
+                    </h1>
+                    <NavigationHeader documentName={annotationData.document.name} />
+                    <AnnotationControlBox />
+                    <CurrentStepRender />
+                    <ModeToggle />
+                  </div>
+                </LoadingWrapper>
+                </SelectionProvider>
+              </MentionProvider>
+            </RelationProvider>
         </SchemaProvider>
       </TokenProvider>
     </WorkflowProvider>

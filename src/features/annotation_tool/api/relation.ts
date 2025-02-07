@@ -3,7 +3,7 @@ import {
   CreateRelationPayload,
   Relation,
   UpdateRelationPayload,
-} from '../types'
+} from '../types/relation'
 
 export const fetchRelations = async (
   documentEditId: number
@@ -31,7 +31,7 @@ export const updateRelation = async (
 }
 
 export const deleteRelation = async (relationId: number): Promise<void> => {
-  await axiosInstance.patch(`/relations/${relationId}`)
+  await axiosInstance.delete(`/relations/${relationId}`)
 }
 
 export const acceptRelationSuggestion = async (

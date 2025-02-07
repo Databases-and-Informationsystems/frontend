@@ -7,7 +7,7 @@ export const RelationStep = () => {
   return (
     <ResizablePanelGroup direction='horizontal'>
       <ResizablePanel>
-        <AnnotatedText/>
+        <AnnotatedText showDeleteButton={false}/>
       </ResizablePanel>
       <ResizableHandle withHandle className='bg-transparent'/>
       <ResizablePanel>
