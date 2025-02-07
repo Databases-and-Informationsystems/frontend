@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import TokenContext from "../provider/TokenProvider";
 
-export const useTokens = () => {
+export const useTokensContext = () => {
     const context = useContext(TokenContext);
 
     if (!context) {

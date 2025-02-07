@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { AnnotatedText } from '../components/AnnotatedText';
 import { useMentionContext } from '../context/useMentionContext';
-import { useTokens } from '../context/useTokens';
+import { useTokensContext } from '../context/useTokensContext';
 import { useStepNavigation } from '../hooks/useStepNavigation';
-import { useSchema } from '../context/useSchema';
+import { useSchemaContext } from '../context/useSchemaContext';
 
 export const MentionSuggestionStep = () => {
-  const { tokens, loading: tokenLoading, error } = useTokens();
-  const { loading: schemaLoading } = useSchema();
+  const { tokens, loading: tokenLoading, error } = useTokensContext();
+  const { loading: schemaLoading } = useSchemaContext();
   const { mentions, loading } = useMentionContext();
   const { step, handleStepChange } = useStepNavigation();
 

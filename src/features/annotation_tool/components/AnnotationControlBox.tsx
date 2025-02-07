@@ -1,20 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useSelection } from '../context/useSelection'
+import { useSelectionContext } from '../context/useSelectionContext'
 import { Button } from '@/components/ui/button';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
-import { useSchema } from '../context/useSchema';
+import { useSchemaContext } from '../context/useSchemaContext';
 import { useStepNavigation } from '../hooks/useStepNavigation';
 import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
 import { useParams } from 'react-router-dom';
 
 export const AnnotationControlBox = () => {
-  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
+  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelectionContext();
   const { handleCreateMention, handleUpdateMention } = useMentionContext();
   const { step } = useStepNavigation();
   const { handleCreateRelation } = useRelationContext();
-  const { schema, loading, error } = useSchema();
+  const { schema, loading, error } = useSchemaContext();
   const { id } = useParams();
 
   if (loading) {

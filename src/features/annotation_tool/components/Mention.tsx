@@ -1,6 +1,6 @@
 import { Mention as MentionType } from '../types/mention'
 import { Badge } from '@/components/ui/badge';
-import { useSelection } from '../context/useSelection';
+import { useSelectionContext } from '../context/useSelectionContext';
 import { useMentionContext } from '../context/useMentionContext';
 import { Button } from '@/components/ui/button';
 import { Check, Clock, Trash2 } from 'lucide-react';
@@ -12,7 +12,7 @@ interface MentionProps {
 }
 
 export const Mention = ({ mention, showDeleteButton = true, isInRelation = false }: MentionProps) => {
-  const { selectedMentions, handleMentionClick } = useSelection();
+  const { selectedMentions, handleMentionClick } = useSelectionContext();
   const { handleDeleteMention } = useMentionContext();
 
   const isSelected = selectedMentions.some((selectedMention) => selectedMention.id === mention.id);

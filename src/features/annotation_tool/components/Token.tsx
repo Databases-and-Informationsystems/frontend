@@ -1,13 +1,13 @@
 import React from 'react'
 import { Token as TokenType } from '../types/token'
-import { useSelection } from '../context/useSelection';
+import { useSelectionContext } from '../context/useSelectionContext';
 
 interface TokenProps {
     token: TokenType;
 }
 
 export const Token = ({ token }: TokenProps) => {
-  const { selectedTokens, handleTokenClick } = useSelection();
+  const { selectedTokens, handleTokenClick } = useSelectionContext();
 
   const isSelected = selectedTokens.some((selectedToken) => selectedToken.id === token.id);
 

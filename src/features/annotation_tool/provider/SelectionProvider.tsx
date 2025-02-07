@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useTokens } from "../context/useTokens";
+import { useTokensContext } from "../context/useTokensContext";
 import { Mention, Token } from "../types";
 import { useMentionContext } from "../context/useMentionContext";
 import { useStepNavigation } from "../hooks/useStepNavigation";
@@ -22,7 +22,7 @@ interface SelectionProviderProps {
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
-  const { tokens: allTokens } = useTokens();
+  const { tokens: allTokens } = useTokensContext();
   const { mentions: allMentions } = useMentionContext();
   const { step } = useStepNavigation();
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);

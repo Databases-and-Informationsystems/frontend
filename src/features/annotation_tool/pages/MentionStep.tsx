@@ -1,10 +1,10 @@
 import { AnnotatedText } from '../components/AnnotatedText'
-import { useSchema } from '../context/useSchema';
-import { useTokens } from '../context/useTokens';
+import { useSchemaContext } from '../context/useSchemaContext';
+import { useTokensContext } from '../context/useTokensContext';
 
 export const MentionStep = () => {
-  const { tokens } = useTokens();
-  const { loading } = useSchema();
+  const { tokens } = useTokensContext();
+  const { loading } = useSchemaContext();
 
   if (loading) {
     return <p>Loading schema...</p>;

@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select'
 import { Relation } from './Relation'
-import { useSchema } from '../context/useSchema'
+import { useSchemaContext } from '../context/useSchemaContext'
 import { useRelationContext } from '../context/useRelationContext'
 import { useEffect, useState } from 'react'
 
 export const RelationSuggestionContainer = () => {
-  const { schema } = useSchema()
+  const { schema } = useSchemaContext()
   const { relations, handleAcceptRelation, handleRejectRelation } = useRelationContext()
   const [relationTag, setRelationTag] = useState<string | undefined>(undefined)
 
