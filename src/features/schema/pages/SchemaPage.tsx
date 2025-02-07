@@ -8,6 +8,7 @@ import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { ModelStepType } from '../types/model'
 import TrainModelModal from '../components/TrainModelModal'
+import SchemaConstraint from '../components/SchemaConstraint'
 
 interface StepWithModels {
   stepName: string
@@ -202,45 +203,15 @@ const SchemaPage = () => {
               a.schema_relation.tag!.localeCompare(b.schema_relation.tag!)
             )
             .map((constraint) => (
-              <div
+              <SchemaConstraint
                 key={constraint.id}
-                className="grid grid-cols-3 items-center p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-md dark:border-gray-700"
-              >
-                {/* Head Mention Tag (Left) */}
-                <div className="flex items-center justify-start space-x-4">
-                  <div
-                    className="w-6 h-6 rounded min-w-[1.5rem]"
-                    style={{
-                      backgroundColor: constraint.schema_mention_head.color,
-                    }}
-                  ></div>
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_mention_head.tag}
-                  </div>
-                </div>
-
-                {/* Relation Tag (Center) */}
-                <div className="flex justify-center items-center space-x-2">
-                  {!constraint.is_directed && renderArrow('right')}
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_relation.tag}
-                  </div>
-                  {!constraint.is_directed && renderArrow('left')}
-                </div>
-
-                {/* Tail Mention Tag (Right) */}
-                <div className="flex items-center justify-end space-x-4">
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_mention_tail.tag}
-                  </div>
-                  <div
-                    className="w-6 h-6 rounded min-w-[1.5rem]"
-                    style={{
-                      backgroundColor: constraint.schema_mention_tail.color,
-                    }}
-                  ></div>
-                </div>
-              </div>
+                mention_head_color={constraint.schema_mention_head.color}
+                mention_head_tag={constraint.schema_mention_head.tag}
+                relation_tag={constraint.schema_relation.tag}
+                is_directed={constraint.is_directed}
+                mention_tail_color={constraint.schema_mention_tail.color}
+                mention_tail_tag={constraint.schema_mention_tail.tag}
+              />
             ))}
         </div>
       </div>

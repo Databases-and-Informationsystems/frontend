@@ -22,6 +22,7 @@ import {
   SelectValue,
   SelectTrigger,
 } from '@/components/ui/select'
+import SchemaConstraint from '../components/SchemaConstraint'
 
 const CreateSchemaPage = () => {
   const navigate = useNavigate()
@@ -422,32 +423,30 @@ const CreateSchemaPage = () => {
           constraints.filter(
             (c) => c.mention_head_tag && c.mention_tail_tag && c.relation_tag
           ).length ? (
-            <div className="flex flex-col space-x-2">
+            <div className="flex flex-col space-y-2">
               {constraints
                 .filter(
                   (c) =>
                     c.mention_head_tag && c.mention_tail_tag && c.relation_tag
                 )
                 .map((constraint, index) => (
-                  <div
+                  <SchemaConstraint
                     key={index}
-                    className="flex justify-between items-center p-2 shadow"
-                  >
-                    {/* Mention Head Tag */}
-                    <span className="text-gray-800dark:text-gray-100 font-medium">
-                      {constraint.mention_head_tag}
-                    </span>
-
-                    {/* Relation Tag */}
-                    <span className="text-gray-800dark:text-gray-100 font-semibold">
-                      {constraint.relation_tag}
-                    </span>
-
-                    {/* Mention Tail Tag */}
-                    <span className="text-gray-800dark:text-gray-100 font-medium">
-                      {constraint.mention_tail_tag}
-                    </span>
-                  </div>
+                    mention_head_color={
+                      mentions.find(
+                        (m) => m.tag === constraint.mention_head_tag
+                      )?.color
+                    }
+                    mention_tail_color={
+                      mentions.find(
+                        (m) => m.tag === constraint.mention_tail_tag
+                      )?.color
+                    }
+                    mention_head_tag={constraint.mention_head_tag}
+                    mention_tail_tag={constraint.mention_tail_tag}
+                    relation_tag={constraint.relation_tag}
+                    is_directed={constraint.is_directed}
+                  />
                 ))}
             </div>
           ) : (

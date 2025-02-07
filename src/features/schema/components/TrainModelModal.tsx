@@ -16,7 +16,11 @@ import { AlertCircle } from 'lucide-react'
 import Loader from '@/components/Loader'
 import { Schema } from '@/types/schema'
 import { ModelStepType } from '../types/model'
-import { getDocumentEditsBySchema, getTrainSettings } from '../api/schemas'
+import {
+  getDocumentEditsBySchema,
+  getTrainSettings,
+  trainModel,
+} from '../api/schemas'
 import { DocumentEdit } from '@/types/document'
 import { ModelWithSetting } from '@/features/projects/types/models'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -49,6 +53,7 @@ const TrainModelModal: React.FC<TrainModelModalProps> = ({
     Record<string, string>
   >({})
 
+  const [modelName, setModelName] = useState<string>('')
   const [documentEdits, setDocumentEdits] = useState<DocumentEdit[]>([])
   const [modelTypesWithSettings, setModelTypesWithSettings] = useState<
     Omit<ModelWithSetting, 'id' | 'name'>[]
@@ -90,10 +95,21 @@ const TrainModelModal: React.FC<TrainModelModalProps> = ({
     fetchData()
   }, [isOpen])
 
-  const handleStartAnnotation = async () => {
+  const handleStartTraining = async () => {
+    if (!selectedModelType) return
     try {
       setLoading(true)
-      // TODO start training
+      const res = await trainModel(
+        schema,
+        modelName,
+        selectedModelType,
+        modelStepType,
+        Object.entries(selectedDocuments)
+          .filter(([_, isSelected]) => isSelected)
+          .map(([id]) => Number(id)),
+        selectedSettings
+      )
+      console.log(res)
     } catch (err: any) {
       console.log('Error: ', err)
       setError(err.message as string)
@@ -152,6 +168,9 @@ const TrainModelModal: React.FC<TrainModelModalProps> = ({
         )}
         <div className="flex flex-col gap-2">
           {Object.keys(settings).map((key, index) => {
+            if (key === 'name') {
+              return <></>
+            }
             const values = settings[key]?.values
             if (Array.isArray(values)) {
               {
@@ -236,6 +255,13 @@ const TrainModelModal: React.FC<TrainModelModalProps> = ({
     >
       <CardContent>
         <div>
+          <Input
+            label="Model Name"
+            value={modelName}
+            onChange={(e) => setModelName(e.target.value)}
+          />
+        </div>
+        <div>
           <Select
             value={selectedModelType}
             onValueChange={(v) => setSelectedModelType(v)}
@@ -316,7 +342,7 @@ const TrainModelModal: React.FC<TrainModelModalProps> = ({
         <Button onClick={() => setIsModalOpen(false)} variant="secondary">
           Cancel
         </Button>
-        <Button onClick={() => handleStartAnnotation()} disabled={loading}>
+        <Button onClick={() => handleStartTraining()} disabled={loading}>
           {loading && <Loader />}
           Train Model
         </Button>
