@@ -38,11 +38,11 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
     return [];
   };
 
-  let css_border = "border-2 border-solid border-gray-400 mb-1 min-h-20 flex flexEins"
+  let css_border = "border-2 border-solid border-gray-400 mb-1 min-h-20 flex flexEins min-w-fit"
   let css_bg = "m-1"
 
   if (dev_mode) {
-    css_border = "border-2 border-solid border-emerald-400 mb-1 min-h-20 flex flexEins";
+    css_border = "border-2 border-solid border-emerald-400 mb-1 min-h-20 flex flexEins min-w-fit";
     css_bg = "bg-red-300 m-1"
   }
 
