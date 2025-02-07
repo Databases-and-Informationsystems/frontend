@@ -9,6 +9,7 @@ interface RelationContextType {
   handleUpdateRelation: (relationId: number, payload: UpdateRelationPayload) => void;
   handleAcceptRelation: (relationId: number) => void;
   handleRejectRelation: (relationId: number) => void;
+  fetchCurrentRelations: () => Promise<void>;
   relations: RelationType[];
   loading: boolean;
 }
@@ -34,7 +35,6 @@ export const RelationProvider = ({ children, initialRelations = [], documentEdit
         const data = await fetchRelations(documentEditId)
         setRelations(data)
         relationsFetched.current = true
-        console.log('Relations', data)
       } catch (error) {
         console.error('Failed to fetch relations:', error)
       } finally {
@@ -45,6 +45,15 @@ export const RelationProvider = ({ children, initialRelations = [], documentEdit
       loadRelations()
     }
   }, [documentEditId, currentStep])
+
+  const fetchCurrentRelations = async () => {
+    try {
+      const data = await fetchRelations(documentEditId)
+      setRelations(data)
+    } catch (error) {
+      console.error('Failed to fetch relations:', error)
+    }
+  }
 
   const handleCreateRelation = async (payload: CreateRelationPayload) => {
     try {
@@ -109,6 +118,7 @@ export const RelationProvider = ({ children, initialRelations = [], documentEdit
     <RelationContext.Provider value={{
       relations,
       loading,
+      fetchCurrentRelations,
       handleCreateRelation,
       handleDeleteRelation,
       handleUpdateRelation,

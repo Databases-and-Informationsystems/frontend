@@ -3,7 +3,7 @@ import {
   CreateRelationPayload,
   Relation,
   UpdateRelationPayload,
-} from '../types'
+} from '../types/relation'
 
 export const fetchRelations = async (
   documentEditId: number

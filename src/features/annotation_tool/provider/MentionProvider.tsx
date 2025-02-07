@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 import { Mention as MentionType } from "../types";
 import { CreateMentionPayload, Mention, UpdateMentionPayload } from "../types/mention";
 import { createMention, updateMention, deleteMention, acceptMentionSuggestion, rejectMentionSuggestion } from "../api/mention";
+import { useRelationContext } from "../context/useRelationContext";
 
 interface MentionContextType {
   handleCreateMention: (payload: CreateMentionPayload) => void;
@@ -21,6 +22,7 @@ interface MentionProviderProps {
 }
 
 export const MentionProvider = ({ children, initialMentions = [] }: MentionProviderProps) => {
+  const { fetchCurrentRelations } = useRelationContext();
   const [mentions, setMentions] = useState<Mention[]>(initialMentions)
   const [loading, setLoading] = useState(false)
 
@@ -54,6 +56,7 @@ export const MentionProvider = ({ children, initialMentions = [] }: MentionProvi
     try {
       await deleteMention(mentionId)
       setMentions((prev) => prev.filter((mention) => mention.id !== mentionId))
+      await fetchCurrentRelations()
     } catch (err) {
       console.error('Failed to delete mention:', err)
     }
