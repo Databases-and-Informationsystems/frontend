@@ -7,7 +7,8 @@ interface WorkflowContextType {
   currentStep: WorkflowStep;
   maxStep: WorkflowStep;
   error: string | null;
-  updateMaxStep: (step: WorkflowStep) => void;
+  loading: boolean;
+  updateMaxStep: (step: WorkflowStep) => Promise<boolean>;
   updateStep: (step: WorkflowStep) => void;
 }
 
@@ -27,6 +28,7 @@ export const WorkflowProvider = ({ children, initialStep }: WorkflowProviderProp
   const [maxStep, setMaxStep] = useState<WorkflowStep>(initialStep);
   const [searchParams, setSearchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -42,19 +44,25 @@ export const WorkflowProvider = ({ children, initialStep }: WorkflowProviderProp
     setSearchParams({ step });
   }
 
-  const updateMaxStep = async (step: WorkflowStep) => {
+  const updateMaxStep = async (step: WorkflowStep): Promise<boolean> => {
     try {
+      setLoading(true);
       const workflowData = await updateWorkflowStep(Number(id), step);
       setMaxStep(workflowData.state.type as WorkflowStep);
       setError(null);
+      return true;
     }
     catch (err) {
       setError('Failed to update workflow step: ' + err);
+      return false;
+    }
+    finally {
+      setLoading(false);
     }
   }
 
   return (
-    <WorkflowContext.Provider value={{ currentStep, maxStep, error, updateStep, updateMaxStep }}>
+    <WorkflowContext.Provider value={{ currentStep, maxStep, error, loading, updateStep, updateMaxStep }}>
       {children}
     </WorkflowContext.Provider>
   );

@@ -40,8 +40,8 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
       return;
     }
     if (isForwardStep(key)) {
-      updateMaxStep(key as WorkflowStep);
-      if (error) {
+      const success = await updateMaxStep(key as WorkflowStep);
+      if (!success) {
         toast.warning(error, {
           className: 'text-base',
           icon: <TriangleAlert />,

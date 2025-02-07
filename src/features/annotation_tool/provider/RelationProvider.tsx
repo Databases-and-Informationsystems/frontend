@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { CreateRelationPayload, Relation, Relation as RelationType, UpdateRelationPayload } from "../types";
+import { CreateRelationPayload, Relation, Relation as RelationType, UpdateRelationPayload } from "../types/relation";
 import { createRelation, deleteRelation, updateRelation, acceptRelationSuggestion, rejectRelationSuggestion, fetchRelations } from "../api/relation";
 import { useWorkflowContext } from "../context/useWorkflowContext";
 

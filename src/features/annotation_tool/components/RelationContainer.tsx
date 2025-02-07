@@ -1,4 +1,3 @@
-import React from 'react'
 import { useRelationContext } from '../context/useRelationContext';
 import { Relation } from './Relation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

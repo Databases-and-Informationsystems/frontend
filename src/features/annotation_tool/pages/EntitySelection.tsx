@@ -3,15 +3,15 @@ import { DraggableHand } from '@/features/annotation_tool/components/DraggableHa
 import { DndContext, DragOverlay } from '@dnd-kit/core'
 import { useState } from 'react'
 import { useMentionContext } from '../context/useMentionContext'
-import { Mention } from '@/features/annotation_tool/components/Mention.tsx'
 import { useEntity } from '@/features/annotation_tool/hooks/useEntity.ts'
 import { Card } from '@/components/ui/card.tsx'
+import { AnnotatedText } from '../components/AnnotatedText'
 
 
 const EntitySelection = () => {
 
   const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleRemoveButton } = useEntity();
-  const { mentions, loading } = useMentionContext();
+  const { mentions } = useMentionContext();
 
   console.log("%c Before mapping: ", "color: orange", entities);
   const entityIds = Array.isArray(entities) ? entities?.map((entity) => entity.id) : [];
@@ -52,17 +52,14 @@ const EntitySelection = () => {
       const fromEntity = getEntityByMentionId(active.id).id;
       if (typeMInE === tempM.tag && fromEntity != over.id) {
         console.log("Can be inserted");
-        handleRemoveFromEntity(fromEntity, active.id, true);
+        handleRemoveFromEntity(fromEntity, active.id, true).then(() => {
         handleAddToEntity(over.id, active.id);
+        });
       } else {
         console.log("Can't be inserted");
       }
     }
     setActiveId(null)
-  }
-
-  if (loading) {
-    return (<p>Loading Mentions...</p>)
   }
 
   if (eLoading) {
@@ -106,9 +103,10 @@ const EntitySelection = () => {
         </DndContext>
       </div>
       <div className={css_right}>
-        {
+        {/* {
           mentions.map((mention) => (<Mention key={mention.id} mention={mention} showDeleteButton={false} ></Mention>))
-        }
+        } */}
+        <AnnotatedText showDeleteButton={false}/>
       </div>
     </Card>
   )
