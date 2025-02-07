@@ -4,15 +4,19 @@ import { updateWorkflowStep } from "../api/workflow";
 import { workflowOrder, WorkflowStep } from "../types/workflow";
 
 interface WorkflowContextType {
-    currentStep: WorkflowStep;
-    maxStep: WorkflowStep;
-    updateMaxStep: (step: WorkflowStep) => void;
-    updateStep: (step: WorkflowStep) => void;
+  currentStep: WorkflowStep;
+  maxStep: WorkflowStep;
+  updateMaxStep: (step: WorkflowStep) => void;
+  updateStep: (step: WorkflowStep) => void;
 }
 
 interface WorkflowProviderProps {
-    children: React.ReactNode;
-    initialStep: WorkflowStep;
+  children: React.ReactNode;
+  initialStep: WorkflowStep;
+}
+
+function isForwardStep(newStep: WorkflowStep, currentMax: WorkflowStep): boolean {
+  return workflowOrder.indexOf(newStep) > workflowOrder.indexOf(currentMax);
 }
 
 const WorkflowContext = createContext<WorkflowContextType | undefined>(undefined);
@@ -27,7 +31,7 @@ export const WorkflowProvider = ({ children, initialStep }: WorkflowProviderProp
     const step = searchParams.get('step') as WorkflowStep | null;
     if (step && workflowOrder.includes(step)) {
       setCurrentStep(step);
-      setMaxStep(step);
+      setMaxStep(prev => isForwardStep(step, prev) ? step : prev);
     }
   }, [searchParams]);
 
@@ -38,7 +42,7 @@ export const WorkflowProvider = ({ children, initialStep }: WorkflowProviderProp
 
   const updateMaxStep = async (step: WorkflowStep) => {
     try {
-      const workflowData = await updateWorkflowStep(Number(id),step);
+      const workflowData = await updateWorkflowStep(Number(id), step);
       setMaxStep(workflowData.state.type as WorkflowStep);
     }
     catch (err) {

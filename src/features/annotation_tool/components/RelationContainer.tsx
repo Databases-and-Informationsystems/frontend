@@ -4,11 +4,7 @@ import { Relation } from './Relation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const RelationContainer = () => {
-  const { relations, loading } = useRelationContext();
-
-  if (loading) {
-    return <p>Loading relations...</p>
-  }
+  const { relations } = useRelationContext();
 
   return (
     <Card>

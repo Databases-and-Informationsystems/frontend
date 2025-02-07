@@ -26,9 +26,11 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
   const isBlocked = useBlockStep(currentStep);
 
   const isForwardStep = (targetStep: string) => {
-    console.log(maxStep);
+    console.log(maxStep, workflowOrder.indexOf(maxStep));
     const currentIndex = workflowOrder.indexOf(maxStep);
+    console.log('currentIndex', currentIndex);
     const targetIndex = workflowOrder.indexOf(targetStep as WorkflowStep);
+    console.log('targetIndex', targetIndex);
     return targetIndex > currentIndex;
   };
 
@@ -45,6 +47,7 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
       updateMaxStep(key as WorkflowStep);
     }
     updateStep(key as WorkflowStep);
+    console.log('maxstep after update', maxStep);
   };
 
 
