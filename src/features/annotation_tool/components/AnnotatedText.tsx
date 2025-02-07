@@ -1,6 +1,7 @@
 import React from 'react'
-import { Mention as MentionType, Token as TokenType } from '../types'
 import { Token } from './Token';
+import { Mention as MentionType } from '../types/mention';
+import { Token as TokenType } from '../types/token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMentionContext } from '../context/useMentionContext';
 import { EnhancedMention } from './EnhancedMention';

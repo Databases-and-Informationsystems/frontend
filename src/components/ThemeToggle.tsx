@@ -9,6 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+
+// This component is created by the Developers of ShadCN
+
 export function ModeToggle() {
     const { setTheme } = useTheme()
    
