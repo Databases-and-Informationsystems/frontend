@@ -1,8 +1,6 @@
 import { AnnotationEntity } from '../types'
 import axiosInstance from '@/lib/axios.ts'
 
-//const BASE_URL = 'http://localhost:3000/entities'
-
 export const fetchEntities = async (document_edit_id: number | string): Promise<AnnotationEntity[]> => {
   try {
     const response = await axiosInstance.get(`/entities/${document_edit_id}`)
@@ -13,9 +11,14 @@ export const fetchEntities = async (document_edit_id: number | string): Promise<
   }
 }
 
-export const createEntity = async (entity: AnnotationEntity) => {
+export type EntityCreationPayload = {
+  document_edit_id: number;
+  mention_ids: number[];
+}
+
+export const createEntity = async (entity: EntityCreationPayload) => {
   try {
-    const response = await axiosInstance.post("/entities/", entity)
+    const response = await axiosInstance.post('/entities', entity)
     return response.data
   } catch (error) {
     console.error('Failed to create entity:', error)
@@ -23,26 +26,9 @@ export const createEntity = async (entity: AnnotationEntity) => {
   }
 }
 
-export const updateEntity = async (entityId: string, updatedEntity: AnnotationEntity) => {
+export const deleteEntity = async (entityId: number) => {
   try {
-
-    const entityToUpdate = {
-      ...updatedEntity,
-      mention_ids: Array.isArray(updatedEntity.mention_ids) ? updatedEntity.mention_ids : Object.values(updatedEntity.mention_ids)
-    };
-
-    const response = await axiosInstance.put(`/entities/${entityId}`, entityToUpdate);
-    console.log("Updated Entity: ", response.data);
-    return response.data;
-  } catch (error) {
-    console.error(`Failed to update entity with ID ${entityId}:`, error);
-    throw error;
-  }
-}
-
-
-export const deleteEntity = async (entityId: string) => {
-  try {
+    console.log("%cDelete 2 reached", "color: red")
     const response = await axiosInstance.delete(`/entities/${entityId}`)
     console.log("Deleted Entity: ", response.data);
     return response.data
