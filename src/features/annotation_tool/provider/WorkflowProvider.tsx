@@ -1,21 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { updateWorkflowStep } from "../api/workflow";
-
-type WorkflowStep =
-  | 'MENTION_SUGGESTION'
-  | 'MENTIONS'
-  | 'ENTITIES'
-  | 'RELATION_SUGGESTION'
-  | 'RELATIONS';
-
-const workflowOrder: WorkflowStep[] = [
-    'MENTION_SUGGESTION',
-    'MENTIONS',
-    'ENTITIES',
-    'RELATION_SUGGESTION',
-    'RELATIONS',
-];
+import { workflowOrder, WorkflowStep } from "../types/workflow";
 
 interface WorkflowContextType {
     currentStep: WorkflowStep;
@@ -66,3 +52,5 @@ export const WorkflowProvider = ({ children, initialStep }: WorkflowProviderProp
     </WorkflowContext.Provider>
   );
 }
+
+export default WorkflowContext;

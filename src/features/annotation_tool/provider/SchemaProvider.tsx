@@ -23,9 +23,7 @@ export const SchemaProvider = ({ children, schemaId }: SchemaProviderProps) => {
   useEffect(() => {
     const loadSchema = async () => {
       try {
-        console.log(schemaId);
         const data = await fetchSchema(schemaId);
-        console.log(data);
         setSchema(data);
       } catch (err) {
         setError("Failed to fetch schema: " + err);

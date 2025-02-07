@@ -1,4 +1,3 @@
-//import { useStepNavigation } from '../hooks/useStepNavigation';
 import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
@@ -11,11 +10,13 @@ import { SchemaProvider } from '../provider/SchemaProvider';
 import { MentionSuggestionStep } from '../pages/MentionSuggestionStep';
 import { RelationSuggestionStep } from '../pages/RelationSuggestionStep';
 import { NavigationHeader } from './NavigationHeader';
-import { useStepNavigation } from '../hooks/useStepNavigation';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import { DocumentEdit } from '../types/documentEdit';
 import { fetchDocumentEdit } from '../api/documentEdit';
+import { useWorkflowContext } from '../context/useWorkflowContext';
+import { WorkflowStep } from '../types/workflow';
+import { WorkflowProvider } from '../provider/WorkflowProvider';
 
 export const AnnotationLayout = () => {
   const { id } = useParams();
@@ -33,6 +34,7 @@ export const AnnotationLayout = () => {
     const fetchAnnotationData = async () => {
       try {
         const data = await fetchDocumentEdit(Number(id));
+        console.log('Annotation Data', data);
         setAnnotationData(data);
       } catch (err) {
         setError('Failed to fetch annotation data: ' + err);
@@ -59,40 +61,42 @@ export const AnnotationLayout = () => {
 
 
   return (
-    <TokenProvider documentId={annotationData.document.id}>
-      <SchemaProvider schemaId={annotationData.schema_id}>
-      <MentionProvider initialMentions={annotationData.mentions}>
-        <SelectionProvider>
-            <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
-              <div className='p-6'>
-                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                  Annotation Document
-                </h1>
-                <NavigationHeader documentName={annotationData.document.name} currentStep={annotationData.state.type} />
-                <AnnotationControlBox />
-                <CurrentStepRender />
-                <ModeToggle />
-              </div>
-            </RelationProvider>
-        </SelectionProvider>
-        </MentionProvider>
-      </SchemaProvider>
-    </TokenProvider>
+    <WorkflowProvider initialStep={annotationData.state.type as WorkflowStep}>
+      <TokenProvider documentId={annotationData.document.id}>
+        <SchemaProvider schemaId={annotationData.schema_id}>
+          <MentionProvider initialMentions={annotationData.mentions}>
+            <SelectionProvider>
+              <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
+                <div className='p-6'>
+                  <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    Annotation Document
+                  </h1>
+                  <NavigationHeader documentName={annotationData.document.name} />
+                  <AnnotationControlBox />
+                  <CurrentStepRender />
+                  <ModeToggle />
+                </div>
+              </RelationProvider>
+            </SelectionProvider>
+          </MentionProvider>
+        </SchemaProvider>
+      </TokenProvider>
+    </WorkflowProvider>
   )
 }
 
 const CurrentStepRender = () => {
-  const { step } = useStepNavigation();
-  switch (step) {
-    case 'mentionSuggestion':
+  const { currentStep } = useWorkflowContext();
+  switch (currentStep) {
+    case 'MENTION_SUGGESTION':
       return <MentionSuggestionStep />
-    case 'mentionEditing':
+    case 'MENTIONS':
       return <MentionStep />
-    case 'entitySelection':
+    case 'ENTITIES':
       return <div>Entity Selection</div>
-    case 'relationSuggestion':
+    case 'RELATION_SUGGESTION':
       return <RelationSuggestionStep />
-    case 'relationEditing':
+    case 'RELATIONS':
       return <RelationStep />
   }
 }

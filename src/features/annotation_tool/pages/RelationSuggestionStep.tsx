@@ -9,9 +9,6 @@ export const RelationSuggestionStep = () => {
 
   const hasSuggestions = relations.some(relation => relation.isShownRecommendation === true);
 
-  console.log(hasSuggestions);
-  console.log(loading);
-
   useEffect(() => {
     if (!loading && !hasSuggestions && step === 'relationSuggestion') {
       handleStepChange('relationEditing');

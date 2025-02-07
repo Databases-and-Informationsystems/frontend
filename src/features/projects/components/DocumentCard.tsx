@@ -41,6 +41,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 }: DocumentCardProps) => {
   const [isStartAnnotationModalOpen, setIsAnnotationModalOpen] =
     useState<boolean>(false)
+
+  console.log('Document', document)
   return (
     <Card key={document.id}>
       <CardHeader className="relative">
@@ -123,7 +125,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <div className="flex flex-row-reverse mt-2">
           {document.document_edit?.id ? (
             <Button>
-              <Link to={`/annotation/${document.document_edit?.id}`}>
+              <Link to={`/annotation/${document.document_edit?.id}?step=${document.document_edit?.state}`}>
                 Continue
               </Link>
             </Button>

@@ -12,3 +12,18 @@ type State = {
     id: number;
     type: string;
 }
+
+export type WorkflowStep =
+  | 'MENTION_SUGGESTION'
+  | 'MENTIONS'
+  | 'ENTITIES'
+  | 'RELATION_SUGGESTION'
+  | 'RELATIONS';
+
+export const workflowOrder: WorkflowStep[] = [
+    'MENTION_SUGGESTION',
+    'MENTIONS',
+    'ENTITIES',
+    'RELATION_SUGGESTION',
+    'RELATIONS',
+];

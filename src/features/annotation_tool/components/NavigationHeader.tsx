@@ -1,10 +1,12 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu.tsx'
-import { useStepNavigation } from '../hooks/useStepNavigation'
 import { useBlockStep } from '../hooks/useBlockStep';
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheckBig, Save, TriangleAlert } from 'lucide-react';
 import { toast } from 'sonner';
+import { useWorkflowContext } from '../context/useWorkflowContext';
+import { workflowOrder, WorkflowStep } from '../types/workflow';
+
 
 const steps = [
   { key: 'MENTION_SUGGESTION', label: 'Mention Suggestion' },
@@ -16,27 +18,34 @@ const steps = [
 
 interface NavigationHeaderProps {
   documentName: string;
-  currentStep: string;
 }
 
 
-export function NavigationHeader({ documentName, currentStep }: NavigationHeaderProps) {
-  const { step, handleStepChange } = useStepNavigation(currentStep);
+export function NavigationHeader({ documentName }: NavigationHeaderProps) {
+  const { currentStep, maxStep, updateStep, updateMaxStep } = useWorkflowContext();
+  const isBlocked = useBlockStep(currentStep);
 
-  const isBlocked = useBlockStep(step);
+  const isForwardStep = (targetStep: string) => {
+    console.log(maxStep);
+    const currentIndex = workflowOrder.indexOf(maxStep);
+    const targetIndex = workflowOrder.indexOf(targetStep as WorkflowStep);
+    return targetIndex > currentIndex;
+  };
 
-  const handleStepClick = (key: string) => {
+  const handleStepClick = async (key: string) => {
     if (isBlocked) {
-      toast.warning('You have to finish all suggestions, before you can proceed to the next step.',
-        {
-          className: 'text-base',
-          icon: <TriangleAlert />,
-        }
-      );
+      toast.warning('You have to finish all suggestions before you can proceed to the next step.', {
+        className: 'text-base',
+        icon: <TriangleAlert />,
+      });
       return;
     }
-    handleStepChange(key);
-  }
+    if (isForwardStep(key)) {
+      console.log('updateMaxStep', key);
+      updateMaxStep(key as WorkflowStep);
+    }
+    updateStep(key as WorkflowStep);
+  };
 
 
   return (
@@ -49,9 +58,9 @@ export function NavigationHeader({ documentName, currentStep }: NavigationHeader
               <React.Fragment key={key}>
                 <NavigationMenuItem className='border-2 rounded-lg p-2 select-none'>
                   <NavigationMenuLink
-                    onClick={() => key !== step && handleStepClick(key)}
+                    onClick={() => key !== currentStep && handleStepClick(key)}
                     style={{ cursor: 'pointer' }}
-                    className={`text-lg font-medium ${key === step ? 'text-blue-500' : 'text-gray-500'
+                    className={`text-lg font-medium ${key === currentStep ? 'text-blue-500' : 'text-gray-500'
                       }`}
                   >
                     {label}
