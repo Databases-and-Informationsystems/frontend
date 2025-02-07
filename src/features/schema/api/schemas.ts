@@ -46,7 +46,7 @@ export const getTrainSettings = async (
   schema: Schema,
   modelStepType: ModelStepType
 ): Promise<Omit<ModelWithSetting, 'id' | 'name'>[]> => {
-  const response = await axiosInstance.get<any>(`/schemas/${schema.id}/train`)
+  const response = await axiosInstance.get<any>(`/training/${schema.id}/train`)
 
   switch (modelStepType) {
     case ModelStepType.entities:
@@ -56,6 +56,34 @@ export const getTrainSettings = async (
     case ModelStepType.mentions:
       return response.data.mention as Omit<ModelWithSetting, 'id' | 'name'>[]
   }
+}
+
+export const trainModel = async (
+  schema: Schema,
+  model_name: string,
+  model_type: string,
+  model_step: string,
+  document_edits: number[],
+  settings: Record<string, string>
+): Promise<any> => {
+  const response = await axiosInstance.post<any>(
+    `/training/${schema.id}/train`,
+    {
+      model_name: model_name,
+      model_type: model_type,
+      model_step: model_step,
+      document_edits: document_edits,
+      settings:
+        Object.keys(settings).map((k) => {
+          return {
+            key: k,
+            value: settings[k],
+          }
+        }) ?? [],
+    }
+  )
+
+  return response.data
 }
 
 export const getDocumentEditsBySchema = async (
