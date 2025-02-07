@@ -22,15 +22,12 @@ interface NavigationHeaderProps {
 
 
 export function NavigationHeader({ documentName }: NavigationHeaderProps) {
-  const { currentStep, maxStep, updateStep, updateMaxStep } = useWorkflowContext();
+  const { currentStep, maxStep, error, updateStep, updateMaxStep } = useWorkflowContext();
   const isBlocked = useBlockStep(currentStep);
 
   const isForwardStep = (targetStep: string) => {
-    console.log(maxStep, workflowOrder.indexOf(maxStep));
     const currentIndex = workflowOrder.indexOf(maxStep);
-    console.log('currentIndex', currentIndex);
     const targetIndex = workflowOrder.indexOf(targetStep as WorkflowStep);
-    console.log('targetIndex', targetIndex);
     return targetIndex > currentIndex;
   };
 
@@ -43,11 +40,16 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
       return;
     }
     if (isForwardStep(key)) {
-      console.log('updateMaxStep', key);
       updateMaxStep(key as WorkflowStep);
+      if (error) {
+        toast.warning(error, {
+          className: 'text-base',
+          icon: <TriangleAlert />,
+        });
+        return;
+      }
     }
     updateStep(key as WorkflowStep);
-    console.log('maxstep after update', maxStep);
   };
 
 
