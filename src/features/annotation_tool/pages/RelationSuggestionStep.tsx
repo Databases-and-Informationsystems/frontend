@@ -1,25 +1,17 @@
-import { useEffect } from "react";
 import { useRelationContext } from "../context/useRelationContext"
 import { RelationSuggestionContainer } from "../components/RelationSuggestionContainer";
-import { useStepNavigation } from "../hooks/useStepNavigation";
 
 export const RelationSuggestionStep = () => {
   const { relations, loading } = useRelationContext();
-  const { step, handleStepChange } = useStepNavigation();
 
   const hasSuggestions = relations.some(relation => relation.isShownRecommendation === true);
 
-  console.log(hasSuggestions);
-  console.log(loading);
+  if (loading) {
+    return <p>Loading suggestions...</p>;
+  }
 
-  useEffect(() => {
-    if (!loading && !hasSuggestions && step === 'relationSuggestion') {
-      handleStepChange('relationEditing');
-    }
-  }, [hasSuggestions, loading, step, handleStepChange]);
-
-  if (loading || !hasSuggestions) {
-    return <p>Loading suggestions or no suggestions available...</p>;
+  if(!hasSuggestions) {
+    return <p>No suggestions available. This step is complete.</p>;
   }
 
   return (

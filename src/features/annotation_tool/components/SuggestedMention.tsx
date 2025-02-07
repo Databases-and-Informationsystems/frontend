@@ -2,7 +2,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Mention } from './Mention'
 import { Mention as MentionType } from '../types/mention';
 import { useMentionContext } from '../context/useMentionContext';
-import { useSchema } from '../context/useSchema';
+import { useSchemaContext } from '../context/useSchemaContext';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';

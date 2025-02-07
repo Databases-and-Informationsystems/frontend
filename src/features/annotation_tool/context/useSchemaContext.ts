@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import SchemaContext from "../provider/SchemaProvider";
 
-export const useSchema = () => {
+export const useSchemaContext = () => {
   const context = useContext(SchemaContext);
 
   if (!context) {

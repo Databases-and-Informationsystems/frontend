@@ -1,42 +1,61 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu.tsx'
-import { useStepNavigation } from '../hooks/useStepNavigation'
 import { useBlockStep } from '../hooks/useBlockStep';
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheckBig, Save, TriangleAlert } from 'lucide-react';
 import { toast } from 'sonner';
+import { useWorkflowContext } from '../context/useWorkflowContext';
+import { workflowOrder, WorkflowStep } from '../types/workflow';
+
 
 const steps = [
-  { key: 'mentionSuggestion', label: 'Mention Suggestion' },
-  { key: 'mentionEditing', label: 'Mention Editing' },
-  { key: 'entitySelection', label: 'Entity Selection' },
-  { key: 'relationSuggestion', label: 'Relation Suggestion' },
-  { key: 'relationEditing', label: 'Relation Editing' },
+  { key: 'MENTION_SUGGESTION', label: 'Mention Suggestion' },
+  { key: 'MENTIONS', label: 'Mention Editing' },
+  { key: 'ENTITIES', label: 'Entity Selection' },
+  { key: 'RELATION_SUGGESTION', label: 'Relation Suggestion' },
+  { key: 'RELATIONS', label: 'Relation Editing' },
 ];
 
+interface NavigationHeaderProps {
+  documentName: string;
+}
 
-export function NavigationHeader(props: { project_name: string }) {
-  const { step, handleStepChange } = useStepNavigation();
 
-  const isBlocked = useBlockStep(step);
+export function NavigationHeader({ documentName }: NavigationHeaderProps) {
+  const { currentStep, maxStep, error, updateStep, updateMaxStep } = useWorkflowContext();
+  const isBlocked = useBlockStep(currentStep);
 
-  const handleStepClick = (key: string) => {
+  const isForwardStep = (targetStep: string) => {
+    const currentIndex = workflowOrder.indexOf(maxStep);
+    const targetIndex = workflowOrder.indexOf(targetStep as WorkflowStep);
+    return targetIndex > currentIndex;
+  };
+
+  const handleStepClick = async (key: string) => {
     if (isBlocked) {
-      toast.warning('You have to finish all suggestions, before you can proceed to the next step.',
-        {
-          className: 'text-base',
-          icon: <TriangleAlert />,
-        }
-      );
+      toast.warning('You have to finish all suggestions before you can proceed to the next step.', {
+        className: 'text-base',
+        icon: <TriangleAlert />,
+      });
       return;
     }
-    handleStepChange(key);
-  }
+    if (isForwardStep(key)) {
+      updateMaxStep(key as WorkflowStep);
+      if (error) {
+        toast.warning(error, {
+          className: 'text-base',
+          icon: <TriangleAlert />,
+        });
+        return;
+      }
+    }
+    updateStep(key as WorkflowStep);
+  };
 
 
   return (
     <div className="top-0">
-      <h2 className="text-left text-3xl font-bold">Annotating: <span className="italic">{props.project_name}</span></h2>
+      <h2 className="text-left text-3xl font-bold">Annotating: <span className="italic">{documentName}</span></h2>
       <div className="flex justify-between items-center py-4">
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-4">
@@ -44,9 +63,9 @@ export function NavigationHeader(props: { project_name: string }) {
               <React.Fragment key={key}>
                 <NavigationMenuItem className='border-2 rounded-lg p-2 select-none'>
                   <NavigationMenuLink
-                    onClick={() => key !== step && handleStepClick(key)}
+                    onClick={() => key !== currentStep && handleStepClick(key)}
                     style={{ cursor: 'pointer' }}
-                    className={`text-lg font-medium ${key === step ? 'text-blue-500' : 'text-gray-500'
+                    className={`text-lg font-medium ${key === currentStep ? 'text-blue-500' : 'text-gray-500'
                       }`}
                   >
                     {label}
@@ -59,16 +78,6 @@ export function NavigationHeader(props: { project_name: string }) {
         </NavigationMenu>
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-4">
-            <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                u
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                f
-              </NavigationMenuLink>
-            </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
                 <div className='flex border-2 rounded-lg p-2 gap-2'>

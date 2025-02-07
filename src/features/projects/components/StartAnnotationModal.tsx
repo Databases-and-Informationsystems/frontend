@@ -111,7 +111,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
         selectedRecommendationModelIdByModelByModelStep,
         selectedSettingsByModelStep
       )
-      navigate(`/annotation/${documentEdit.id}`)
+      navigate(`/annotation/${documentEdit.id}?step=MENTION_SUGGESTION`)
     } catch (err: any) {
       console.log('Error: ', err)
       setError(err.message as string)

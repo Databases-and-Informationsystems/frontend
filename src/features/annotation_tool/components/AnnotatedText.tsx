@@ -4,18 +4,15 @@ import { Token } from './Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMentionContext } from '../context/useMentionContext';
 import { EnhancedMention } from './EnhancedMention';
+import { useTokensContext } from '../context/useTokensContext';
 
 interface AnnotatedTextProps {
-  tokens: TokenType[];
   showDeleteButton?: boolean;
 }
 
-export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) => {
-  const { mentions, loading } = useMentionContext();
-
-  if (loading) {
-    return <p>Loading mentions...</p>;
-  }
+export const AnnotatedText = ({ showDeleteButton }: AnnotatedTextProps) => {
+  const { mentions } = useMentionContext();
+  const { tokens } = useTokensContext();
 
   const getMentionByTokenId = (tokenId: number): MentionType | undefined => (
     mentions.find(mention => mention.tokens.some(token => token.id === tokenId)));
@@ -41,6 +38,7 @@ export const AnnotatedText = ({ tokens, showDeleteButton }: AnnotatedTextProps) 
       }
 
       const mention = getMentionByTokenId(token.id);
+
 
       if (mention) {
         const mentionTokens = sentenceTokens.filter((token) => (

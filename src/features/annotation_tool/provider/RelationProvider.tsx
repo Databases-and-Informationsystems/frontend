@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { CreateRelationPayload, Relation, Relation as RelationType, UpdateRelationPayload } from "../types";
-import { useStepNavigation } from "../hooks/useStepNavigation";
 import { createRelation, deleteRelation, updateRelation, acceptRelationSuggestion, rejectRelationSuggestion, fetchRelations } from "../api/relation";
+import { useWorkflowContext } from "../context/useWorkflowContext";
 
 interface RelationContextType {
   handleCreateRelation: (payload: CreateRelationPayload) => void;
@@ -23,7 +23,7 @@ interface RelationProviderProps {
 
 export const RelationProvider = ({ children, initialRelations = [], documentEditId }: RelationProviderProps) => {
   const [relations, setRelations] = useState<Relation[]>(initialRelations)
-  const { step } = useStepNavigation()
+  const { currentStep } = useWorkflowContext()
   const [loading, setLoading] = useState(true)
   const relationsFetched = useRef<boolean>(false)
 
@@ -41,10 +41,10 @@ export const RelationProvider = ({ children, initialRelations = [], documentEdit
         setLoading(false)
       }
     }
-    if (step === 'relationSuggestion' && !relationsFetched.current) {
+    if (currentStep === 'RELATION_SUGGESTION' && !relationsFetched.current) {
       loadRelations()
     }
-  }, [documentEditId, step])
+  }, [documentEditId, currentStep])
 
   const handleCreateRelation = async (payload: CreateRelationPayload) => {
     try {

@@ -1,19 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useSelection } from '../context/useSelection'
+import { useSelectionContext } from '../context/useSelectionContext'
 import { Button } from '@/components/ui/button';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
 import { getMatchingConstraints } from '../utils/getMatchingConstraints';
-import { useSchema } from '../context/useSchema';
-import { useStepNavigation } from '../hooks/useStepNavigation';
+import { useSchemaContext } from '../context/useSchemaContext';
 import { CreateMentionPayload, CreateRelationPayload, Mention, Token, UpdateMentionPayload } from '../types';
+import { useParams } from 'react-router-dom';
+import { useWorkflowContext } from '../context/useWorkflowContext';
 
 export const AnnotationControlBox = () => {
-  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelection();
+  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelectionContext();
   const { handleCreateMention, handleUpdateMention } = useMentionContext();
-  const { step } = useStepNavigation();
+  const { currentStep } = useWorkflowContext();
   const { handleCreateRelation } = useRelationContext();
-  const { schema, loading, error } = useSchema();
+  const { schema, loading, error } = useSchemaContext();
+  const { id } = useParams();
 
   if (loading) {
     return <div>Loading schema...</div>;
@@ -26,7 +28,7 @@ export const AnnotationControlBox = () => {
   const createMention = (tokens: Token[], schemaId: number) => {
     const payload: CreateMentionPayload = {
       schema_mention_id: schemaId,
-      document_edit_id: 0, // Access document_edit_id from context
+      document_edit_id: Number(id),
       token_ids: tokens.map(token => token.id),
     };
     handleCreateMention(payload);
@@ -35,9 +37,8 @@ export const AnnotationControlBox = () => {
 
   const updateMention = (mention: Mention, schemaId: number) => {
     const payload: UpdateMentionPayload = {
-      schmea_mention_id: schemaId,
+      schema_mention_id: schemaId,
       token_ids: mention.tokens.map(token => token.id),
-      entity_id: mention.entity_id,
     }
     handleUpdateMention(mention.id, payload);
     resetMentions()
@@ -57,7 +58,7 @@ export const AnnotationControlBox = () => {
   }
 
 
-  if (step === 'mentionEditing' && selectedTokens.length > 0) {
+  if (currentStep === 'MENTIONS' && selectedTokens.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -81,7 +82,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (step === 'mentionEditing' && selectedMentions.length > 0) {
+  if (currentStep === 'MENTIONS' && selectedMentions.length > 0) {
     return (
       <Card className='absolute top-0'>
         <CardHeader>
@@ -105,7 +106,7 @@ export const AnnotationControlBox = () => {
       </Card>
     )
   }
-  if (step === 'relationEditing' && selectedMentions.length === 2) {
+  if (currentStep === 'RELATIONS' && selectedMentions.length === 2) {
     const mentionHead = selectedMentions[0];
     const mentionTail = selectedMentions[1];
 

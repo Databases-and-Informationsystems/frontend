@@ -7,11 +7,11 @@ export const useBlockStep = (step: string) => {
   const { relations } = useRelationContext();
 
   const isBlocked = useMemo(() => {
-    if (step === 'mentionSuggestion') {
+    if (step === 'MENTION_SUGGESTION') {
       return mentions.some((mention) => mention.isShownRecommendation === true);
     }
 
-    if (step === 'relationSuggestion') {
+    if (step === 'RELATION_SUGGESTION') {
       return relations.some(relation => relation.isShownRecommendation === true);
     }
 

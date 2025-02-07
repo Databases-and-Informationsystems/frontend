@@ -1,8 +1,8 @@
 import React, { createContext, useState } from "react";
-import { useTokens } from "../context/useTokens";
+import { useTokensContext } from "../context/useTokensContext";
 import { Mention, Token } from "../types";
 import { useMentionContext } from "../context/useMentionContext";
-import { useStepNavigation } from "../hooks/useStepNavigation";
+import { useWorkflowContext } from "../context/useWorkflowContext";
 
 interface SelectionContextType {
   selectedTokens: Token[];
@@ -22,9 +22,9 @@ interface SelectionProviderProps {
 const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
 
 export const SelectionProvider = ({ children }: SelectionProviderProps) => {
-  const { tokens: allTokens } = useTokens();
+  const { tokens: allTokens } = useTokensContext();
   const { mentions: allMentions } = useMentionContext();
-  const { step } = useStepNavigation();
+  const { currentStep } = useWorkflowContext();
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [selectedMentions, setSelectedMentions] = useState<Mention[]>([]);
 
@@ -73,19 +73,18 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
       return;
     }
 
-    // Mention step
-    if (step === 'mentionEditing') {
+    if (currentStep === 'MENTIONS') {
       setSelectedMentions([mention]);
       return;
     }
 
     // Entity step
-    if (step === 'entitySelection') {
+    if (currentStep === 'ENTITIES') {
       setSelectedMentions([...selectedMentions, mention]);
     }
 
     // Relation step
-    if (step === 'relationEditing') {
+    if (currentStep === 'RELATIONS') {
       if (selectedMentions.length < 2) {
         setSelectedMentions([...selectedMentions, mention]);
       }
