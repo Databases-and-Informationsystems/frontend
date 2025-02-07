@@ -1,6 +1,6 @@
 import { AnnotationLayout } from '@/features/annotation_tool/components/AnnotationLayout'
 import DashboardLayout from '@/features/dashboard/components/DashboardLayout'
-import { Routes, Route, Navigate } from 'react-router'
+import { Routes, Route } from 'react-router'
 import Dashboard from '@/features/dashboard/pages/Dashboard'
 import ProjectPage from '@/features/projects/components/ProjectPage'
 import ProjectV2Page from '@/features/projects/pages/ProjectV2Page'
@@ -13,6 +13,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import CreateSchemaPage from '@/features/schema/pages/CreateSchemaPage'
 import Heatmap from '@/features/heatmap/pages/Heatmap'
 import ProjectsV2Page from '@/features/projects/pages/ProjectsV2Page'
+import { PageNotFound } from '@/components/PageNotFound'
 
 const AppRoutes = () => {
   return (
@@ -32,10 +33,9 @@ const AppRoutes = () => {
           <Route path="settings" element={<Settings />} />
           <Route path="heatmap/:id" element={<Heatmap />} />
         </Route>
-        <Route path="/annotation/:id" element={<AnnotationLayout/>} />
+        <Route path="/project/:projectId/annotation/:id" element={<AnnotationLayout />} />
       </Route>
-
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<PageNotFound/>} />
     </Routes>
   )
 }

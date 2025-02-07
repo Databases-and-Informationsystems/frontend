@@ -1,4 +1,4 @@
-import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle'
+import { ModeToggle } from '@/components/ThemeToggle'
 import {
   Sidebar,
   SidebarContent,

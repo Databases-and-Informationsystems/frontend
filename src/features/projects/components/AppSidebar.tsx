@@ -1,4 +1,4 @@
-import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle'
+import { ModeToggle } from '@/components/ThemeToggle'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import { PanelsTopLeft, FolderKanban, Users, SwatchBook, Settings } from 'lucide-react'
 import { Link } from 'react-router'

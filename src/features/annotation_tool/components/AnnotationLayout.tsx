@@ -1,4 +1,4 @@
-import { ModeToggle } from '@/components/ThemeToggle/ThemeToggle';
+import { ModeToggle } from '@/components/ThemeToggle';
 import { SelectionProvider } from '../provider/SelectionProvider';
 import { MentionProvider } from '../provider/MentionProvider';
 import { AnnotationControlBox } from './AnnotationControlBox';
