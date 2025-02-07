@@ -1,0 +1,197 @@
+{
+  "tokens": [
+    {
+      "id": "1",
+      "text": "The",
+      "index_in_document": 0,
+      "pos_tag": "DT",
+      "bio_tag": "B-Actor",
+      "sentence_index": 0
+    },
+    {
+      "id": "2",
+      "text": "MSPN",
+      "index_in_document": 1,
+      "pos_tag": "NNP",
+      "bio_tag": "I-Actor",
+      "sentence_index": 0
+    },
+    {
+      "id": "3",
+      "text": "registers",
+      "index_in_document": 2,
+      "pos_tag": "VBZ",
+      "bio_tag": "B-Activity",
+      "sentence_index": 0
+    },
+    {
+      "id": "4",
+      "text": "the",
+      "index_in_document": 3,
+      "pos_tag": "DT",
+      "bio_tag": "B-Activity_Data",
+      "sentence_index": 0
+    },
+    {
+      "id": "5",
+      "text": "measurement",
+      "index_in_document": 4,
+      "pos_tag": "NN",
+      "bio_tag": "I-Activity_Data",
+      "sentence_index": 0
+    },
+    {
+      "id": "6",
+      "text": "at",
+      "index_in_document": 5,
+      "pos_tag": "IN",
+      "bio_tag": "O",
+      "sentence_index": 0
+    },
+    {
+      "id": "7",
+      "text": "the",
+      "index_in_document": 6,
+      "pos_tag": "DT",
+      "bio_tag": "B-Actor",
+      "sentence_index": 0
+    },
+    {
+      "id": "8",
+      "text": "GO",
+      "index_in_document": 7,
+      "pos_tag": "NN",
+      "bio_tag": "I-Actor",
+      "sentence_index": 0
+    },
+    {
+      "id": "9",
+      "text": ".",
+      "index_in_document": 8,
+      "pos_tag": ".",
+      "bio_tag": "O",
+      "sentence_index": 0
+    }
+  ],
+  "mentions": [
+    {
+      "id": "6221",
+      "tag": "Activity Data",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "4",
+        "5"
+      ]
+    },
+    {
+      "id": "9879",
+      "tag": "Actor",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "id": "9053",
+      "tag": "Actor",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "id": "3140",
+      "tag": "Activity",
+      "isShownRecommendation": false,
+      "token_ids": [
+        "3"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "1",
+      "mention_ids": [
+        "9879",
+        "3104"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "id": "5619",
+      "tag": "is performed by",
+      "isDirected": false,
+      "isShownRecommendation": false,
+      "mention_head_id": "3140",
+      "mention_tail_id": "9053"
+    },
+    {
+      "id": "6811",
+      "tag": "is received by",
+      "isDirected": false,
+      "isShownRecommendation": false,
+      "mention_head_id": "3140",
+      "mention_tail_id": "9879"
+    }
+  ],
+  "schema": {
+    "mentions": [
+      {
+        "id": "1",
+        "tag": "Actor",
+        "color": "#dc2626"
+        "isEntity": true
+      },
+      {
+        "id": "2",
+        "tag": "Activity",
+        "color": "#3b82f6"
+      },
+      {
+        "id": "3",
+        "tag": "Activity Data",
+        "color": "#16a34a"
+      }
+    ],
+    "relations": [
+      {
+        "id": "1",
+        "tag": "is performed by"
+      },
+      {
+        "id": "2",
+        "tag": "uses"
+      },
+      {
+        "id": "3",
+        "tag": "is received by"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "1",
+        "isDirected": true,
+        "schema_relation_id": "1",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "1"
+      },
+      {
+        "id": "2",
+        "isDirected": false,
+        "schema_relation_id": "2",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "3"
+      },
+      {
+        "id": "3",
+        "isDirected": true,
+        "schema_relation_id": "3",
+        "schema_mention_head_id": "2",
+        "schema_mention_tail_id": "1"
+      }
+    ]
+  }
+}
