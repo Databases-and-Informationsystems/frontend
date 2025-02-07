@@ -2,10 +2,22 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { useBlockStep } from '../hooks/useBlockStep';
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
-import { CircleCheckBig, Save, TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWorkflowContext } from '../context/useWorkflowContext';
 import { workflowOrder, WorkflowStep } from '../types/workflow';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from '@/components/ui/button';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { useNavigate, useParams } from 'react-router';
 
 
 const steps = [
@@ -79,19 +91,13 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-4">
             <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                <div className='flex border-2 rounded-lg p-2 gap-2'>
-                  <Save />
-                  Save Changes
-                </div>
+              <NavigationMenuLink style={{ cursor: "pointer" }} className="text-lg font-medium">
+                <ConfirmExitDialog input='Save and Exit' />
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                <div className='flex border-2 rounded-lg p-2 gap-2'>
-                  <CircleCheckBig />
-                  Finish Annotation
-                </div>
+              <NavigationMenuLink style={{ cursor: "pointer" }} className="text-lg font-medium">
+                <ConfirmExitDialog input='Finish Annotation' />
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -99,4 +105,38 @@ export function NavigationHeader({ documentName }: NavigationHeaderProps) {
       </div>
     </div>
   )
+}
+
+interface ConfirmExitDialogProps {
+  input: string;
+}
+
+const ConfirmExitDialog = ({ input }: ConfirmExitDialogProps) => {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">{input}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Exit Annotation</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to exit the annotation?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button onClick={() => navigate(`/dashboard/projects-v2/${projectId}`)} variant="destructive">
+            Yes, Exit
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }
