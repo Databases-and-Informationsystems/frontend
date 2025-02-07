@@ -12,9 +12,8 @@ import Page from '@/components/Page'
 import PageHeader from '@/components/PageHeader'
 import { Separator } from '@/components/ui/separator'
 import { translateDocumentState } from '../util/document_util'
-
 import DocumentCard from '../components/DocumentCard'
-import { Button } from '@/components/ui/button'
+import { CreateDocumentDialog } from '../components/CreateDocumentDialog'
 
 const initialGroupedDocuments: Record<DocumentStateType, Document[]> = {
   [DocumentStateType.NEW]: [],
@@ -66,7 +65,7 @@ const ProjectV2Page: React.FC = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [id])
 
   const handleAddDocument = async (name: string, content: string) => {
     try {
@@ -128,7 +127,7 @@ const ProjectV2Page: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-row-reverse">
-        <Button>Add Document</Button> {/* TODO Not Implemented yet */}
+        <CreateDocumentDialog handleCreateDocument={handleAddDocument} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-3 items-start">
         {Object.keys(documentsByState).map((state) => (

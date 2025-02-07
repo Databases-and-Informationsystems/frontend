@@ -13,20 +13,19 @@ export const getModelsBySchema = async (
 
 export const createDocumentEdit = async (
   documentId: number,
-  modelsByStepEnum: ModelsByModelStep,
-  modelByStepType: Record<ModelStepEnum, string | undefined>,
+  recommendationModelIdByStepType: Record<ModelStepEnum, string | undefined>,
   settingsByModel: Record<ModelStepEnum, Record<string, string>>
 ): Promise<DocumentEdit> => {
   // TODO this could be way simpler with a more generic endpoint
-  const model_mention_id = modelsByStepEnum[ModelStepEnum.mention].find(
-    (m) => m.model_type === modelByStepType[ModelStepEnum.mention]
-  )?.id
-  const model_relation_id = modelsByStepEnum[ModelStepEnum.relation].find(
-    (m) => m.model_type === modelByStepType[ModelStepEnum.relation]
-  )?.id
-  const model_entities_id = modelsByStepEnum[ModelStepEnum.entity].find(
-    (m) => m.model_type === modelByStepType[ModelStepEnum.entity]
-  )?.id
+  const model_mention_id = Number(
+    recommendationModelIdByStepType[ModelStepEnum.mention]
+  )
+  const model_relation_id = Number(
+    recommendationModelIdByStepType[ModelStepEnum.relation]
+  )
+  const model_entities_id = Number(
+    recommendationModelIdByStepType[ModelStepEnum.entity]
+  )
 
   if (!model_mention_id || !model_relation_id || !model_entities_id) {
     return Promise.reject(

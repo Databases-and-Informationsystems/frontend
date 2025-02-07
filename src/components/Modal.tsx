@@ -5,12 +5,21 @@
  * this would be a better way to go
  */
 
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children: ReactNode
+  title?: string
+  description?: string
   size?: 's' | 'm' | 'l' | 'xl'
 }
 
@@ -21,60 +30,28 @@ const sizes = {
   xl: '70rem',
 }
 
-const Modal = ({ isOpen, onClose, children, size = 'm' }: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement | null>(null)
-
-  // Close modal when clicking outside the modal content
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      onClose()
-    }
-  }
-
-  // Close modal when pressing Escape
-  const handleEscapeKey = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      onClose()
-    }
-  }
-
-  useEffect(() => {
-    if (isOpen) {
-      // Listen for outside clicks and Escape key press when modal is open
-      document.addEventListener('click', handleOutsideClick)
-      document.addEventListener('keydown', handleEscapeKey)
-    } else {
-      // Cleanup listeners when modal is closed
-      document.removeEventListener('click', handleOutsideClick)
-      document.removeEventListener('keydown', handleEscapeKey)
-    }
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-      document.removeEventListener('keydown', handleEscapeKey)
-    }
-  }, [isOpen])
-
+const Modal = ({
+  isOpen,
+  onClose,
+  children,
+  title,
+  description,
+  size = 'm',
+}: ModalProps) => {
   if (!isOpen) return null
-
   return (
-    <div
-      className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center transition-opacity duration-300 ease-in-out opacity-100 z-50"
-      role="dialog"
-      aria-labelledby="modal-title"
-      aria-hidden={!isOpen}
-    >
-      <div
-        className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full`}
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        className={`p-6 overflow-y-scroll max-h-full`}
         style={{ maxWidth: sizes[size] }}
-        role="document"
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
       >
+        <DialogHeader>
+          {title && <DialogTitle>{title}</DialogTitle>}
+          {description && <DialogDescription>{description}</DialogDescription>}
+        </DialogHeader>
         {children}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }
-
 export default Modal

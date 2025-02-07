@@ -24,7 +24,7 @@ export const translateDocumentEditState = (
     case DocumentEditStateType.RELATIONS:
       return 'Relations'
     case DocumentEditStateType.ENTITIES:
-      return 'Entites'
+      return 'Entities'
     case DocumentEditStateType.FINISHED:
       return 'Finished'
   }

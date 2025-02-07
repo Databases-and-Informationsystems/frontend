@@ -5,6 +5,10 @@ import { Schema } from '@/types/schema'
 import { RecommendationModel } from '@/types/recommendation'
 import Page from '@/components/Page'
 import PageHeader from '@/components/PageHeader'
+import { Button } from '@/components/ui/button'
+import { ModelStepType } from '../types/model'
+import TrainModelModal from '../components/TrainModelModal'
+import SchemaConstraint from '../components/SchemaConstraint'
 
 interface StepWithModels {
   stepName: string
@@ -15,6 +19,11 @@ const SchemaPage = () => {
   const [schema, setSchema] = useState<Schema | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | undefined>(undefined)
+
+  const [modelStepToTrain, setModelStepToTrain] = useState<ModelStepType>(
+    ModelStepType.mentions
+  )
+  const [trainModelModalOpen, setTrainModelModalOpen] = useState<boolean>(false)
 
   const [modelsByStep, setModelsByStep] = useState<any>([])
 
@@ -39,6 +48,7 @@ const SchemaPage = () => {
           {} as Record<number, StepWithModels>
         )
         setModelsByStep(groupedByStep)
+        console.log('groupedByStep: ', groupedByStep)
       }
     } catch (err: any) {
       console.log('Error: ', err)
@@ -87,7 +97,7 @@ const SchemaPage = () => {
         {Object.keys(modelsByStep).map((stepId) => (
           <div
             key={stepId}
-            className="w-full p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md"
+            className="w-full p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md flex flex-col"
           >
             <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-4">
               {modelsByStep[stepId].stepName}
@@ -107,9 +117,28 @@ const SchemaPage = () => {
                 </div>
               ))}
             </div>
+            <div className="flex mt-auto">
+              <Button
+                className="mx-auto mt-4"
+                onClick={() => {
+                  setModelStepToTrain(
+                    modelsByStep[stepId].stepName as ModelStepType
+                  )
+                  setTrainModelModalOpen(true)
+                }}
+              >
+                Train Model
+              </Button>
+            </div>
           </div>
         ))}
       </div>
+      <TrainModelModal
+        isOpen={trainModelModalOpen}
+        setIsModalOpen={setTrainModelModalOpen}
+        schema={schema}
+        modelStepType={modelStepToTrain}
+      ></TrainModelModal>
 
       {/* Schema Mentions */}
       <div className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
@@ -174,45 +203,15 @@ const SchemaPage = () => {
               a.schema_relation.tag!.localeCompare(b.schema_relation.tag!)
             )
             .map((constraint) => (
-              <div
+              <SchemaConstraint
                 key={constraint.id}
-                className="grid grid-cols-3 items-center p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-md dark:border-gray-700"
-              >
-                {/* Head Mention Tag (Left) */}
-                <div className="flex items-center justify-start space-x-4">
-                  <div
-                    className="w-6 h-6 rounded min-w-[1.5rem]"
-                    style={{
-                      backgroundColor: constraint.schema_mention_head.color,
-                    }}
-                  ></div>
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_mention_head.tag}
-                  </div>
-                </div>
-
-                {/* Relation Tag (Center) */}
-                <div className="flex justify-center items-center space-x-2">
-                  {!constraint.is_directed && renderArrow('right')}
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_relation.tag}
-                  </div>
-                  {!constraint.is_directed && renderArrow('left')}
-                </div>
-
-                {/* Tail Mention Tag (Right) */}
-                <div className="flex items-center justify-end space-x-4">
-                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {constraint.schema_mention_tail.tag}
-                  </div>
-                  <div
-                    className="w-6 h-6 rounded min-w-[1.5rem]"
-                    style={{
-                      backgroundColor: constraint.schema_mention_tail.color,
-                    }}
-                  ></div>
-                </div>
-              </div>
+                mention_head_color={constraint.schema_mention_head.color}
+                mention_head_tag={constraint.schema_mention_head.tag}
+                relation_tag={constraint.schema_relation.tag}
+                is_directed={constraint.is_directed}
+                mention_tail_color={constraint.schema_mention_tail.color}
+                mention_tail_tag={constraint.schema_mention_tail.tag}
+              />
             ))}
         </div>
       </div>
