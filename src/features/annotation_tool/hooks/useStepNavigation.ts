@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router";
 
-export const useStepNavigation = (defaultStep = 'mentionSuggestion') => {
+export const useStepNavigation = (initialStep: string = 'MENTION_SUGGESTION') => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const step = searchParams.get('step') || defaultStep;
+    const step = searchParams.get('step') || initialStep;
 
     const handleStepChange = (newStep: string) => {
         setSearchParams({ step: newStep });

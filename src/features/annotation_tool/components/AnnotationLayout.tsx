@@ -68,13 +68,12 @@ export const AnnotationLayout = () => {
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                   Annotation Document
                 </h1>
-                <NavigationHeader project_name='Test' />
+                <NavigationHeader documentName={annotationData.document.name} currentStep={annotationData.state.type} />
                 <AnnotationControlBox />
                 <CurrentStepRender />
                 <ModeToggle />
               </div>
             </RelationProvider>
-          
         </SelectionProvider>
         </MentionProvider>
       </SchemaProvider>

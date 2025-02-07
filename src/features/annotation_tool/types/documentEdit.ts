@@ -6,9 +6,16 @@ export type DocumentEdit = {
     mentions: Mention[];
     relations: Relation[];
     schema_id: number;
+    state: State;
+
 }
 
 type Document = {
     id: number;
     name: string;
+}
+
+type State = {
+    id: number;
+    type: string;
 }

@@ -7,16 +7,21 @@ import { CircleCheckBig, Save, TriangleAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
 const steps = [
-  { key: 'mentionSuggestion', label: 'Mention Suggestion' },
-  { key: 'mentionEditing', label: 'Mention Editing' },
-  { key: 'entitySelection', label: 'Entity Selection' },
-  { key: 'relationSuggestion', label: 'Relation Suggestion' },
-  { key: 'relationEditing', label: 'Relation Editing' },
+  { key: 'MENTION_SUGGESTION', label: 'Mention Suggestion' },
+  { key: 'MENTIONS', label: 'Mention Editing' },
+  { key: 'ENTITIES', label: 'Entity Selection' },
+  { key: 'RELATION_SUGGESTION', label: 'Relation Suggestion' },
+  { key: 'RELATIONS', label: 'Relation Editing' },
 ];
 
+interface NavigationHeaderProps {
+  documentName: string;
+  currentStep: string;
+}
 
-export function NavigationHeader(props: { project_name: string }) {
-  const { step, handleStepChange } = useStepNavigation();
+
+export function NavigationHeader({ documentName, currentStep }: NavigationHeaderProps) {
+  const { step, handleStepChange } = useStepNavigation(currentStep);
 
   const isBlocked = useBlockStep(step);
 
@@ -36,7 +41,7 @@ export function NavigationHeader(props: { project_name: string }) {
 
   return (
     <div className="top-0">
-      <h2 className="text-left text-3xl font-bold">Annotating: <span className="italic">{props.project_name}</span></h2>
+      <h2 className="text-left text-3xl font-bold">Annotating: <span className="italic">{documentName}</span></h2>
       <div className="flex justify-between items-center py-4">
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-4">
@@ -59,16 +64,6 @@ export function NavigationHeader(props: { project_name: string }) {
         </NavigationMenu>
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-4">
-            <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                u
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
-                f
-              </NavigationMenuLink>
-            </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink onClick={() => {/*TODO*/ }} style={{ cursor: "pointer" }} className="text-lg font-medium">
                 <div className='flex border-2 rounded-lg p-2 gap-2'>

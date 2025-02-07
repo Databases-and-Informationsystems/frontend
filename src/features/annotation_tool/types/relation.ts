@@ -1,4 +1,4 @@
-import { SchemaRelation } from "@/features/schema/types/types";
+import { SchemaRelation } from "@/types/schema";
 import { Mention } from "./mention";
 
 export type Relation = {
