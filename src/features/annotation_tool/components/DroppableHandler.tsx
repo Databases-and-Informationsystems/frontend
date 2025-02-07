@@ -20,8 +20,8 @@ interface MultipleDroppablesProps {
   onMentionRemoved: (eid: number | string, mid: number | string) => void
 }
 
-export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved, allTokens, dev_mode }: MultipleDroppablesProps) {
-  const { mentions, loading, handleCreateMention, handleDeleteMention, handleUpdateMention } = useMentionContext();
+export function MultipleDroppables({ eIds, allEntities, onMentionRemoved, dev_mode }: MultipleDroppablesProps) {
+  const { mentions } = useMentionContext();
 
   const getMentionById = (id) => {
     //console.log("Searching for id: " + id);
@@ -52,7 +52,6 @@ export function MultipleDroppables({ eIds, items, allEntities, onMentionRemoved,
         <Card key={id} className={css_border}>
           <Droppable id={id} key={id}>
             {/*Droppable container id: {id}*/}
-            {/*items[id].map((item) => ( <div key={item.id}>{item.id}</div> ))*/}
             {getMentionIdsById(id).map((i) => (
               <DraggableHand
                 key={i}

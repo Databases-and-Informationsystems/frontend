@@ -10,8 +10,8 @@ import { Card } from '@/components/ui/card.tsx'
 
 const EntitySelection = () => {
 
-  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleRemoveButton, handleCreateEntity, handleCreateEntityViaElements, handleDeleteEntity } = useEntity();
-  const { mentions, loading, handleUpdateMention } = useMentionContext();
+  const { loading: eLoading, entities, getEntityById, handleAddToEntity, handleRemoveFromEntity, handleRemoveButton } = useEntity();
+  const { mentions, loading } = useMentionContext();
 
   console.log("%c Before mapping: ", "color: orange", entities);
   const entityIds = Array.isArray(entities) ? entities?.map((entity) => entity.id) : [];
