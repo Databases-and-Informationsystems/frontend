@@ -29,7 +29,6 @@ export const MentionProvider = ({ children, initialMentions = [] }: MentionProvi
   const handleCreateMention = async (payload: CreateMentionPayload) => {
     try {
       const createdMention = await createMention(payload)
-      console.log('createdMention', createdMention)
       setMentions((prev) => [...prev, createdMention])
     } catch (err) {
       console.error('Failed to create mention:', err)

@@ -66,9 +66,9 @@ export const AnnotationLayout = () => {
     <WorkflowProvider initialStep={annotationData.state.type as WorkflowStep}>
       <TokenProvider documentId={annotationData.document.id}>
         <SchemaProvider schemaId={annotationData.schema_id}>
-          <MentionProvider initialMentions={annotationData.mentions}>
-            <SelectionProvider>
-              <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
+            <RelationProvider initialRelations={annotationData.relations} documentEditId={Number(id)}>
+              <MentionProvider initialMentions={annotationData.mentions}>
+                <SelectionProvider>
                 <LoadingWrapper>
                   <div className='p-6'>
                     <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -80,9 +80,9 @@ export const AnnotationLayout = () => {
                     <ModeToggle />
                   </div>
                 </LoadingWrapper>
-              </RelationProvider>
-            </SelectionProvider>
-          </MentionProvider>
+                </SelectionProvider>
+              </MentionProvider>
+            </RelationProvider>
         </SchemaProvider>
       </TokenProvider>
     </WorkflowProvider>
