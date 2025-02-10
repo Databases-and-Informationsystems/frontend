@@ -3,24 +3,22 @@ import UIButton from './UIButton';
 
 interface DocumentFormProps {
   onClose: () => void;
-  onCreate: (name: string, content: string, project: string) => void;
-  projects: string[]; 
+  onCreate: (name: string, content: string, ) => void;
 }
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate, projects }) => {
+const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate }) => {
   const [name, setName] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [selectedProject, setSelectedProject] = useState<string>(projects[0]);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
 
   useEffect(() => {
-    setIsFormValid(name.trim() !== '' && content.trim() !== '' && selectedProject.trim() !== '');
-  }, [name, content, selectedProject]);
+    setIsFormValid(name.trim() !== '' && content.trim() !== '');
+  }, [name, content]);
 
   const handleCreate = () => {
     if (isFormValid) {
-      onCreate(name, content, selectedProject);
+      onCreate(name, content);
       setName('');
       setContent('');
       onClose();
@@ -60,21 +58,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ onClose, onCreate, projects
             className="w-full border p-2 rounded-lg"
             onKeyDown={handleKeyPress}
           />
-        </div>
-
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Select Project</label>
-          <select
-            value={selectedProject}
-            onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-full border p-2 rounded-lg"
-          >
-            {projects.map((project) => (
-              <option key={project} value={project}>
-                {project}
-              </option>
-            ))}
-          </select>
         </div>
 
         {!isFormValid && <p className="text-red-500 text-sm mb-4">Both fields are required.</p>}

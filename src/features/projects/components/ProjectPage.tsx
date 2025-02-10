@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Modal from './Modal'
 import DocumentForm from './DocumentForm'
-import ProjectCard from './ProjectCard'
-import DocumentPreview from './DocumentPreview'
-import DocumentList from './DocumentList'
+import ProjectCard from '@/features/dashboard/components/ProjectCard'
+
 import {
   getProjects,
   createProject,
@@ -12,180 +11,162 @@ import {
   deleteDocument,
   getTeams,
   getSchemas,
+  deleteProject
 } from '../api/projects'
-import { Document, DocumentStateType } from '@/types/document'
+import { Document } from '@/types/document'
 import { Schema } from '@/types/schema'
 import { Team } from '@/types/user'
 import { Project } from '@/types/project'
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
-  const [ongoingDocs, setOngoingDocs] = useState<Document[]>([])
-  const [openDocs, setOpenDocs] = useState<Document[]>([])
-  const [completedDocs, setCompletedDocs] = useState<Document[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [isAddDocOpen, setIsAddDocOpen] = useState(false)
-  const [isDetailsVisible, setIsDetailsVisible] = useState(false)
-  const [previewContent, setPreviewContent] = useState<string | null>(null)
   const [projectName, setProjectName] = useState('')
   const [schema, setSchema] = useState<Schema | undefined>(undefined)
   const [team, setTeam] = useState<Team | undefined>(undefined)
   const [teams, setTeams] = useState<Team[]>([])
   const [schemas, setSchemas] = useState<Schema[]>([])
-  const fetchDocumentsForProject = async (projectId: number) => {
+  const [documents, setDocuments] = useState<Document[]>([])
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null) 
+  const [isDetailsVisible, setIsDetailsVisible] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+
+
+  const handleAddDocument = async (name: string, content: string) => {
+    if (!selectedProjectId) return;
     try {
-      const documents = await getDocumentsByProject(projectId)
-      const ongoing = documents.filter(
-        (doc: Document) => doc.state.type === DocumentStateType.IN_PROGRESS
-      )
-      const open = documents.filter(
-        (doc: Document) => doc.state.type === DocumentStateType.NEW
-      )
-      const completed = documents.filter(
-        (doc: Document) => doc.state.type === DocumentStateType.FINISHED
-      )
 
-      setOngoingDocs(ongoing)
-      setOpenDocs(open)
-      setCompletedDocs(completed)
-    } catch (error) {
-      console.error('Error fetching documents:', error)
-    }
-  }
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [projectsData, teamsData, schemasData] = await Promise.all([
-          getProjects(),
-          getTeams(),
-          getSchemas(),
-        ])
-        console.log('ProjectsData: ', projectsData)
-        setProjects(projectsData)
-        setTeams(teamsData)
-        setSchemas(schemasData)
-      } catch (error) {
-        console.error('Error fetching initial data:', error)
-      }
-    }
-    fetchData()
-  }, [])
-
-  const handleAddDocument = async (
-    name: string,
-    content: string,
-    project: string
-  ) => {
-    try {
-      const projectFound = projects.find((p) => p.name === project)
-      if (!projectFound) throw new Error('Project not found')
-
-      const newDoc = await createDocument(projectFound.id, name, content)
-      setOpenDocs((prev) => [...prev, newDoc])
+      const newDoc = await createDocument(selectedProjectId, name, content)
+      setProjects((prev) => {
+        return prev.map((p) =>
+          p.id === selectedProjectId
+            ? { ...p, documents: [...(p.documents || []), newDoc] } 
+            : p
+        )
+      })
     } catch (error) {
       console.error('Error adding document:', error)
     }
   }
 
-  const handleDeleteDocument = async (id: number) => {
+  const handleDeleteDocument = async (id: number, projectId: number) => {
     try {
       await deleteDocument(id)
-      setOngoingDocs((prev) => prev.filter((doc) => doc.id !== id))
-      setOpenDocs((prev) => prev.filter((doc) => doc.id !== id))
-      setCompletedDocs((prev) => prev.filter((doc) => doc.id !== id))
-      console.log(`Document with id ${id} deleted`)
+      setProjects((prev) =>
+        prev.map((project) =>
+          project.id === projectId
+            ? {
+                ...project,
+                documents: project.documents?.filter((doc) => doc.id !== id),
+              }
+            : project
+        )
+      )
     } catch (error) {
       console.error('Error deleting document:', error)
     }
   }
+  const handleDeleteProject = async (projectId: number) => {
+    try {
+      await deleteProject(projectId);
+      setProjects((prev) => prev.filter((project) => project.id !== projectId));
+    } catch (error) {
+      console.error('Error deleting project:', error);
+    }
+  };
+  
+  const handleOpenProject = async (project: Project) => {
+    setSelectedProject(project);
+    setIsDetailsVisible(true); 
+  };
+  
 
-  const handlePreviewDocument = (content: string) => {
-    setPreviewContent(content || 'No content available for preview.')
-  }
+  useEffect(() => {
+    const fetchProjectsAndDocuments = async () => {
+      try {
+        const projectsData = await getProjects()
+        console.log('Projects retrieved : ', projectsData)
 
-  const handleOpenProject = async (projectId: number) => {
-    setIsDetailsVisible(true)
-    fetchDocumentsForProject(projectId)
-  }
-  const handleCloseProject = () => setIsDetailsVisible(false)
+        const projectsWithDocuments: Project[] = await Promise.all(
+          projectsData.map(async (project: Project) => {
+            const documents = await getDocumentsByProject(project.id)
+            console.log('Documents retrieved for project ', project.id, documents)
+            return {
+              ...project,
+              documents: documents || [], 
+            }
+          })
+        )
 
-  const handleCreateProject = async (
-    name: string,
-    schema: Schema,
-    team: Team
-  ) => {
-    console.log('handleCreateProject')
+        setProjects(projectsWithDocuments)
+        setDocuments(projectsWithDocuments.flatMap((p) => p.documents ?? []))
+      } catch (error) {
+        console.error('Error fetching projects and documents:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjectsAndDocuments()
+  }, [])
+
+  useEffect(() => {
+    const fetchTeamsAndSchemas = async () => {
+      try {
+        const [teamsData, schemasData] = await Promise.all([getTeams(), getSchemas()])
+        setTeams(teamsData)
+        setSchemas(schemasData)
+      } catch (error) {
+        console.error('Error fetching teams and schemas:', error)
+      }
+    }
+
+    fetchTeamsAndSchemas()
+  }, [])
+
+  const handleCreateProject = async (name: string, schema: Schema, team: Team) => {
     try {
       const newProject = await createProject(name, team.id, schema.id)
       setProjects((prev) => [...prev, newProject])
       setIsProjectModalOpen(false)
+      setSelectedProject(newProject)
     } catch (error) {
       console.error('Error creating project:', error)
     }
   }
 
+  if (loading) {
+    return <div>Loading projects...</div>
+  }
+
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {!isDetailsVisible && (
-        <>
-          <button
-            className="fixed top-6 right-6 bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0]"
-            onClick={() => setIsProjectModalOpen(true)}
-          >
-            Create Project
-          </button>
-
-          <h1 className="text-3xl font-bold mb-6">Projects</h1>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onPreview={handlePreviewDocument}
-                onDeleteDocument={handleDeleteDocument}
-                onAddDocument={() => setIsAddDocOpen(true)}
-                onOpenProject={() => handleOpenProject(project.id)}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {isDetailsVisible && (
-        <div className="modal bg-white p-6 rounded-lg shadow-lg relative z-40">
-          <button
-            className="absolute top-2 right-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700"
-            onClick={handleCloseProject}
-          >
-            Close
-          </button>
-          <DocumentList
-            ongoingDocs={ongoingDocs}
-            openDocs={openDocs}
-            completedDocs={completedDocs}
-            handlePreviewDocument={handlePreviewDocument}
-            handleDeleteDocument={handleDeleteDocument}
+      <button
+        className="fixed top-6 right-6 bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0]"
+        onClick={() => setIsProjectModalOpen(true)}
+      >
+        Create Project
+      </button>
+      <h1 className="text-3xl font-bold mb-6">Projects</h1>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {projects.map((project) => (
+          <ProjectCard
+          key={project.id}
+          project={project}
+          onAddDocument={() => {setSelectedProjectId(project.id); setIsAddDocOpen(true)}}
+          onDeleteDocument={(id) => handleDeleteDocument(id, project.id)}
+          onOpenProject={handleOpenProject}
+          onDeleteProject={handleDeleteProject}
           />
-          <button
-            className="bg-[#0097E1] text-white py-2 px-4 rounded-lg hover:bg-[#4ab9f0] mt-4"
-            onClick={() => setIsAddDocOpen(true)}
-          >
-            Add Document
-          </button>
-        </div>
-      )}
-
-      {previewContent && (
-        <DocumentPreview onClose={() => setPreviewContent(null)} />
-      )}
-
+        ))}
+      </div>
       {isAddDocOpen && (
         <div className="relative z-50">
           <DocumentForm
             onClose={() => setIsAddDocOpen(false)}
-            onCreate={handleAddDocument}
-            projects={projects.map((project) => project.name)}
+            onCreate={handleAddDocument} 
           />
         </div>
       )}

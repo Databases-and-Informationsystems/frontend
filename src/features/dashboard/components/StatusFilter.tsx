@@ -9,6 +9,8 @@ import {
 import { STATUS_STYLES } from '@/types/document'
 import { Document } from '@/types/document'
 import { Link} from 'react-router'
+import { useState } from 'react'
+import StartAnnotatingModal from '@/features/projects/components/StartAnnotationModal'
 interface StatusFilterProps {
   documents: Document[]
 }
@@ -28,7 +30,9 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
     (d) => d.state.type === 'FINISHED'
   )
   
-
+const [isStartAnnotationModalOpen, setIsAnnotationModalOpen] =
+    useState<boolean>(false)
+const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   return (
     <div className="p-6 bg-gray-50 rounded-lg shadow-lg">
       <Accordion type="single" collapsible>
@@ -61,6 +65,8 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                       {doc.schema.name}
                     </Link>
                   </p>
+                  <p className="text-sm text-gray-600">
+                    Team: {doc.team.name}</p>
                   <div className="flex items-center justify-between mt-3">
                     <div className="w-full h-2 bg-green-100 rounded-full mr-4">
                       <div className="h-full bg-green-500 rounded-full"></div>
@@ -77,7 +83,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
             className={`text-xl font-bold ${STATUS_STYLES.NEW}`}
             disabled={!new_documents.length}
           >
-            new Documents ({new_documents.length})
+            New Documents ({new_documents.length})
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -101,10 +107,22 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                       {doc.schema.name}
                     </Link>
                   </p>
-                  <Button variant="outline">Start Working</Button>
+                  <p className="text-sm text-gray-600">Team: {doc.team.name}</p>
+                  <Button  onClick={() => {
+                     setIsAnnotationModalOpen(true);
+                     setSelectedDocument(doc);
+                     }}>
+                     Start Working 
+                  </Button>
                 </div>
+                
               ))}
             </div>
+            <StartAnnotatingModal
+             isOpen={isStartAnnotationModalOpen}
+             setIsModalOpen={setIsAnnotationModalOpen}
+             document={setSelectedDocument}
+           />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="completed">
@@ -136,7 +154,9 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
                       {doc.schema.name}
                     </Link>
                   </p>
+                  <p className="text-sm text-gray-600">Team: {doc.team.name}</p>
                   <Button variant="outline">Open Document</Button>
+                   <Link to={`/dashboard/projects/${doc.id}`}>Details</Link>
                 </div>
               ))}
             </div>

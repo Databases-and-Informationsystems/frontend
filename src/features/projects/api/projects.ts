@@ -72,3 +72,6 @@ export const getSchemas = async (): Promise<Schema[]> => {
   const response = await axiosInstance.get<SchemaWrapper>('/schemas')
   return response.data.schemas
 }
+export const deleteProject = async (project_Id: number) => {
+  await axiosInstance.delete(`/projects/${project_Id}`)
+}
