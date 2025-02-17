@@ -1,33 +1,46 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router';
-import { useAuth } from '@/hooks/useAuth';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const { login , register } = useAuth();
+const Login: React.FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [token, setToken] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password || (!isSignIn && !username)) {
-      setErrorMessage('Please fill out all fields!');
-      return;
-    }
+    const url = isSignIn
+      ? 'http://localhost:5001/api/auth/login' 
+      : 'http://localhost:5001/api/auth/signup';
+
+    const payload = isSignIn
+      ? { email, password } 
+      : { username, email, password }; 
 
     try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(data.message || 'An error occurred.');
+        return;
+      }
+
       if (isSignIn) {
-        await login(email, password);
         setSuccessMessage('Login successful!');
-        navigate('/dashboard');
+        setToken(data.token);
+        localStorage.setItem('token', data.token); 
+        window.location.href = '/dashboard/settings';
       } else {
-        await register(username, email, password);
         setSuccessMessage('Account created successfully!');
       }
 
@@ -85,6 +98,7 @@ const Login = () => {
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
             </>
           )}
@@ -96,6 +110,7 @@ const Login = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           {/* Password input */}
@@ -105,6 +120,8 @@ const Login = () => {
             placeholder={isSignIn ? 'Enter your password' : 'Create your password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
           />
 
           {/* Error and Success Messages */}
