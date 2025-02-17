@@ -47,6 +47,16 @@ export const AnnotationControlBox = () => {
     resetMentions()
   }
 
+  const extendMention = (mention: Mention, token: Token) => {
+    const payload: UpdateMentionPayload = {
+      token_ids: [...mention.tokens.map(t => t.id), token.id],
+    };
+  
+    handleUpdateMention(mention.id, payload);
+    resetTokens();
+    resetMentions();
+  };
+
 
   const createRelation = (mentions: Mention[], schemaId: number) => {
     const payload: CreateRelationPayload = {
@@ -60,18 +70,77 @@ export const AnnotationControlBox = () => {
   }
 
 
-  if (currentStep === 'MENTIONS' && selectedTokens.length > 0) {
-    return (
-      <Card className='absolute top-0'>
-        <CardHeader>
-          <CardTitle>
-            Create Mention
-          </CardTitle>
+  if (currentStep === 'MENTIONS') {
+    if (selectedMentions.length === 1 && selectedTokens.length === 1) {
+      const mentionToExtend = selectedMentions[0];
+      const tokenToAdd = selectedTokens[0];
+      const canExtend = canExtendMentionWithToken(mentionToExtend, tokenToAdd);
+  
+      if (canExtend) {
+        return (
+          <Card className='absolute top-0'>
+            <CardHeader>
+              <CardTitle>Extend Mention</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Selected Mention ID: {mentionToExtend.id} – Extend by Token {tokenToAdd.id}?</p>
+              <Button
+                onClick={() => extendMention(mentionToExtend, tokenToAdd)}
+                className='mr-2'
+              >
+                Extend
+              </Button>
+            </CardContent>
+          </Card>
+        );
+      } else {
+        return (
+          <Card className='absolute top-0'>
+            <CardHeader>
+              <CardTitle>Extend Mention</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Token is not adjacent to the selected Mention.</p>
+            </CardContent>
+          </Card>
+        );
+      }
+    }
+  
+    if (selectedTokens.length > 0 && selectedMentions.length === 0) {
+      return (
+        <Card className='absolute top-0'>
+          <CardHeader>
+            <CardTitle>Create Mention</CardTitle>
+            <CardContent>
+              <div>
+                {schema?.schema_mentions.map((schemaMention) => (
+                  <Button
+                    onClick={() => createMention(selectedTokens, schemaMention.id)}
+                    key={schemaMention.id}
+                    className='mr-2'
+                    style={{ backgroundColor: schemaMention.color }}>
+                    {schemaMention.tag}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </CardHeader>
+        </Card>
+      )
+    }
+
+    if (selectedMentions.length === 1 && selectedTokens.length === 0) {
+      return (
+        <Card className='absolute top-0'>
+          <CardHeader>
+            <CardTitle>Update Mention</CardTitle>
+          </CardHeader>
           <CardContent>
             <div>
               {schema?.schema_mentions.map((schemaMention) => (
                 <Button
-                  onClick={() => createMention(selectedTokens, schemaMention.id)}
+                  onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
                   key={schemaMention.id}
                   className='mr-2'
                   style={{ backgroundColor: schemaMention.color }}>
@@ -80,33 +149,9 @@ export const AnnotationControlBox = () => {
               ))}
             </div>
           </CardContent>
-        </CardHeader>
-      </Card>
-    )
-  }
-  if (currentStep === 'MENTIONS' && selectedMentions.length > 0) {
-    return (
-      <Card className='absolute top-0'>
-        <CardHeader>
-          <CardTitle>
-            Update Mention
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            {schema?.schema_mentions.map((schemaMention) => (
-              <Button
-                onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
-                key={schemaMention.id}
-                className='mr-2'
-                style={{ backgroundColor: schemaMention.color }}>
-                {schemaMention.tag}
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    )
+        </Card>
+      )
+    }
   }
   if (currentStep === 'RELATIONS' && selectedMentions.length === 2) {
     const mentionHead = selectedMentions[0];
