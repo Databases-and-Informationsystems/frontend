@@ -58,7 +58,7 @@ export const AnnotationControlBox = () => {
 
     tokenIds.sort((a, b) => a - b);
     const payload: UpdateMentionPayload = {
-      token_ids: [...mention.tokens.map(t => t.id), token.id],
+      token_ids: tokenIds,
     };
 
     handleUpdateMention(mention.id, payload);
@@ -87,26 +87,39 @@ export const AnnotationControlBox = () => {
 
       if (canExtend) {
         return (
-          <Card className='absolute top-0'>
+          <Card className='absolute 
+            top-14
+            left-20 
+            z-50 
+            p-4 
+            bg-white 
+            shadow-md'>
             <CardHeader>
-              <CardTitle>Extend Mention</CardTitle>
+              <CardTitle className='text-4xl'>Extend Mention</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Selected Mention ID: {mentionToExtend.id} – Extend by Token {tokenToAdd.id}?</p>
-              <Button
-                onClick={() => extendMention(mentionToExtend, tokenToAdd)}
-                className='mr-2'
-              >
-                Extend
-              </Button>
+              <div className="flex items-center justify-center flex-nowrap space-x-4">
+                <Button
+                  onClick={() => extendMention(mentionToExtend, tokenToAdd)}
+                  className="text-xl py-3 px-6"
+                >
+                  Extend
+                </Button>
+              </div>
             </CardContent>
           </Card>
         );
       } else {
         return (
-          <Card className='absolute top-0'>
+          <Card className='absolute 
+          top-14
+          left-20 
+          z-50 
+          p-4 
+          bg-white 
+          shadow-md'>
             <CardHeader>
-              <CardTitle>Extend Mention</CardTitle>
+              <CardTitle className='text-4xl'>Extend Mention</CardTitle>
             </CardHeader>
             <CardContent>
               <p>Token is not adjacent to the selected Mention.</p>
@@ -118,40 +131,52 @@ export const AnnotationControlBox = () => {
 
     if (selectedTokens.length > 0 && selectedMentions.length === 0) {
       return (
-        <Card className='absolute top-0'>
+        <Card className='absolute 
+        top-14
+        left-20 
+        z-50 
+        p-4 
+        bg-white 
+        shadow-md'>
           <CardHeader>
-            <CardTitle>Create Mention</CardTitle>
-            <CardContent>
-              <div>
-                {schema?.schema_mentions.map((schemaMention) => (
-                  <Button
-                    onClick={() => createMention(selectedTokens, schemaMention.id)}
-                    key={schemaMention.id}
-                    className='mr-2'
-                    style={{ backgroundColor: schemaMention.color }}>
-                    {schemaMention.tag}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
+            <CardTitle className='text-4xl'>Create Mention</CardTitle>
           </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-center flex-nowrap space-x-4 ">
+              {schema?.schema_mentions.map((schemaMention) => (
+                <Button
+                  onClick={() => createMention(selectedTokens, schemaMention.id)}
+                  key={schemaMention.id}
+                  className="text-xl py-3 px-6"
+                  style={{ backgroundColor: schemaMention.color }}>
+                  {schemaMention.tag}
+                </Button>
+              ))}
+            </div>
+          </CardContent>
         </Card>
       )
     }
 
     if (selectedMentions.length === 1 && selectedTokens.length === 0) {
       return (
-        <Card className='absolute top-0'>
+        <Card className='absolute 
+        top-14
+        left-20 
+        z-50 
+        p-4 
+        bg-white 
+        shadow-md'>
           <CardHeader>
-            <CardTitle>Update Mention</CardTitle>
+            <CardTitle className='text-4xl'>Update Mention</CardTitle>
           </CardHeader>
           <CardContent>
-            <div>
+            <div className="flex items-center justify-center flex-nowrap space-x-4 ">
               {schema?.schema_mentions.map((schemaMention) => (
                 <Button
                   onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
                   key={schemaMention.id}
-                  className='mr-2'
+                  className="text-xl py-3 px-6"
                   style={{ backgroundColor: schemaMention.color }}>
                   {schemaMention.tag}
                 </Button>
@@ -178,9 +203,15 @@ export const AnnotationControlBox = () => {
 
     if (matchingConstraints.length === 0) {
       return (
-        <Card className="absolute top-0">
+        <Card className='absolute 
+        top-14
+        left-20 
+        z-50 
+        p-4 
+        bg-white 
+        shadow-md'>
           <CardHeader>
-            <CardTitle>Create Relation</CardTitle>
+            <CardTitle className='text-4xl'>Create Relation</CardTitle>
           </CardHeader>
           <CardContent>
             <p>
@@ -192,26 +223,34 @@ export const AnnotationControlBox = () => {
     }
 
     return (
-      <Card className='absolute top-0'>
+      <Card className='absolute 
+        top-14
+        left-20 
+        z-50 
+        p-4 
+        bg-white 
+        shadow-md'>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className='text-4xl'>
             Create Relation
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {matchingConstraints.map((constraint) => {
-            const relation = schema?.schema_relations.find(
-              (schemaRelation) => schemaRelation.id === constraint.schema_relation.id
-            );
-            return (
-              <Button
-                key={constraint.id}
-                onClick={() => createRelation(selectedMentions, constraint.schema_relation.id)}
-                className='mr-2'>
-                {relation?.tag || ''}
-              </Button>
-            );
-          })}
+          <div className="flex items-center justify-center flex-nowrap space-x-4 ">
+            {matchingConstraints.map((constraint) => {
+              const relation = schema?.schema_relations.find(
+                (schemaRelation) => schemaRelation.id === constraint.schema_relation.id
+              );
+              return (
+                <Button
+                  key={constraint.id}
+                  onClick={() => createRelation(selectedMentions, constraint.schema_relation.id)}
+                  className="text-xl py-3 px-6">
+                  {relation?.tag || ''}
+                </Button>
+              );
+            })}
+          </div>
         </CardContent>
       </Card>
     )

@@ -117,7 +117,7 @@ const ConfirmExitDialog = ({ input }: ConfirmExitDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">{input}</Button>
+        <Button variant="outline" className='text-lg font-medium'>{input}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
