@@ -20,7 +20,7 @@ export type CreateMentionPayload = {
 }
 
 export type UpdateMentionPayload = {
-  schema_mention_id: number;
+  schema_mention_id?: number;
   token_ids: number[];
   entity_id?: number;
 }
