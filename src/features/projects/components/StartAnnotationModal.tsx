@@ -219,7 +219,7 @@ const StartAnnotatingModal: React.FC<StartAnnotatingModalProps> = ({
                 /* value can by any of the given values in the array. These are provided in a Select form*/
               }
               return (
-                <div>
+                <div key={index}>
                   <Select
                     key={index}
                     value={selectedSettingsByModelStep[modelStep][key]}
