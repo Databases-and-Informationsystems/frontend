@@ -29,10 +29,14 @@ export const AnnotationControlBox = () => {
   }
 
   const createMention = (tokens: Token[], schemaId: number) => {
+    const tokenIds = tokens.map(token => token.id);
+
+    tokenIds.sort((a, b) => a - b);
+
     const payload: CreateMentionPayload = {
       schema_mention_id: schemaId,
       document_edit_id: Number(id),
-      token_ids: tokens.map(token => token.id),
+      token_ids: tokenIds,
     };
     handleCreateMention(payload);
     resetTokens()
@@ -48,10 +52,15 @@ export const AnnotationControlBox = () => {
   }
 
   const extendMention = (mention: Mention, token: Token) => {
+    const tokenIds = mention.tokens.map(t => t.id);
+
+    tokenIds.push(token.id);
+
+    tokenIds.sort((a, b) => a - b);
     const payload: UpdateMentionPayload = {
       token_ids: [...mention.tokens.map(t => t.id), token.id],
     };
-  
+
     handleUpdateMention(mention.id, payload);
     resetTokens();
     resetMentions();
@@ -75,7 +84,7 @@ export const AnnotationControlBox = () => {
       const mentionToExtend = selectedMentions[0];
       const tokenToAdd = selectedTokens[0];
       const canExtend = canExtendMentionWithToken(mentionToExtend, tokenToAdd);
-  
+
       if (canExtend) {
         return (
           <Card className='absolute top-0'>
@@ -106,7 +115,7 @@ export const AnnotationControlBox = () => {
         );
       }
     }
-  
+
     if (selectedTokens.length > 0 && selectedMentions.length === 0) {
       return (
         <Card className='absolute top-0'>
