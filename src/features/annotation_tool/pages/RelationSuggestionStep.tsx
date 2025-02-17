@@ -15,7 +15,7 @@ export const RelationSuggestionStep = () => {
   const nextStep: WorkflowStep = 'RELATIONS';
 
   useEffect(() => {
-    if (!hasSuggestions) {
+    if (!hasSuggestions && !loading) {
       const isForward = isForwardStep(nextStep, maxStep);
       if (isForward) {
         updateMaxStep(nextStep).then(success => {
@@ -32,7 +32,7 @@ export const RelationSuggestionStep = () => {
         updateStep(nextStep);
       }
     }
-  }, [hasSuggestions, maxStep, nextStep, updateMaxStep, updateStep]);
+  }, [loading, hasSuggestions, maxStep, nextStep, updateMaxStep, updateStep]);
 
   if (loading) {
     return <p>Loading suggestions...</p>;
