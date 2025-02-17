@@ -163,3 +163,21 @@ export const AnnotationControlBox = () => {
     )
   }
 }
+
+function canExtendMentionWithToken(mention: Mention, token: Token): boolean {
+  const mentionTokens = mention.tokens;
+
+  if (mentionTokens.length === 0) return false;
+
+  const docIndices = mentionTokens.map((t) => t.document_index);
+  const minIndex = Math.min(...docIndices);
+  const maxIndex = Math.max(...docIndices);
+
+  if (mentionTokens[0].sentence_index !== token.sentence_index) {
+    return false;
+  }
+  return (
+    token.document_index === minIndex - 1 ||
+    token.document_index === maxIndex + 1
+  );
+}
