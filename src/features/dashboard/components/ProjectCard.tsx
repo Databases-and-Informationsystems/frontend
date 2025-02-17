@@ -15,12 +15,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showOngoing, setShowOngoing] = useState<boolean>(false)
   const [showOpen, setShowOpen] = useState<boolean>(false)
   const [showCompleted, setShowCompleted] = useState<boolean>(false)
-  const navigate = useNavigate()
-
-  const handleOpenProject = () => {
-    // This does not make sense, as navigation is to page of projects
-    navigate('/dashboard/projects')
-  }
 
   return (
     <div className="project-card bg-white p-8 rounded-lg shadow-lg w-full">
@@ -179,12 +173,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         )}
       </div>
       <div className="mt-4">
-        <button
-          className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
-          onClick={handleOpenProject}
-        >
-          Open Project
-        </button>
+        <Link to={`/dashboard/projects-v2/${project.id}`}>
+          <button
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+          >
+            Open Project
+          </button>
+        </Link>
       </div>
     </div>
   )
