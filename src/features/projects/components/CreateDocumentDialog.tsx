@@ -1,3 +1,4 @@
+import Loader from "@/components/Loader"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Loader2 } from "lucide-react"
 import { useState } from "react"
 import FadeLoader from "react-spinners/FadeLoader"
 
@@ -41,7 +43,7 @@ export function CreateDocumentDialog({ handleCreateDocument }: CreateDocumentDia
         <Button variant="outline">Create Document</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px] w-full h-auto">
         <DialogHeader>
           <DialogTitle>Create Document</DialogTitle>
           <DialogDescription>
@@ -78,9 +80,9 @@ function CreateDocumentForm({ isSaving, error, onCancel, onSubmit }: CreateDocum
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 items-center gap-4">
+    <form onSubmit={handleSubmit} className="bg-white sm:max-w-[600px] w-full h-auto">
+      <div className="grid gap-4 py-4 item">
+        <div>
           <label htmlFor="doc-name" className="text-right">
             Name
           </label>
@@ -88,10 +90,10 @@ function CreateDocumentForm({ isSaving, error, onCancel, onSubmit }: CreateDocum
             id="doc-name"
             name="name"
             placeholder="Document name"
-            className="col-span-3"
+            className="col-span-3 h-12 text-lg px-4"
           />
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
+        <div >
           <label htmlFor="doc-content" className="text-right">
             Content
           </label>
@@ -99,17 +101,17 @@ function CreateDocumentForm({ isSaving, error, onCancel, onSubmit }: CreateDocum
             id="doc-content"
             name="content"
             placeholder="Document content..."
-            className="col-span-3"
+            className="col-span-3 h-32 text-lg px-4"
           />
         </div>
       </div>
       {error && <p className="text-red-500">{error}</p>}
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel} type="button">
+        <Button onClick={onCancel} type="button">
           Cancel
         </Button>
         <Button type="submit" disabled={isSaving}>
-          {isSaving ? <FadeLoader /> : 'Save changes'}
+          {isSaving ? <Loader/> : 'Save changes'}
         </Button>
       </DialogFooter>
     </form>
