@@ -1,10 +1,14 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:5001/api',
-})
+  withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: 'csrf_access_token',
+  xsrfHeaderName: 'X-CSRF-TOKEN',
+});
 
-axiosInstance.interceptors.request.use(
+/*axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
     if (token && config.headers) {
@@ -12,17 +16,17 @@ axiosInstance.interceptors.request.use(
     }
     return config
   },
-)
+)*/
 
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401 || error.response.status === 403) {
-      localStorage.removeItem('token')
-      window.location.href = '/login' // react router not accessible here
+      localStorage.removeItem('token');
+      window.location.href = '/login'; // react router not accessible here
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
-export default axiosInstance
+export default axiosInstance;

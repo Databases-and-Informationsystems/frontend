@@ -1,22 +1,20 @@
-import { loginUser, logoutUser, registerUser } from "@/features/login/api/login";
-import { createContext, useEffect, useState } from "react";
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+} from '@/features/login/api/login';
+import { createContext } from 'react';
 
 interface AuthContextType {
-  token: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
   register: (username: string, email: string, password: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  token: null,
-  isAuthenticated: false,
-  isLoading: true,
-  login: () => { },
-  logout: () => { },
-  register: () => { },
+  login: () => {},
+  logout: () => {},
+  register: () => {},
 });
 
 interface AuthProviderProps {
@@ -24,53 +22,45 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
-    }
-    setIsLoading(false);
-  }, []);
-
   const login = async (email: string, password: string) => {
     try {
-      const result = await loginUser(email, password);
-      setToken(result.token);
-      localStorage.setItem('token', result.token);
-    }
-    catch (error) {
+      await loginUser(email, password);
+    } catch (error) {
       throw new Error('Failed to connect to the server. Error: ' + error);
     }
-  }
+  };
 
   const logout = async () => {
     try {
       await logoutUser();
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error('Failed to connect to the server. Error: ' + error);
     }
-    setToken(null);
-    localStorage.removeItem('token');
-  }
+  };
 
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
     try {
       await registerUser(username, email, password);
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error('Failed to connect to the server. Error: ' + error);
     }
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated: !!token, isLoading, login, logout, register }}>
+    <AuthContext.Provider
+      value={{
+        login,
+        logout,
+        register,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export default AuthContext;
