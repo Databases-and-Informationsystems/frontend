@@ -9,7 +9,11 @@ interface RelationProps {
 }
 
 export const Relation = ({ relation }: RelationProps) => {
-  const { handleDeleteRelation } = useRelationContext(); 
+  const { handleDeleteRelation } = useRelationContext();
+
+  if (!relation) {
+    return <p>Relation not found</p>;
+  }
 
   const headMention = relation.head_mention;
   const tailMention = relation.tail_mention;

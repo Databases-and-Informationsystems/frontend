@@ -30,7 +30,9 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
 
   // Select Tokens and reset selected Mentions
   const handleTokenClick = (tokenId: number, sentenceIndex: number) => {
-    resetMentions();
+    if (currentStep !== 'MENTIONS') {
+      resetMentions();
+    }
 
     const currentToken = allTokens.find((token) => token.id === tokenId);
     if (!currentToken) return;
@@ -62,7 +64,9 @@ export const SelectionProvider = ({ children }: SelectionProviderProps) => {
   };
 
   const handleMentionClick = (mentionId: number) => {
-    resetTokens();
+    if (currentStep !== 'MENTIONS') {
+      resetTokens();
+    }
 
     const mention = allMentions.find((mention) => mention.id === mentionId);
     if (!mention) return;
