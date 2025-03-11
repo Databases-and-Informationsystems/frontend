@@ -1,21 +1,25 @@
-import React from 'react'
-import { Token as TokenType } from '../types/token'
+import React from 'react';
+import { Token as TokenType } from '../types/token';
 import { useSelectionContext } from '../context/useSelectionContext';
 
 interface TokenProps {
-    token: TokenType;
+  token: TokenType;
 }
 
 export const Token = ({ token }: TokenProps) => {
   const { selectedTokens, handleTokenClick } = useSelectionContext();
 
-  const isSelected = selectedTokens.some((selectedToken) => selectedToken.id === token.id);
+  const isSelected = selectedTokens.some(
+    (selectedToken) => selectedToken.id === token.id
+  );
 
   return (
-    <span className={`select-none text-xl font-semibold cursor-pointer ${isSelected ? 'border rounded-lg border-gray-300 p-1' : ''}`}
+    <span
+      style={{ marginRight: '1em' }}
+      className={`select-none text-xl font-semibold cursor-pointer ${isSelected ? 'border rounded-lg border-gray-300 p-1' : ''}`}
       onClick={() => handleTokenClick(token.id, token.sentence_index)}
     >
       {token.text}
     </span>
-  )
-}
+  );
+};

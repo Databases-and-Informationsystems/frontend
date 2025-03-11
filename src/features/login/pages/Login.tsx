@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login , register } = useAuth();
+  const { login, register } = useAuth();
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +44,7 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="black-half">
-        <h1>Annotation Tool</h1>
+        <h1>TeaPie</h1>
       </div>
 
       <div className="white-half">
@@ -102,7 +102,9 @@ const Login = () => {
           <span>{isSignIn ? 'Your password' : 'Create a password'}</span>
           <input
             type="password"
-            placeholder={isSignIn ? 'Enter your password' : 'Create your password'}
+            placeholder={
+              isSignIn ? 'Enter your password' : 'Create your password'
+            }
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

@@ -3,18 +3,20 @@ import {
   logoutUser,
   registerUser,
 } from '@/features/login/api/login';
-import { createContext } from 'react';
+import { createContext, useState } from 'react';
 
 interface AuthContextType {
   login: (email: string, password: string) => void;
   logout: () => void;
   register: (username: string, email: string, password: string) => void;
+  email?: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
   login: () => {},
   logout: () => {},
   register: () => {},
+  email: undefined,
 });
 
 interface AuthProviderProps {
@@ -22,10 +24,14 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [email, setEmail] = useState<string | undefined>(undefined);
+
   const login = async (email: string, password: string) => {
     try {
       await loginUser(email, password);
+      setEmail(email);
     } catch (error) {
+      setEmail(undefined);
       throw new Error('Failed to connect to the server. Error: ' + error);
     }
   };
@@ -35,6 +41,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       await logoutUser();
     } catch (error) {
       throw new Error('Failed to connect to the server. Error: ' + error);
+    } finally {
+      setEmail(undefined);
     }
   };
 
@@ -56,6 +64,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         logout,
         register,
+        email,
       }}
     >
       {children}

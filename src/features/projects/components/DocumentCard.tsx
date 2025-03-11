@@ -1,12 +1,12 @@
-import { Document } from '@/types/document'
-import { Button } from '@/components/ui/button'
+import { Document } from '@/types/document';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import {
   DialogHeader,
   DialogFooter,
@@ -16,23 +16,23 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { DocumentStateType } from '@/types/document'
-import { translateDocumentEditState } from '../util/document_util'
+} from '@/components/ui/dialog';
+import { DocumentStateType } from '@/types/document';
+import { translateDocumentEditState } from '../util/document_util';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import UserIcon from '@/components/UserIcon'
-import StartAnnotatingModal from './StartAnnotationModal'
-import { useState } from 'react'
-import { Link } from 'react-router'
-import StyledLink from '@/components/StyledLink'
+} from '@/components/ui/popover';
+import UserIcon from '@/components/UserIcon';
+import StartAnnotatingModal from './StartAnnotationModal';
+import { useState } from 'react';
+import { Link } from 'react-router';
+import StyledLink from '@/components/StyledLink';
 
 interface DocumentCardProps {
-  document: Document
-  onDeleteDocument: (id: number, type: DocumentStateType) => void
+  document: Document;
+  onDeleteDocument?: (id: number, type: DocumentStateType) => void;
 }
 
 const DocumentCard: React.FC<DocumentCardProps> = ({
@@ -40,9 +40,9 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   onDeleteDocument,
 }: DocumentCardProps) => {
   const [isStartAnnotationModalOpen, setIsAnnotationModalOpen] =
-    useState<boolean>(false)
+    useState<boolean>(false);
 
-  console.log('Document', document)
+  console.log('Document', document);
   return (
     <Card key={document.id}>
       <CardHeader className="relative">
@@ -71,18 +71,20 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 <Button type="submit">Cancel</Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button
-                  variant="destructive"
-                  type="submit"
-                  onClick={() =>
-                    onDeleteDocument(
-                      document.id,
-                      document.state.type as DocumentStateType
-                    )
-                  }
-                >
-                  Delete
-                </Button>
+                {onDeleteDocument && (
+                  <Button
+                    variant="destructive"
+                    type="submit"
+                    onClick={() =>
+                      onDeleteDocument(
+                        document.id,
+                        document.state.type as DocumentStateType
+                      )
+                    }
+                  >
+                    Delete
+                  </Button>
+                )}
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -125,7 +127,9 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <div className="flex flex-row-reverse mt-2">
           {document.document_edit?.id ? (
             <Button>
-              <Link to={`/project/${document.project.id}/annotation/${document.document_edit?.id}?step=${document.document_edit?.state}`}>
+              <Link
+                to={`/project/${document.project.id}/annotation/${document.document_edit?.id}?step=${document.document_edit?.state}`}
+              >
                 Continue
               </Link>
             </Button>
@@ -142,7 +146,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         />
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default DocumentCard
+export default DocumentCard;

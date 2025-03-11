@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useSelectionContext } from '../context/useSelectionContext'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useSelectionContext } from '../context/useSelectionContext';
 import { Button } from '@/components/ui/button';
 import { useMentionContext } from '../context/useMentionContext';
 import { useRelationContext } from '../context/useRelationContext';
@@ -9,11 +9,16 @@ import { useSchemaContext } from '../context/useSchemaContext';
 import { useParams } from 'react-router-dom';
 import { useWorkflowContext } from '../context/useWorkflowContext';
 import { Token } from '../types';
-import { CreateMentionPayload, Mention, UpdateMentionPayload } from '../types/mention';
+import {
+  CreateMentionPayload,
+  Mention,
+  UpdateMentionPayload,
+} from '../types/mention';
 import { CreateRelationPayload } from '../types/relation';
 
 export const AnnotationControlBox = () => {
-  const { selectedTokens, selectedMentions, resetTokens, resetMentions } = useSelectionContext();
+  const { selectedTokens, selectedMentions, resetTokens, resetMentions } =
+    useSelectionContext();
   const { handleCreateMention, handleUpdateMention } = useMentionContext();
   const { currentStep } = useWorkflowContext();
   const { handleCreateRelation } = useRelationContext();
@@ -29,7 +34,7 @@ export const AnnotationControlBox = () => {
   }
 
   const createMention = (tokens: Token[], schemaId: number) => {
-    const tokenIds = tokens.map(token => token.id);
+    const tokenIds = tokens.map((token) => token.id);
 
     tokenIds.sort((a, b) => a - b);
 
@@ -39,20 +44,20 @@ export const AnnotationControlBox = () => {
       token_ids: tokenIds,
     };
     handleCreateMention(payload);
-    resetTokens()
-  }
+    resetTokens();
+  };
 
   const updateMention = (mention: Mention, schemaId: number) => {
     const payload: UpdateMentionPayload = {
       schema_mention_id: schemaId,
-      token_ids: mention.tokens.map(token => token.id),
-    }
+      token_ids: mention.tokens.map((token) => token.id),
+    };
     handleUpdateMention(mention.id, payload);
-    resetMentions()
-  }
+    resetMentions();
+  };
 
   const extendMention = (mention: Mention, token: Token) => {
-    const tokenIds = mention.tokens.map(t => t.id);
+    const tokenIds = mention.tokens.map((t) => t.id);
 
     tokenIds.push(token.id);
 
@@ -66,18 +71,16 @@ export const AnnotationControlBox = () => {
     resetMentions();
   };
 
-
   const createRelation = (mentions: Mention[], schemaId: number) => {
     const payload: CreateRelationPayload = {
       schema_relation_id: schemaId,
       document_edit_id: Number(id),
       mention_head_id: mentions[0].id,
       mention_tail_id: mentions[1].id,
-    }
+    };
     handleCreateRelation(payload);
     resetMentions();
-  }
-
+  };
 
   if (currentStep === 'MENTIONS') {
     if (selectedMentions.length === 1 && selectedTokens.length === 1) {
@@ -87,15 +90,17 @@ export const AnnotationControlBox = () => {
 
       if (canExtend) {
         return (
-          <Card className='absolute 
+          <Card
+            className="absolute 
             top-14
             left-20 
             z-50 
             p-4 
             bg-white 
-            shadow-md'>
+            shadow-md"
+          >
             <CardHeader>
-              <CardTitle className='text-4xl'>Extend Mention</CardTitle>
+              <CardTitle className="text-4xl">Extend Mention</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-center flex-nowrap space-x-4">
@@ -111,15 +116,17 @@ export const AnnotationControlBox = () => {
         );
       } else {
         return (
-          <Card className='absolute 
+          <Card
+            className="absolute 
           top-14
           left-20 
           z-50 
           p-4 
           bg-white 
-          shadow-md'>
+          shadow-md"
+          >
             <CardHeader>
-              <CardTitle className='text-4xl'>Extend Mention</CardTitle>
+              <CardTitle className="text-4xl">Extend Mention</CardTitle>
             </CardHeader>
             <CardContent>
               <p>Token is not adjacent to the selected Mention.</p>
@@ -131,60 +138,74 @@ export const AnnotationControlBox = () => {
 
     if (selectedTokens.length > 0 && selectedMentions.length === 0) {
       return (
-        <Card className='absolute 
+        <Card
+          className="absolute 
         top-14
         left-20 
         z-50 
         p-4 
         bg-white 
-        shadow-md'>
+        shadow-md"
+        >
           <CardHeader>
-            <CardTitle className='text-4xl'>Create Mention</CardTitle>
+            <CardTitle className="text-4xl text-black">
+              Create Mention
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-center flex-nowrap space-x-4 ">
               {schema?.schema_mentions.map((schemaMention) => (
                 <Button
-                  onClick={() => createMention(selectedTokens, schemaMention.id)}
+                  onClick={() =>
+                    createMention(selectedTokens, schemaMention.id)
+                  }
                   key={schemaMention.id}
                   className="text-xl py-3 px-6"
-                  style={{ backgroundColor: schemaMention.color }}>
+                  style={{ backgroundColor: schemaMention.color }}
+                >
                   {schemaMention.tag}
                 </Button>
               ))}
             </div>
           </CardContent>
         </Card>
-      )
+      );
     }
 
     if (selectedMentions.length === 1 && selectedTokens.length === 0) {
       return (
-        <Card className='absolute 
+        <Card
+          className="absolute 
         top-14
         left-20 
         z-50 
         p-4 
         bg-white 
-        shadow-md'>
+        shadow-md"
+        >
           <CardHeader>
-            <CardTitle className='text-4xl'>Update Mention</CardTitle>
+            <CardTitle className="text-4xl text-black">
+              Update Mention
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-center flex-nowrap space-x-4 ">
               {schema?.schema_mentions.map((schemaMention) => (
                 <Button
-                  onClick={() => updateMention(selectedMentions[0], schemaMention.id)}
+                  onClick={() =>
+                    updateMention(selectedMentions[0], schemaMention.id)
+                  }
                   key={schemaMention.id}
                   className="text-xl py-3 px-6"
-                  style={{ backgroundColor: schemaMention.color }}>
+                  style={{ backgroundColor: schemaMention.color }}
+                >
                   {schemaMention.tag}
                 </Button>
               ))}
             </div>
           </CardContent>
         </Card>
-      )
+      );
     }
   }
   if (currentStep === 'RELATIONS' && selectedMentions.length === 2) {
@@ -203,49 +224,48 @@ export const AnnotationControlBox = () => {
 
     if (matchingConstraints.length === 0) {
       return (
-        <Card className='absolute 
-        top-14
-        left-20 
-        z-50 
-        p-4 
-        bg-white 
-        shadow-md'>
+        <Card className="absolute top-14 left-20  z-50 p-4 bg-white shadow-md text-black">
           <CardHeader>
-            <CardTitle className='text-4xl'>Create Relation</CardTitle>
+            <CardTitle className="text-4xl">Create Relation</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>
-              You can't build a relation from the selected mentions.
-            </p>
+            <p>You can't build a relation from the selected mentions.</p>
           </CardContent>
         </Card>
       );
     }
 
     return (
-      <Card className='absolute 
+      <Card
+        className="absolute 
         top-14
         left-20 
         z-50 
         p-4 
         bg-white 
-        shadow-md'>
+        shadow-md"
+      >
         <CardHeader>
-          <CardTitle className='text-4xl'>
-            Create Relation
-          </CardTitle>
+          <CardTitle className="text-4xl">Create Relation</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center flex-nowrap space-x-4 ">
             {matchingConstraints.map((constraint) => {
               const relation = schema?.schema_relations.find(
-                (schemaRelation) => schemaRelation.id === constraint.schema_relation.id
+                (schemaRelation) =>
+                  schemaRelation.id === constraint.schema_relation.id
               );
               return (
                 <Button
                   key={constraint.id}
-                  onClick={() => createRelation(selectedMentions, constraint.schema_relation.id)}
-                  className="text-xl py-3 px-6">
+                  onClick={() =>
+                    createRelation(
+                      selectedMentions,
+                      constraint.schema_relation.id
+                    )
+                  }
+                  className="text-xl py-3 px-6"
+                >
                   {relation?.tag || ''}
                 </Button>
               );
@@ -253,9 +273,9 @@ export const AnnotationControlBox = () => {
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
-}
+};
 
 function canExtendMentionWithToken(mention: Mention, token: Token): boolean {
   const mentionTokens = mention.tokens;
